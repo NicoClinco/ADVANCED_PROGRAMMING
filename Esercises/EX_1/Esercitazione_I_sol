@@ -1,0 +1,6 @@
+Solutions: 
+
+1 ---------------
+
+ 1)-2) cat "HPC_2k.log_structured.csv" | sort | cut -d "," -f 3 | uniq -u > nodes.log
+ 3) grep -wc "unavailable" HPC_2k.log_structured.csv 
