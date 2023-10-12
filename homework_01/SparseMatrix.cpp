@@ -1,6 +1,6 @@
 #include "SparseMatrix.h"
 
-SparseMatrix::SparseMatrix(int rows,int cols):nRows(rows),nCols(cols),nonZeros(0)		
+SparseMatrix::SparseMatrix(int rows,int cols):nRows(rows),nCols(cols),nnz(0)		
 {}
 
 
@@ -14,9 +14,9 @@ int SparseMatrix::GetRows() const
   return nRows;
 }
 
-int SparseMatrix::nonZeros() const
+int SparseMatrix::NumnonZeros() const
 {
-  return nonZeros;
+  return nnz;
 }
 
 
