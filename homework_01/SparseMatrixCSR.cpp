@@ -115,8 +115,10 @@ std::vector<float> SparseMatrixCSR::operator * (const std::vector<float>& y) con
     int deltarow = row_idx[i+1]-row_idx[i];
     for(int j=row_idx[i];j<row_idx[i]+deltarow;j++)
     {
-      //std::cout<< "i: "<< i << " " <<  values[j] <<std::endl;
+      std::cout<< "i: "<< i << " " <<  values[j] <<  cols[j-1] << std::endl;
       //std::cout << j << std::endl;
+      // j : position considered to go trough values: it tells the position of an index
+      
       x[i]+=(values[j]*y[cols[j-1]]);
     }
     
