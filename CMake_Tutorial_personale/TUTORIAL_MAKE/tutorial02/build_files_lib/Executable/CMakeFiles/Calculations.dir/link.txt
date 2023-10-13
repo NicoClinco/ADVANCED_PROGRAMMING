@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Calculations.dir/simpleProgramExe.cpp.o -o Calculations  ../MATHFUNCTIONS/libSquareRootLib.a ../MATHFUNCTIONS/libSquareLib.a 

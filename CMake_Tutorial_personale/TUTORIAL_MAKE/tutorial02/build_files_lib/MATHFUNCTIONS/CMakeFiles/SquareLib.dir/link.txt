@@ -1,0 +1,2 @@
+/usr/bin/ar qc libSquareLib.a CMakeFiles/SquareLib.dir/SecondMathFunctions/Square.cpp.o
+/usr/bin/ranlib libSquareLib.a

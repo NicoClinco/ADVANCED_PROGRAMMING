@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial02/Executable/simpleProgramExe.cpp
+iostream
+-
+cmath
+-
+SquareRoot.cpp
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial02/Executable/SquareRoot.cpp
+Square.cpp
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial02/Executable/Square.cpp
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-c++"
+	BuildStamp="20230401-1330-Experimental"
+	Name="nicopc-HP-ProBook-6470b"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="nicopc-HP-ProBook-6470b"
+	OSRelease="5.15.0-69-generic"
+	OSVersion="#76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="58"
+	ProcessorCacheSize="3072"
+	NumberOfLogicalCPU="4"
+	NumberOfPhysicalCPU="2"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="3786"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="1800"
+	>
+	<Build>
+		<StartDateTime>Apr 01 15:30 CEST</StartDateTime>
+		<StartBuildTime>1680355832</StartBuildTime>
+		<BuildCommand>/usr/bin/cmake --build . --config "Release"</BuildCommand>
+		<Log Encoding="base64" Compression="bin/gzip"/>
+		<EndDateTime>Apr 01 15:30 CEST</EndDateTime>
+		<EndBuildTime>1680355834</EndBuildTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Build>
+</Site>

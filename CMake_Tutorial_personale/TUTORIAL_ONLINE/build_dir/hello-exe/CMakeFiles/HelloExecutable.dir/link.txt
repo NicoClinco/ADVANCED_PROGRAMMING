@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/HelloExecutable.dir/simpleProgram.cpp.o  -o HelloExecutable  ../say-hello/libplotLib.a ../say-hello/libplotLib2.a 

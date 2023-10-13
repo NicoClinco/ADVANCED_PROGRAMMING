@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-c++"
+	BuildStamp="20230401-1330-Experimental"
+	Name="nicopc-HP-ProBook-6470b"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="nicopc-HP-ProBook-6470b"
+	OSRelease="5.15.0-69-generic"
+	OSVersion="#76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="58"
+	ProcessorCacheSize="3072"
+	NumberOfLogicalCPU="4"
+	NumberOfPhysicalCPU="2"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="3786"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2400"
+	>
+	<Testing>
+		<StartDateTime>Apr 01 15:30 CEST</StartDateTime>
+		<StartTestTime>1680355834</StartTestTime>
+		<TestList>
+			<Test>./test25</Test>
+			<Test>./usageTest</Test>
+			<Test>./SquareRootCheck</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>test25</Name>
+			<Path>.</Path>
+			<FullName>./test25</FullName>
+			<FullCommandLine>/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/build_step5/Tutorial "25"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00374476</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/build_step5/Tutorial "25"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJwzNNIzMuVyzs8tKC3JzEtXKC4sKlHIT1MwMlUoyVdISlUwNMYna65nYmZoaoJPiameiYGZAV5TTPUMDE3xOwOoBAiM8CoZEMmQjFSgcGliUapCUX4+TDazGCgFAGO7bFs=</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>usageTest</Name>
+			<Path>.</Path>
+			<FullName>./usageTest</FullName>
+			<FullCommandLine>/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/build_step5/Tutorial</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="text/string" name="Exit Code">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Exit Value">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00426724</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Pass Reason">
+					<Value>Required regular expression found. Regex=[Usage:.*number]</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/build_step5/Tutorial</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJzTz8jPTdXPy0zOL0jWd0ktzi7JL9B39k3MTo0PKS3JL8pMzNEPCQ3xD/J09In3dfR21S+BChuY6ieVZuakxBeXpBaY6sNUK4SlFhVn5ucpGOoZcIUWJ6anWinoU92SvNLcpNQiLgA4BUOU====</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>SquareRootCheck</Name>
+			<Path>.</Path>
+			<FullName>./SquareRootCheck</FullName>
+			<FullCommandLine>/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/build_step5/Tutorial "9"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00323822</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Pass Reason">
+					<Value>Required regular expression found. Regex=[9 is 3]</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/build_step5/Tutorial "9"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJwzNNIzMuVyzs8tKC3JzEtXKC4sKlHIT1OwVCjJV0hKVcAnZ6xnglfWwMjY1Bi/CiCwxKdiUMmFZKQCRUsTi1IVivLzoZKZxUAZAEdnaCg=</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Apr 01 15:30 CEST</EndDateTime>
+		<EndTestTime>1680355834</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

@@ -4,6 +4,7 @@ SparseMatrixCOO::SparseMatrixCOO(int rows,int cols):
 				  SparseMatrix(rows,cols)
 {}
 
+// Construct by giving the rows, the columns, and the values
 SparseMatrixCOO::SparseMatrixCOO
 (
   const std::vector<int>& r,  
@@ -25,8 +26,8 @@ SparseMatrixCOO::SparseMatrixCOO
   nnz = nnzSize;
   
   // Check if the rows are compatible with the indexes in the vectors: to-do
-  nRows = rows_;
-  nCols = cols_;
+  //nRows = rows_;
+  //nCols = cols_;
   
   
 }
@@ -96,7 +97,8 @@ virtual void SparseMatrixCOO::Set(int row,int col,float value)
 
 float SparseMatrixCOO::operator () (int row, int col) const 
 {
-   float x = Get(row,col);
+   float x = this->Get(row,col);
+
    return x;
 }
 
@@ -125,7 +127,7 @@ float& SparseMatrixCOO::operator () (int row, int col)
   }
 }
 
-
+// Matrix multiplication by a vector:
 std::vector<float> SparseMatrixCOO::operator * (const std::vector<float>& y) const
 {
   // Perform x = Ay as a matrix-multiplication
@@ -136,13 +138,12 @@ std::vector<float> SparseMatrixCOO::operator * (const std::vector<float>& y) con
   
   std::vector<float> x(nRows,0.0);
 
-
   for(int i=0;i<nnz;i++)
   {
    x[rows[i]]+=(values[i]*y[cols[i]]);
   }
   return x;
-  
+
 }
 
 

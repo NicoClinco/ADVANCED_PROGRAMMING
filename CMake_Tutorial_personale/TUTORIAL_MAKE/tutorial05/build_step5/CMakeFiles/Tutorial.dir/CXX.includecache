@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../MathFunctions/MathFunctions.h
+
+../MathFunctions/MathLibraries/powerclass.hpp
+iostream
+-
+cmath
+-
+
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/tutorial.cxx
+cmath
+-
+iostream
+-
+string
+-
+powerclass.hpp
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/powerclass.hpp
+MathFunctions.h
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/MathFunctions.h
+TutorialConfig.h
+/home/nicopc/Desktop/CMake_Tutorial/TUTORIAL_MAKE/tutorial05/TutorialConfig.h
+
+TutorialConfig.h
+
