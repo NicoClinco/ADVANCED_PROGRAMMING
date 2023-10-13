@@ -2,6 +2,8 @@
 #include <vector>
 #include "SparseMatrixCOO.h"
 #include "SparseMatrixCSR.h"
+#include "PostProc.h"
+
 
 int main()
 {
@@ -19,21 +21,33 @@ int main()
  
  std::vector<float> y(ncols,1.0);
  
- std::vector<float> x_csr = CSR_A*y;
+ //std::vector<float> x_csr = CSR_A*y;
  
  std::vector<float> x_coo = COO_A*y;
  
  std::cout << " Multiplication for CSR-FORMAT " << std::endl;
  
- for(auto e_csr : x_csr )
-   std::cout << e_csr << " ";
+ //printVector<float>(x_csr);
  
- std::cout << "\n\n"<<std::endl;
  std::cout << " Multiplication for COO-FORMAT " << std::endl;
 
- for(auto e_coo : x_coo )
-   std::cout << e_coo << " ";
+ printVector<float>(x_coo);
+
+ //std::cout << CSR_A(1,3) << " " << CSR_A(1,5) << " " << CSR_A(2,3) << " ";
+ //std::cout << CSR_A(2,5) << " " << CSR_A(4,2) << " " << CSR_A(4,4) << "\n\n\n";
  
+ CSR_A(1,2) = 33;
+ 
+ std::vector<float> x_csr = CSR_A*y;
+ printVector<float>(x_csr);
+ 
+ /*
+ CSR_A(1,2) = 33;
+
+  x_csr = CSR_A*y;
+ 
+ printVector<float>(x_csr);
+ */
  
  
  /*

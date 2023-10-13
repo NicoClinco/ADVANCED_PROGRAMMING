@@ -44,11 +44,11 @@ float SparseMatrixCSR::Get(int row, int col) const
   	int deltarow = row_idx[row]-row_idx[row-1];
   	if(deltarow>0)
   	{
-  	// Start looping from row
-  	 for(int j=row_idx[row-1];j<row_idx[row-1]+deltarow;j++)
+  	// j: global position of the values array
+  	 for(int pos=row_idx[row-1];pos<row_idx[row-1]+deltarow;pos++)
   	 {
-  	  if( cols[j] == col-1)
-  	    return values[j];
+  	  if( cols[pos] == col-1)
+  	    return values[pos];
   	 }//end loop for the columns
   	 return float(0.0); // In the row is not present a value != 0
   	}
@@ -76,16 +76,35 @@ float& SparseMatrixCSR::operator () (int row, int col)
    
    if(deltarow>0)
    {
-    for(int j=row_idx[row-1];j<row_idx[row-1]+deltarow;j++)
+    // pos : global position index for values
+    for(int pos=row_idx[row-1];pos<row_idx[row-1]+deltarow;pos++)
     {
-     if( cols[j] == col-1 )
-       return values[j];
+     if( cols[pos] == col-1 )
+       return values[pos];
     }//end loop for the columns
-    // Insert the value for the columns and update the values
-    cols.insert(cols.begin()+row_idx[row-1],col-1);
-    values.insert(values.begin()+row_idx[row-1],0.0);
+    
+    // If here, we have not found the coloumn,
+    // we must put it
+    int startPos = row_idx[row-1];
+    int stopPos;
+    for(int pos=startPos;pos<startPos+deltarow;pos++)
+    {
+      int currColumn = cols[pos];
+      if( (col-1)<currColumn )
+      {
+       stopPos = pos;
+       //std::cout<< stopPos << "\n\n" <<std::endl;
+       break;
+      }
+    }
+    // Insert the value:
+    cols.insert(cols.begin()+stopPos,col-1);
+    values.insert(values.begin()+stopPos,0.0);
     row_idx[row]++;
-    return values[row_idx[row-1]];
+    nnz++;
+    
+    return values[stopPos];
+    
    }else{
    
       cols.insert(cols.begin()+row_idx[row-1],col-1);
@@ -96,6 +115,7 @@ float& SparseMatrixCSR::operator () (int row, int col)
    }
    
   }// end else
+  
  
 }
 
@@ -110,22 +130,21 @@ std::vector<float> SparseMatrixCSR::operator * (const std::vector<float>& y) con
   
   std::vector<float> x(nRows,0.0);
   
+  
+  
   for(unsigned int i=0;i< row_idx.size()-1;i++)
   {
     int deltarow = row_idx[i+1]-row_idx[i];
-    for(int j=row_idx[i];j<row_idx[i]+deltarow;j++)
-    {
-      std::cout<< "i: "<< i << " " <<  values[j] <<  cols[j-1] << std::endl;
-      //std::cout << j << std::endl;
-      // j : position considered to go trough values: it tells the position of an index
-      
-      x[i]+=(values[j]*y[cols[j-1]]);
+     
+    for(int pos=row_idx[i];pos<row_idx[i]+deltarow;pos++)
+    {      
+      x[i]+=(values[pos]*y[cols[pos]]);
     }
-    
-  }// end for
-  
+   
+ }// end for
   return x;
-}
+}  
+
 
 
 
