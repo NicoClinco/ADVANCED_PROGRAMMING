@@ -36,11 +36,16 @@ int main()
  //std::cout << CSR_A(1,3) << " " << CSR_A(1,5) << " " << CSR_A(2,3) << " ";
  //std::cout << CSR_A(2,5) << " " << CSR_A(4,2) << " " << CSR_A(4,4) << "\n\n\n";
  
- std::cout<< COO_A;
  
+ CSR_A(2,4) = 2.2;
  
+ //std::cout<< COO_A;
  
+ std::cout<< CSR_A;
  
+ //std::cout << CSR_A(3,5) << std::endl;
+ 
+ printVector<float>((CSR_A*y));
 
 
  

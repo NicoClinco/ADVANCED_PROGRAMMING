@@ -1,4 +1,5 @@
 #include "SparseMatrixCSR.h"
+#include <iomanip>
 
 SparseMatrixCSR::SparseMatrixCSR(int rows,int cols):
 				  SparseMatrix(rows,cols)
@@ -83,8 +84,8 @@ float& SparseMatrixCSR::operator () (int row, int col)
        return values[pos];
     }//end loop for the columns
     
-    // If here, we have not found the coloumn,
-    // we must put it
+    // If here, we have not found the entry,
+    // insert it
     int startPos = row_idx[row-1];
     int stopPos;
     for(int pos=startPos;pos<startPos+deltarow;pos++)
@@ -100,7 +101,19 @@ float& SparseMatrixCSR::operator () (int row, int col)
     // Insert the value:
     cols.insert(cols.begin()+stopPos,col-1);
     values.insert(values.begin()+stopPos,0.0);
-    row_idx[row]++;
+    
+    //Increase the indexes for every row
+    for(int rowI=row;rowI<nRows+1;rowI++)
+      row_idx[rowI]++;
+   
+    
+    for (auto _ : cols )
+     std::cout << _ << " " ;
+     
+    std::cout<<"\n";
+    for (auto _ : values )
+     std::cout << _ << " " ;
+  
     nnz++;
     
     return values[stopPos];
@@ -146,22 +159,31 @@ std::vector<float> SparseMatrixCSR::operator * (const std::vector<float>& y) con
 // Stream operator-overloading:
 std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR& obj)
 {
+  
+  os<< "----CSR-MATRIX----" << "\n";
+  
   int posCol=0; // zero position
-  for(int row=0;row<nRows;row++)
+  int nnzRow = 0; // number of non-zeros in the row considered
+  
+  for(int row=0;row<obj.nRows;row++)
   {
    posCol = 0;
-   for(int col=0;col<nCols;col++)
+   nnzRow = obj.row_idx[row+1]-obj.row_idx[row];
+   
+   for(int col=0;col<obj.nCols;col++)
    {
-     if(col == cols[row_idx[row]+posCol])
+     if(col == obj.cols[obj.row_idx[row]+posCol] && nnzRow>0)
      {
-      std::cout << values[row_idx[row]+posCol] << "  ";
+      os << std::fixed << std::setprecision(1) << obj.values[obj.row_idx[row]+posCol] << "  ";
       posCol++;
      }else{
-      std::cout << "0.0" << "  ";
+      os << std::fixed << std::setprecision(1) << float(0)<<"  ";
      }
-   }
-   
-  }
+   }// end for cols
+   os << "\n";
+  }//end loop
+  os<<"------------------"<<"\n";
+  return os;
   
 }
 

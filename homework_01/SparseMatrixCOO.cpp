@@ -151,6 +151,7 @@ std::vector<float> SparseMatrixCOO::operator * (const std::vector<float>& y) con
 std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj)
 {
   
+  os<< "----COO-MATRIX----" << "\n";
   unsigned int pos = 0;
   
   for(int row=0;row<obj.nRows;row++)
@@ -160,11 +161,12 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj)
      if(row == obj.rows[pos] && col == obj.cols[pos])
         {os << std::fixed << std::setprecision(1) << float(obj.values[pos])<< "  "; pos++;}
      else{
-     os << std::fixed << std::setprecision(1) << "0.0"<<"  ";
+     os << std::fixed << std::setprecision(1) << float(0)<<"  ";
      }  
     }
     os<<"\n";
   }
+  os<<"------------------"<<"\n";
   return os;
   
 }
