@@ -1,4 +1,5 @@
 #include "SparseMatrixCOO.h"
+#include <iomanip>
 
 SparseMatrixCOO::SparseMatrixCOO(int rows,int cols):
 				  SparseMatrix(rows,cols)
@@ -143,8 +144,32 @@ std::vector<float> SparseMatrixCOO::operator * (const std::vector<float>& y) con
    x[rows[i]]+=(values[i]*y[cols[i]]);
   }
   return x;
-
 }
+
+
+//Operator overloading
+std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj)
+{
+  
+  unsigned int pos = 0;
+  
+  for(int row=0;row<obj.nRows;row++)
+  {
+    for(int col=0;col<obj.nCols;col++)
+    {
+     if(row == obj.rows[pos] && col == obj.cols[pos])
+        {os << std::fixed << std::setprecision(1) << float(obj.values[pos])<< "  "; pos++;}
+     else{
+     os << std::fixed << std::setprecision(1) << "0.0"<<"  ";
+     }  
+    }
+    os<<"\n";
+  }
+  return os;
+  
+}
+
+
 
 
 

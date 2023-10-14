@@ -130,8 +130,6 @@ std::vector<float> SparseMatrixCSR::operator * (const std::vector<float>& y) con
   
   std::vector<float> x(nRows,0.0);
   
-  
-  
   for(unsigned int i=0;i< row_idx.size()-1;i++)
   {
     int deltarow = row_idx[i+1]-row_idx[i];
@@ -145,6 +143,27 @@ std::vector<float> SparseMatrixCSR::operator * (const std::vector<float>& y) con
   return x;
 }  
 
+// Stream operator-overloading:
+std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR& obj)
+{
+  int posCol=0; // zero position
+  for(int row=0;row<nRows;row++)
+  {
+   posCol = 0;
+   for(int col=0;col<nCols;col++)
+   {
+     if(col == cols[row_idx[row]+posCol])
+     {
+      std::cout << values[row_idx[row]+posCol] << "  ";
+      posCol++;
+     }else{
+      std::cout << "0.0" << "  ";
+     }
+   }
+   
+  }
+  
+}
 
 
 

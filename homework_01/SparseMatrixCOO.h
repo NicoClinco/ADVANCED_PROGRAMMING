@@ -33,6 +33,7 @@ class SparseMatrixCOO:
   
   virtual std::vector<float> operator * (const std::vector<float> & y) const;
   
+  friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj);
     
   protected:
   
