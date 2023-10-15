@@ -8,7 +8,7 @@
 int main()
 {
  std::vector<int> _rows_{0,0,1,1,3,3};
- std::vector<int> _cols_{2,4,2,4,1,3};
+ std::vector<int> _cols_{2,4,2,3,1,3};
  std::vector<float> _vals_{3.1,4,5,7.4,2,6};
  std::vector<int> _rowI_{0, 2, 4, 4, 6};
  int nrows = 4;
@@ -36,14 +36,17 @@ int main()
  //std::cout << CSR_A(1,3) << " " << CSR_A(1,5) << " " << CSR_A(2,3) << " ";
  //std::cout << CSR_A(2,5) << " " << CSR_A(4,2) << " " << CSR_A(4,4) << "\n\n\n";
  
- 
- CSR_A(2,4) = 2.2;
- 
+ //CSR_A(4,5) = 41.0;
  //std::cout<< COO_A;
  
- std::cout<< CSR_A;
+ //std::cout<< CSR_A;
  
- //std::cout << CSR_A(3,5) << std::endl;
+ CSR_A(1,1) = 2.3;
+ CSR_A(3,5) = 31.0;
+ 
+ CSR_A(4,5) = 5.000;
+ 
+ std::cout << CSR_A;
  
  printVector<float>((CSR_A*y));
 
