@@ -102,7 +102,7 @@ float SparseMatrixCOO::operator () (int row, int col) const
 
    return x;
 }
-
+/*
 float& SparseMatrixCOO::operator () (int row, int col)
 {
   if(row>nRows || col >nCols || row < 1 || col < 1)
@@ -126,7 +126,40 @@ float& SparseMatrixCOO::operator () (int row, int col)
      return this->values[i];
     }
   }
+  
 }
+*/
+
+float& SparseMatrixCOO::operator () (int row, int col)
+{
+  if(row>nRows || col >nCols || row < 1 || col < 1)
+   throw std::invalid_argument( "Insert a valid index for the rows or coloumns: " );
+
+  // Use the global-global indexing to enumerate the positions:
+  // The index goes from 0 to Nelem-1 and increments for every column in a row.
+  
+  int gIndx = (row-1)*nCols + (col-1);
+  unsigned int i = 0;
+  for(i=0;i<rows.size();i++)
+  {
+    int currgIndx = (rows[i])*nCols + (cols[i]);
+    if( currgIndx == gIndx )
+      return this->values[i];
+    
+    else if( currgIndx > gIndx )
+      break;
+  }
+  // If here, insert the value in the position:
+  rows.insert(rows.begin()+i,row-1);
+  cols.insert(cols.begin()+i,col-1);
+  values.insert(values.begin()+i,0.0); // It will be overwritten
+  nnz++;
+  return this->values[i];
+  
+}
+
+
+
 
 // Matrix multiplication by a vector:
 std::vector<float> SparseMatrixCOO::operator * (const std::vector<float>& y) const
@@ -161,7 +194,7 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj)
      if(row == obj.rows[pos] && col == obj.cols[pos])
         {os << std::fixed << std::setprecision(1) << float(obj.values[pos])<< "  "; pos++;}
      else{
-     os << std::fixed << std::setprecision(1) << float(0)<<"  ";
+     os << std::fixed << std::setprecision(1) << float(0.0)<<"  ";
      }  
     }
     os<<"\n";
@@ -171,8 +204,21 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj)
   
 }
 
+// Copy the vector of the stored row-indexes
+std::vector<int> SparseMatrixCOO::Get_vecRows() const
+{
+  return (*this).rows;
+}
 
-
+/*
+SparseMatrix* COOtoCSR( const SparseMatrixCOO& _COO_)
+{
+  int nRows = _COO_.GetRows();
+  int nCols = _COO_.GetCols();
+  SparseMatrix* CSR_A = new SparseMatrixCSR(nRows,nCols);
+  return (*CSR_A);
+}
+*/
 
 
 

@@ -23,3 +23,6 @@ int SparseMatrix<T>::NumnonZeros() const
 }
 
 
+template class SparseMatrix<int>;
+
+template class SparseMatrix<float>;

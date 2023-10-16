@@ -16,16 +16,16 @@ SparseMatrixCSR<T>::SparseMatrixCSR
   int rows_, int cols_
 ):SparseMatrix<T>(rows_,cols_)
 {
-  this.row_idx = r_idx; this.cols = c; this.values = val;
+  this->row_idx = r_idx; this->cols = c; this->values = val;
   
-  unsigned int rIdxSize = row_idx.size();
-  unsigned int cSize = cols.size();
-  unsigned int nnzSize = values.size();
+  unsigned int rIdxSize = this->row_idx.size();
+  unsigned int cSize = this->cols.size();
+  unsigned int nnzSize = this->values.size();
   
-  if((rIdxSize!=(unsigned int) nRows+1) || (cSize != nnzSize) )
+  if((rIdxSize!=(unsigned int) this->nRows+1) || (cSize != nnzSize) )
     throw std::invalid_argument( "###Wrong dimensions for the entries###" );
   
-  nnz = nnzSize;
+  this->nnz = nnzSize;
   
 }
 
@@ -33,26 +33,26 @@ SparseMatrixCSR<T>::SparseMatrixCSR
 template<typename T>
 T SparseMatrixCSR<T>::Get(int row, int col) const
 {
-  if (row > nRows || col > nCols || row < 1 || col <1)
+  if (row > this->nRows || col > this->nCols || row < 1 || col <1)
   {
     throw std::invalid_argument( "Insert a valid index for the rows or columns: " );
     return -1;
-  }else if(nnz==0)
+  }else if(this->nnz==0)
   {
     return T(0.0);
     	
   }else{
         // Check if there are non-zeros: row = i+1
-  	int deltarow = row_idx[row]-row_idx[row-1];
+  	int deltarow = this->row_idx[row]-this->row_idx[row-1];
   	if(deltarow>0)
   	{
   	// j: global position of the values array
   	
-  	 for(int pos=row_idx[row-1];pos<row_idx[row-1]+deltarow;pos++)
+  	 for(int pos=this->row_idx[row-1];pos<this->row_idx[row-1]+deltarow;pos++)
   	 {
   	  
-  	  if( cols[pos] == col-1)
-  	    return values[pos];
+  	  if( this->cols[pos] == col-1)
+  	    return this->values[pos];
   	 }//end loop for the columns
   	 return T(0.0); // In the row is not present a value != 0
   	}
@@ -73,7 +73,7 @@ T SparseMatrixCSR<T>::operator () (int row, int col) const
 template<typename T>
 T& SparseMatrixCSR<T>::operator () (int row, int col)
 {
-  if(row>nRows || col >nCols || row < 1 || col < 1)
+  if(row> this->nRows || col >this->nCols || row < 1 || col < 1)
   {
    throw std::invalid_argument( "Insert a valid index for the rows or coloumns: " );
    
@@ -86,34 +86,34 @@ T& SparseMatrixCSR<T>::operator () (int row, int col)
    
    */
    
-   int deltarow = row_idx[row]-row_idx[row-1];
-   int startPos = row_idx[row-1];
+   int deltarow = this->row_idx[row]-this->row_idx[row-1];
+   int startPos = this->row_idx[row-1];
    int stopPos=startPos;int pos=0;
    
    for(pos=startPos;pos<startPos+deltarow;pos++)
     {
-      if( (col-1)< cols[pos] )
+      if( (col-1)< this->cols[pos] )
       {
        stopPos = pos;
        break;
       }
-      if ( (col-1) == cols[pos] )
-         return values[pos];
+      if ( (col-1) == this->cols[pos] )
+         return this->values[pos];
     }
     if(pos == startPos + deltarow )
     	stopPos = pos;
     
     // Insert the value:
-    cols.insert(cols.begin()+stopPos,col-1);
-    values.insert(values.begin()+stopPos,0.0);
+    this->cols.insert(this->cols.begin()+stopPos,col-1);
+    this->values.insert(this->values.begin()+stopPos,0.0);
     
     //Increase the indexes for every row
-    for(int rowI=row;rowI<nRows+1;rowI++)
-      row_idx[rowI]++;
+    for(int rowI=row;rowI<this->nRows+1;rowI++)
+      this->row_idx[rowI]++;
    
-    nnz++; // Increase non-zeros
+    this->nnz++; // Increase non-zeros
     
-    return values[stopPos];
+    return this->values[stopPos];
    
   }// end else
   
@@ -121,23 +121,23 @@ T& SparseMatrixCSR<T>::operator () (int row, int col)
 }
 
 template<typename T>
-std::vector<T> SparseMatrixCSR::operator * (const std::vector<T>& y) const
+std::vector<T> SparseMatrixCSR<T>::operator * (const std::vector<T>& y) const
 {
   // Perform x = Ay as a matrix-multiplication
-  if( y.size() != (unsigned int) nCols)
+  if( y.size() != (unsigned int) this->nCols)
   {
     throw std::invalid_argument( "###Vector is not compatible with the matrix dimensions###" );
   }
   
-  std::vector<T> x(nRows,0.0);
+  std::vector<T> x(this->nRows,0.0);
   
-  for(unsigned int i=0;i< row_idx.size()-1;i++)
+  for(unsigned int i=0;i< this->row_idx.size()-1;i++)
   {
-    int deltarow = row_idx[i+1]-row_idx[i];
+    int deltarow = this->row_idx[i+1]-this->row_idx[i];
      
-    for(int pos=row_idx[i];pos<row_idx[i]+deltarow;pos++)
+    for(int pos=this->row_idx[i];pos<this->row_idx[i]+deltarow;pos++)
     {      
-      x[i]+=(values[pos]*y[cols[pos]]);
+      x[i]+=(this->values[pos]*y[this->cols[pos]]);
     }
    
  }// end for
@@ -145,8 +145,8 @@ std::vector<T> SparseMatrixCSR::operator * (const std::vector<T>& y) const
 }  
 
 // Stream operator-overloading:
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<T>& obj)
+//template<typename T>
+std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<float>& obj)
 {
   
   os<< "----CSR-MATRIX----" << "\n";
@@ -188,5 +188,15 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<T>& obj)
 }
 
 
+// Explicit instatation:
+
+
+template class SparseMatrix<int>;
+
+template class SparseMatrixCSR<int>;
+
+template class SparseMatrix<float>;
+
+template class SparseMatrixCSR<float>;
 
 

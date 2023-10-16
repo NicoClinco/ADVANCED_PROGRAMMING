@@ -32,7 +32,12 @@ class SparseMatrixCSR:
   virtual std::vector<float> operator * (const std::vector<float> & y) const;
   
   friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR& obj);
-    
+
+  std::vector<int> Get_vecIrows() const;
+
+  friend SparseMatrix& CSRtoCOO( const SparseMatrixCSR& _CSR_);
+
+  
   protected:
   
    std::vector<int> row_idx;

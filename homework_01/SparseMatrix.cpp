@@ -19,4 +19,13 @@ int SparseMatrix::NumnonZeros() const
   return nnz;
 }
 
+std::vector<int> SparseMatrix::Get_vecCols() const
+{
+  return (*this).cols;
+}
+
+std::vector<float> SparseMatrix::Get_vecVals() const
+{
+  return (*this).values;
+}
 

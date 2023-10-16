@@ -39,7 +39,7 @@ class SparseMatrix
    
    int nRows, nCols, nnz;  
    std::vector<T> values;   // values different from zero.
-   std::vector<T> cols;           // cols where there are non zero-values.
+   std::vector<int> cols;           // cols where there are non zero-values.
    
   
 };

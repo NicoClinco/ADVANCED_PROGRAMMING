@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "SparseMatrix.h"
+#include "SparseMatrixCSR.h"
 
 
 class SparseMatrixCOO:
@@ -22,7 +23,7 @@ class SparseMatrixCOO:
   const std::vector<float>& val,
   int rows_, int cols_
   );
-    
+ 
   virtual float Get(int row, int col) const;
   
   //virtual void Set(int row, int col,float value);
@@ -34,10 +35,15 @@ class SparseMatrixCOO:
   virtual std::vector<float> operator * (const std::vector<float> & y) const;
   
   friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO& obj);
-    
+
+  std::vector<int> Get_vecRows() const;
+
+  friend SparseMatrix& COOtoCSR( const SparseMatrixCOO& _COO_);
+  
+       
   protected:
   
-   std::vector<int> rows;
+  std::vector<int> rows;
   
 };
 

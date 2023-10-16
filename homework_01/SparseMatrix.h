@@ -12,13 +12,14 @@ class SparseMatrix
    SparseMatrix(int rows,int cols);
    
    
-
-   
    // Getter-Setter
    int GetCols() const;
    int GetRows() const;
    int NumnonZeros() const;
-   
+
+  std::vector<int> Get_vecCols() const;
+
+  std::vector<float> Get_vecVals() const;
    
    virtual float Get(int row, int col) const = 0;
    //virtual void Set(int row,int col,float value) = 0;
@@ -30,15 +31,13 @@ class SparseMatrix
    
    // Multiplication
    virtual std::vector<float> operator * (const std::vector<float> & y) const = 0;
-   
-   // Condition number
-   
+  
    
   protected:
    
    int nRows, nCols, nnz;  
    std::vector<float> values;   // values different from zero.
-   std::vector<int> cols;           // cols where there are non zero-values.
+   std::vector<int> cols;       // cols where there are non zero-values.
    
   
 };

@@ -77,61 +77,32 @@ float& SparseMatrixCSR::operator () (int row, int col)
    
   }else
   {
-   /* "Loop trough the values"
-     pos: global-index to loop trough values, cols.
-     
-     Perform a loop trough the values: if we found the column,
-     the entry is found, otherwise we must insert the value.
-   
-   */
-   
    int deltarow = row_idx[row]-row_idx[row-1];
-   int startPos = row_idx[row-1];
-   int stopPos=startPos;int pos=0;
    
-   for(pos=startPos;pos<startPos+deltarow;pos++)
-    {
-      if( (col-1)< cols[pos] )
-      {
-       stopPos = pos;
-       break;
-      }
-      if ( (col-1) == cols[pos] )
-         return values[pos];
-    }
-    if(pos == startPos + deltarow )
-    	stopPos = pos;
-    
-    // Insert the value:
-    cols.insert(cols.begin()+stopPos,col-1);
-    values.insert(values.begin()+stopPos,0.0);
-    
-    //Increase the indexes for every row
-    for(int rowI=row;rowI<nRows+1;rowI++)
-      row_idx[rowI]++;
-   
-    nnz++; // Increase non-zeros
-    
-    return values[stopPos];
-   
-   
-   /*
    if(deltarow>0)
    {
     // pos : global position index for values
-   int startPos = row_idx[row-1];
-   int stopPos=startPos;int pos=0;
-   
-   for(pos=startPos;pos<startPos+deltarow;pos++)
+    for(int pos=row_idx[row-1];pos<row_idx[row-1]+deltarow;pos++)
+    {
+     if( cols[pos] == col-1 ){
+       return values[pos];
+       }
+    }//end loop for the columns
+    
+    // If here, we have not found the entry,
+    // we must add it:
+    int startPos = row_idx[row-1];
+    int stopPos,pos;
+    for(pos=startPos;pos<startPos+deltarow;pos++)
     {
       if( (col-1)< cols[pos] )
       {
        stopPos = pos;
        break;
       }
-      if ( (col-1) == cols[pos] )
-         return values[pos];
     }
+    // Insert the value:
+    // Case in which we have not found an entry:
     if(pos == startPos + deltarow )
     	stopPos = pos;
     
@@ -146,19 +117,16 @@ float& SparseMatrixCSR::operator () (int row, int col)
     nnz++; // Increase non-zeros
     
     return values[stopPos];
-  
+    
    }else{
-      
+   
       cols.insert(cols.begin()+row_idx[row-1],col-1);
       values.insert(values.begin()+row_idx[row-1],0.0);
-      
       nnz++;
-      for(int rowI=row;rowI<nRows+1;rowI++)
-       row_idx[rowI]++;
-       
+      row_idx[row]++; 
       return values[row_idx[row-1]];
-   }*/
-    
+   }
+   
   }// end else
   
  
@@ -197,28 +165,17 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR& obj)
   int posCol=0; // zero position
   int nnzRow = 0; // number of non-zeros in the row considered
   
-  /* "Perform a classic double for loop"
-    
-     For every row, obtain the number of entries nnzRow
-     and perform a cycle trough the coloumn: if we found an
-     entry, print that else print 0.0;
-  */
-  
-  
   for(int row=0;row<obj.nRows;row++)
   {
    posCol = 0;
    nnzRow = obj.row_idx[row+1]-obj.row_idx[row];
-   int nRemanent = nnzRow;
    
    for(int col=0;col<obj.nCols;col++)
    {
-     if(col == obj.cols[obj.row_idx[row]+posCol] && nRemanent>0)
+     if(col == obj.cols[obj.row_idx[row]+posCol] && nnzRow>0)
      {
-      //std::cout <<  "\n" << col << "\n";
       os << std::fixed << std::setprecision(1) << obj.values[obj.row_idx[row]+posCol] << "  ";
       posCol++;
-      nRemanent--;
      }else{
       os << std::fixed << std::setprecision(1) << float(0)<<"  ";
      }
