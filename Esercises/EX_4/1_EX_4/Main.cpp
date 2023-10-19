@@ -1,44 +1,60 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "ADCLASSES.h"
 
-
-/*
-  Store a function pointer into a class.
- */
 
 template<class type>
-class ADdouble
+Sum<type>& operator +
+(
+ const ADexpression<type>& a,
+ const ADexpression<type>& b
+)
 {
-  
-  public:
+  Sum<type>* _sum_ = new Sum<type>(a,b);
+  return (*_sum_);
+}
 
-  ADdouble(type (*fToStore)(const type&)):
-    _func_(fToStore)
-  {
-  }
-  
-  virtual type evaluate(const type& num){
-    return _func_(num);};
-
-  virtual type evaluate_derivative(){return type(0);};
-
- private:
-
-  type (*_func_)(const type&); 
-  //Pointer to a function:
-  
-};
-
-
-float Monomial(const float& x)
+template<class type>
+Product<type>& operator *
+(
+ const ADexpression<type>& a,
+ const ADexpression<type>& b
+)
 {
-  return 3.0*x + 2.0;
+  Product<type>* _prod_ = new Product<type>(a,b);
+  return (*_prod_);
 }
 
   
 int main()
 {
-  ADdouble<float> Amonomial(Monomial);
-  std::cout<<Amonomial.evaluate(0.5);
+
+  float x = 0.5;
+  ADexpression<float>* _scalar_ = new Var<float>(x);
+
+  ADexpression<float>* _scalarII_ =new Var<float>(x+0.5);
+
+  std::cout << _scalar_->evaluate()<<"\n";
+  
+  std::cout << _scalarII_->evaluate()<<"\n";
+
+  ADexpression<float>* _sum_ = new Sum<float>( *_scalar_,*_scalarII_);
+
+  std::cout << _sum_->evaluate()<< "\n";
+  
+  ADexpression<float>* _prod_ = new Product<float>( *_scalar_,*_scalar_);
+
+  std::cout <<"prod: "<<  _prod_->evaluate_der() << std::endl;
+
+
+  ADexpression<float>& sumOP = (*_scalar_)+(*_scalarII_);
+  
+  std::cout<< sumOP.evaluate()<<"\n";
+
+  ADexpression<float>& prodOP= (*_scalar_) * (*_scalar_);
+
+  std::cout <<"prodOP: "<<  prodOP.evaluate_der()<<"\n";
+  
+  return 0;
 }

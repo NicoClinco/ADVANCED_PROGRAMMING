@@ -1,3 +1,6 @@
+#ifndef CLASS_H
+#define CLASS_H
+
 template<class type>
 class ADdouble
 {
@@ -8,17 +11,23 @@ class ADdouble
     _func_(fToStore)
   {}
   
-  virtual type evaluate(){
-    return type(0)};
+  virtual type evaluate(const type& x) const = 0;
 
-  virtual type evaluate_derivative(){return type(0)};
+  virtual type evaluate_derivative(const type& x) const = 0;
 
- private:
+  virtual ADdouble<type>& operator + (const ADdouble<type>& _tosum_) =  0;
+  
+  //virtual ADdouble operator -() =  0;
+  //virtual ADdouble  operator *() = 0;
+  
 
-  type *(_func_)(const type&)=nullptr; 
+
+ protected:
+
+  type (*_func_)(const type&); 
   //Pointer to a function:
   
-}
+};
 
 template<class type>
 class Scalar:
@@ -26,17 +35,45 @@ class Scalar:
 {
  public:
 
-  virtual type evaluate() override
-  {
-    // BHO
-  }
+  Scalar(type (*fToStore)(const type&)):
+    ADdouble<type>(fToStore)
+  {};
 
-  virtual type evaluate_derivative() = 0
-  {
-    // BHO
-  }
-  
-}
+  virtual type evaluate(const type& x) const;
  
+  virtual type evaluate_derivative(const type& x) const;
+
+  virtual ADdouble<type>& operator + (const ADdouble<type>& _tosum_) =  0;
+  
+  
+};
+
+template<class type>
+type Scalar<type>::evaluate(const type& x) const
+{
+  return (*this)._func_(x);
+}
+
+template<class type>
+type Scalar<type>::evaluate_derivative(const type& x) const
+{
+  // Evaluate the derivative with forward difference:
+  type f_x0 = (*this)._func_(x);
+  type h    = type(0.001);
+  type f_xh = (*this)._func_(x+h);
+  
+  return type((f_xh-f_x0)/h);
+}
+/*
+template<class type>
+ADdouble<type>& Scalar<type>::operator + (const ADdouble<type>& _tosum_) const
+{
+  (*this)
+}
+*/
+
+
+
+#endif
 
 
