@@ -18,7 +18,7 @@ void printVector
 }
 
 
-SparseMatrix& CSRtoCOO( const SparseMatrixCSR& _CSR_)
+SparseMatrixCOO& CSRtoCOO( const SparseMatrixCSR& _CSR_)
 {
   int nRows = _CSR_.GetRows();
   int nCols = _CSR_.GetCols();
@@ -26,14 +26,30 @@ SparseMatrix& CSRtoCOO( const SparseMatrixCSR& _CSR_)
   std::vector<int> _rowsIdx_ = _CSR_.row_idx;
   std::vector<int> _cols_ = _CSR_.cols;
   std::vector<float> _vals_ = _CSR_.values;
-  
-  SparseMatrix* COO_A = new SparseMatrixCOO(nRows,nCols);
 
-  return (*COO_A);
+  // Creating the rows:
+  std::vector<int> rows;
+
+ 
+  // Converting the indexing CSR->COO:
+  for (unsigned int i=0;i<_rowsIdx_.size()-1;i++)
+  {
+    // num element per row:
+    int num_elem = _rowsIdx_[i+1] - _rowsIdx_[i];
+    for(int idx=0;idx<num_elem;idx++)
+      rows.push_back(i); 
+  }
+  
+  SparseMatrix* COO_A =
+    new SparseMatrixCOO(rows,_cols_,_vals_,nRows,nCols);
+
+  SparseMatrixCOO& COO_A_CONV = dynamic_cast<SparseMatrixCOO&>(*COO_A);
+  
+  return (COO_A_CONV);
 }
 
 
-SparseMatrix& COOtoCSR(const SparseMatrixCOO& _COO_)
+SparseMatrixCSR& COOtoCSR(const SparseMatrixCOO& _COO_)
 {
   int nRows = _COO_.GetRows();
   int nCols = _COO_.GetCols();
@@ -47,17 +63,19 @@ SparseMatrix& COOtoCSR(const SparseMatrixCOO& _COO_)
   std::vector<int> rowI(nRows+1,0);
 
   
-  
+  // Convert the indexing COO->CSR:
   for(unsigned int i=0;i<_rows_.size();i++)
   {
     for(unsigned int j=_rows_[i]+1;j<rowI.size();j++)
       rowI[j]++;
   }
-  
+
+  // Creating a SparseMatrix:
   SparseMatrix* CSR_A =
     new SparseMatrixCSR(rowI,_cols_,_vals_,nRows,nCols);
-  
-  
 
-  return(*CSR_A);
+  SparseMatrixCSR& CSR_A_CONV = dynamic_cast<SparseMatrixCSR&>(*CSR_A);
+
+  
+  return(CSR_A_CONV);
 }

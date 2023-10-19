@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include "SparseMatrix.h"
 
+// forward declaration: needed for CSRtoCOO
+class SparseMatrixCOO;
 
 class SparseMatrixCSR:
   public SparseMatrix
@@ -35,7 +37,7 @@ class SparseMatrixCSR:
 
   std::vector<int> Get_vecIrows() const;
 
-  friend SparseMatrix& CSRtoCOO( const SparseMatrixCSR& _CSR_);
+  friend SparseMatrixCOO& CSRtoCOO( const SparseMatrixCSR& _CSR_);
 
   
   protected:

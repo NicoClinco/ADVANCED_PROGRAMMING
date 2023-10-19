@@ -69,19 +69,36 @@ int main()
  std::cout << COO_A;
  printVector<float>((COO_A*y));
 
- std::cout << "########### COO FORMAT ###################"<<std::endl;
+ std::cout << "########### COO FORMAT ###################"<<"\n\n\n"<< std::endl;
 
  std::cout << " TEST THE CONVERSION PROPERTIES" <<std::endl;
 
 
- SparseMatrix& SM_CSR = COOtoCSR(COO_A);
- SparseMatrixCSR& CSR_A_CONV = dynamic_cast<SparseMatrixCSR&>(SM_CSR);
-
- std::cout << "######### CONVERTED-CSR-MATRIX-#########" <<std::endl;
- std::cout << CSR_A_CONV;
+ /* TEST THE CONVERSION FROM COO TO CSR */ 
+ 
+ SparseMatrixCSR& SM_CSR = COOtoCSR(COO_A);
+ 
+ //SparseMatrixCSR& CSR_A_CONV = dynamic_cast<SparseMatrixCSR&>(SM_CSR);
 
  std::cout << "######### CONVERTED-CSR-MATRIX-#########" <<std::endl;
  
+ std::cout << SM_CSR;
+
+ std::cout << "######### CONVERTED-CSR-MATRIX-#########" <<"\n"<< std::endl;
+
+ /*------------------------------------*/
+
+ /*  TEST THE CONVERSION FROM CSR TO COO */
+
+ SparseMatrixCOO& SM_COO = CSRtoCOO(SM_CSR);
+
+ std::cout << "###### CONVERTED-COO-MATRIX-#########"<<std::endl;
+ 
+ std::cout<< SM_COO;
+
+ std::cout << "###### CONVERTED-COO-MATRIX-########"<<"\n"<< std::endl;
+
+ /* -----------------------------------*/
 
  
  return 0;

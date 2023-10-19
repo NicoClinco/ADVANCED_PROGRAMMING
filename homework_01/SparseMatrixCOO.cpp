@@ -210,15 +210,6 @@ std::vector<int> SparseMatrixCOO::Get_vecRows() const
   return (*this).rows;
 }
 
-/*
-SparseMatrix* COOtoCSR( const SparseMatrixCOO& _COO_)
-{
-  int nRows = _COO_.GetRows();
-  int nCols = _COO_.GetCols();
-  SparseMatrix* CSR_A = new SparseMatrixCSR(nRows,nCols);
-  return (*CSR_A);
-}
-*/
 
 
 
