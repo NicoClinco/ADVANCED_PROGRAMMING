@@ -42,9 +42,11 @@ SparseMatrix& COOtoCSR(const SparseMatrixCOO& _COO_)
   std::vector<int> _cols_ = _COO_.cols;
   std::vector<float> _vals_ = _COO_.values;
 
+
   // Creating the new vector for row-indexing
   std::vector<int> rowI(nRows+1,0);
 
+  
   
   for(unsigned int i=0;i<_rows_.size();i++)
   {
