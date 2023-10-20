@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 class DataSource
 {
@@ -13,6 +14,11 @@ class DataSource
   DataSource(std::string name):
     _name_(name)
   {};
+
+  friend class DataTransformer;
+  friend class LinearScaler;
+  friend class LogTransformer;
+  friend class StandardScaler;
 
   virtual ~DataSource() {};
   
@@ -29,7 +35,7 @@ class DataSource
   protected:
    std::string _name_;
    std::vector<float> _data_;
-};
+};// end class DataSource
 
 
 class FileDataSource:
@@ -65,7 +71,7 @@ public:
 protected:
   std::string _fname_;
   std::ifstream file;
-};
+};// end class FileDataSource
 
 class ConsoleDataSource:
     public DataSource
@@ -89,6 +95,6 @@ public:
     while(iss >> val)
       _data_.push_back(val);
   } 
-};
+};// end class ConsoleDataSource
 
 #endif

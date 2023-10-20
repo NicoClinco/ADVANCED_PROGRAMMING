@@ -1,0 +1,19 @@
+#ifndef _DATATRANSFORMER_
+#define _DATATRANSFORMER_
+
+
+class DataTransformer
+{
+ public:
+
+  friend class DataSource;
+  
+};// end class DataTransf
+
+
+class 
+
+
+
+
+#endif
