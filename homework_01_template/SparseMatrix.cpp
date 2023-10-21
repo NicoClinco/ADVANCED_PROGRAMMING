@@ -22,7 +22,8 @@ int SparseMatrix<T>::NumnonZeros() const
   return nnz;
 }
 
+// explicit instatation:
 
 template class SparseMatrix<int>;
 
-template class SparseMatrix<float>;
+template class SparseMatrix<double>;

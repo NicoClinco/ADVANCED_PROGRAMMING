@@ -30,14 +30,15 @@ class SparseMatrixCSR:
   virtual T& operator () (int row, int col);
   
   virtual std::vector<T> operator * (const std::vector<T> & y) const;
-  
-  friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<float>& obj);
+
+  // Declare all the instantiations friend of the class:
+  template<class Y>
+  friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<Y>& obj);
     
   protected:
   
    std::vector<int> row_idx;
   
 };
-
 
 #endif

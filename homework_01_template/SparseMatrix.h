@@ -24,7 +24,7 @@ class SparseMatrix
    virtual T Get(int row, int col) const = 0;
    //virtual void Set(int row,int col,float value) = 0;
   
-  
+ 
    // Access values
    virtual T operator () (int row, int col) const = 0;
    virtual T& operator () (int row, int col) = 0;
@@ -32,7 +32,8 @@ class SparseMatrix
    // Multiplication
    virtual std::vector<T> operator * (const std::vector<T> & y) const = 0;
    
-   // Condition number
+  // virtual destructor
+  ~SparseMatrix(){};
    
    
   protected:

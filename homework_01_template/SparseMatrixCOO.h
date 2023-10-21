@@ -32,8 +32,9 @@ class SparseMatrixCOO:
   virtual T& operator () (int row, int col);
   
   virtual std::vector<T> operator * (const std::vector<T> & y) const;
-  
-  friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO<T>& obj);
+
+  template<class Y>
+  friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO<Y>& obj);
     
   protected:
   
