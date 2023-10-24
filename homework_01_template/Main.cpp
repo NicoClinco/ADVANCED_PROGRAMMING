@@ -57,6 +57,25 @@ int main()
  std::cout << A_COO_ZERO<< std::endl;
  std::cout << A_CSR_ZERO<< std::endl;
 
+
+ // Conversion from COO-format to CSR-format:
+ SparseMatrix<double>& Sparse = COOtoCSR<double>(A_COO_ZERO);
+ // Conversion needed for printing:
+ SparseMatrixCSR<double> ConvertedtoCSR = dynamic_cast<SparseMatrixCSR<double>& >(Sparse);
+
+ // Print the converted matrix:
+ std::cout << " CONVERTED MATRIX: FROM COO TO CSR" << std::endl;
+ std::cout << ConvertedtoCSR << std::endl;
+ 
+ // Conversion from CSR-format to COO-format:
+ 
+ SparseMatrix<double>& SparseI = CSRtoCOO<double>(A_CSR_ZERO);
+SparseMatrixCOO<double> ConvertedtoCOO= dynamic_cast<SparseMatrixCOO<double>& >(SparseI);
+
+ 
+ //Print the converted matrix:
+ std::cout << " CONVERTED MATRIX FROM CSR TO COO"<< std::endl;
+ std::cout << ConvertedtoCOO << std::endl;
  
  return 0;
 }

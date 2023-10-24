@@ -5,6 +5,10 @@
 #include <stdexcept>
 #include "SparseMatrix.h"
 
+// forward declaration for friend function conversion:
+template <class>
+class SparseMatrixCOO;
+
 template<typename T>
 class SparseMatrixCSR:
   public SparseMatrix<T>
@@ -34,7 +38,10 @@ class SparseMatrixCSR:
   // Declare all the instantiations friend of the class:
   template<class Y>
   friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<Y>& obj);
-    
+
+  template<class Y>
+  friend SparseMatrixCOO<Y>& CSRtoCOO( const SparseMatrixCSR<Y>& _CSR_);
+  
   protected:
   
    std::vector<int> row_idx;
