@@ -17,6 +17,7 @@ void printVector
   std::cout  << "\n"<< std::endl;    
 }
 
+
 // CONVERSION: FROM COO TO CSR:
  template<class Y>
  SparseMatrixCSR<Y>& COOtoCSR( const SparseMatrixCOO<Y>& _COO_)
@@ -48,6 +49,7 @@ void printVector
 
   return(CSR_A_CONV);
 }
+
 
 //CONVERSION FROM CSR TO COO:
 template<class Y>

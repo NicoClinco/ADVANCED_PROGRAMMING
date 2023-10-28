@@ -162,6 +162,7 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO<T>& obj)
   return os;
 }// end function
 
+
 // explicit instatation:
 
 template class SparseMatrixCOO<int>;
@@ -169,8 +170,6 @@ template class SparseMatrixCOO<double>;
 
 template std::ostream& operator<<(std::ostream &os,const SparseMatrixCOO<double>& obj);
 template std::ostream& operator<<(std::ostream &os,const SparseMatrixCOO<int>& obj);
-
-
 
 
 

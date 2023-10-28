@@ -29,8 +29,6 @@ class SparseMatrixCOO:
     
   virtual T Get(int row, int col) const;
   
-  //virtual void Set(int row, int col,float value);
-  
   virtual T operator () (int row, int col) const;
   
   virtual T& operator () (int row, int col);
@@ -40,6 +38,7 @@ class SparseMatrixCOO:
   template<class Y>
   friend std::ostream& operator<<(std::ostream& os, const SparseMatrixCOO<Y>& obj);
 
+  // declaration of function needed for conversion
   template<class Y>
   friend SparseMatrixCSR<Y>& COOtoCSR( const SparseMatrixCOO<Y>& _COO_);
   

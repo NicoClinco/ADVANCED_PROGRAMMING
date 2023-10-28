@@ -1,7 +1,8 @@
 
 #include <iostream>
 #include <vector>
-
+#include "header.hpp"
+/*
 class Array
 {
  public:
@@ -24,18 +25,12 @@ class Array
 private:
   std::vector<float> data;
 };
+*/
 
 int main()
 {
-  std::vector<float> d1{1.1,2.2,3.3,4.4};
-  Array a(d1);
-
-  const Array& a_const = a;
-  
-  const float& x = a_const(2);
-  
-
-  std::cout<<x<<std::endl;
- 
+  std::vector<double> vec{1.0,2.3,4.5,5.3};
+  array<double> a(vec);
+  a.getNum(2) = 35.5;
  return 0;
 }

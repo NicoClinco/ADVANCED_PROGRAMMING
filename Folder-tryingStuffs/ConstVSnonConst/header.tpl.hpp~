@@ -1,0 +1,5 @@
+template<class T>
+T& array<T>::getNum(unsigned int idx)
+{
+  return ( (idx< v1.size() ) ?  v1[idx] : (std::cout<< "WRONG")); 
+}

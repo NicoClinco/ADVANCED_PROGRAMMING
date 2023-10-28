@@ -33,14 +33,14 @@ class SparseMatrix
    virtual std::vector<T> operator * (const std::vector<T> & y) const = 0;
    
   // virtual destructor
-  ~SparseMatrix(){};
+  virtual ~SparseMatrix(){};
    
    
   protected:
    
-   int nRows, nCols, nnz;  
+   int nRows, nCols, nnz;   
    std::vector<T> values;   // values different from zero.
-   std::vector<int> cols;           // cols where there are non zero-values.
+   std::vector<int> cols;   // cols where there are non zero-values.
    
   
 };

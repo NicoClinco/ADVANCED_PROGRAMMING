@@ -87,7 +87,6 @@ T& SparseMatrixCSR<T>::operator () (int row, int col)
      
      Perform a loop trough the values: if we found the column,
      the entry is found, otherwise we must insert the value.
-   
    */
 
     // If it is the first time, update the cols and the values:
@@ -224,8 +223,7 @@ std::ostream& operator<<(std::ostream& os, const SparseMatrixCSR<T>& obj)
 template class SparseMatrixCSR<int>;
 template class SparseMatrixCSR<double>;
 
-// Explicit instantation for the functions:
-
+// Explicit instantation of the friend function:
 template std::ostream& operator<<(std::ostream &os,const SparseMatrixCSR<double>& obj);
 template std::ostream& operator<<(std::ostream &os,const SparseMatrixCSR<int>& obj);
 
