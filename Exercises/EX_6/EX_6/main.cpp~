@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+
+class Vector
+{
+public:
+
+  Vector(const double* data);
+
+  //Copy-constructor
+  Vector(const Vector& rhs)
+  {
+    
+  }
+  Vector& operator=(Vector& rhs)
+  {
+    
+  }
+  
+  double* data_;
+};
+
+  
+  
