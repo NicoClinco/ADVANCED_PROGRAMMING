@@ -3,7 +3,9 @@
 #include <boost/math/quadrature/trapezoidal.hpp>
 #include <functional>
 
-/*
+namespace math_homework2
+{
+// Abstract class for quadrature:
 class Quadrature
 {
 public:
@@ -14,7 +16,8 @@ public:
    virtual std::vector<double> makeQuadPnts(double a ,double b) = 0;
  protected:
   int N_;
-*/
+};
+
 
 class TrapzQuadrature:
   public Quadrature
@@ -46,9 +49,7 @@ class TrapzQuadrature:
     // return the stuff;
   }
 
-private:
-  int N;
-};
+}; // end TrapzQuadrature
 
 class MidPointQuadrature:
   public Quadrature
@@ -66,7 +67,7 @@ public:
     // TO DO
   }
   
-  double operator()((std::function<double (double)> funToInt,double a,double b) const
+  double operator()((std::function<double (double)> funToInt,double a) const
   {
     // Divide the interval [a,b] in subintervals and obtain the quadrature points:
     std::vector<double> weights_ = makeQuadWeights(a,b);
@@ -75,17 +76,24 @@ public:
     // Perform the summation:
   }
     
-};
+    }; // end MidPointQuadrature
 
+
+  // Interface class: used for creating the various quadrature
+  
 template<class QuadType>
 class numericalIntegration
 {
 public:
   numericalIntegration(QuadType* qrule):
     qrule_(qrule){};
+
+  // a : starting point
+  // b : end point
+  // n : number of integration subdomain
   double operator () (std::function<double (double)> funToInt,double a, double b) const
   {
-    return  qrule_->operator()(funToInt,a,b);
+    return  qrule_->operator()(funToInt,a,b,n);
   }
 
 private:
@@ -93,13 +101,14 @@ private:
   QuadType* qrule_;
 };
 
+}
 int main()
 {
   using boost::math::quadrature::trapezoidal; 
   auto f = [](double x) { return x; }; // To integrate
   //double I = trapezoidal(f, 0.0, boost::math::constants::two_pi<double>());
   TrapzQuadrature trpQuad{};
-  numericalIntegration Int{&trpQuad};
+  numericalIntegration Int<TrapzQuadrature>{&trpQuad};
   
   std::cout << Int(f,0.0,1.0) << std::endl;
   return 0;

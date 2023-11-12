@@ -34,6 +34,7 @@ public:
   type solve(const double& tInit,const double& tFinal,std::function< type (type)> RHS,const type& x0){}
 };
 
+// Specialization for double:
 template<>
 double EULER_FIRST_ORDER<double>::solve(const double& tInit,const double& tFinal,std::function< double (double)> RHS,const double& x0)
 {
@@ -51,13 +52,14 @@ double EULER_FIRST_ORDER<double>::solve(const double& tInit,const double& tFinal
   return xFinal;
 }
 
-/*
+
+// Specialization for vector:
 template<>
 std::vector<double> Euler_FIRST_ORDER<double>::solve(const double& tInit,const double& tFinal,std::function< std::vector<double> (std::vector<double>)> RHS,const std::vector<double>& x0)
 {
   return x0;
 }
-*/
+
 
 
 template<template<class> class TimeStepping, class type>
