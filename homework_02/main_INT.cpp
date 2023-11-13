@@ -158,7 +158,7 @@ public:
 // Function to integrate:
 double ToIntegrate(double x)
 {
-  return -3*x*x;
+  return -3*x*x*x;
 }
 
 int main()
@@ -175,10 +175,10 @@ int main()
 
   double xSTART = 0.0;
   double xEND   = 1.0;
-  double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,2);
+  double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,20);
 
   numericalIntegration<TrapzQuadrature> nIntegrationTR;
-  double TRAPZ_RES = nIntegrationTR(ToIntegrate,xSTART,xEND,2);
+  double TRAPZ_RES = nIntegrationTR(ToIntegrate,xSTART,xEND,20);
    
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRAPZ_RES << "\n";
