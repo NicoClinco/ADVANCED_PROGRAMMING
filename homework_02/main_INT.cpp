@@ -4,8 +4,10 @@
 #include <functional>
 #include <numeric>
 #include <cmath>
+#include <stdio.h>
 
-namespace math_homework2
+
+namespace Integrate_1D
 {
 
   /*
@@ -38,23 +40,50 @@ namespace math_homework2
    one has only to implement the weights and the points.
 
   */
-  /*
+  
 class SimpsonQuadrature
 {
 public:
 
-  virtual std::vector<double> makeQuadWeights()
+ virtual std::vector<double> makeQuadWeights(double a, double b,int n)
   {
+    double h = (b-a)/(2*n);
+    std::vector<double> weighs(2*n+1,0.0);
+    weighs[0] = h/3;
+    weighs[2*n] = h/3;
+    int count = 1;
+    std::generate(weighs.begin()+1,weighs.end()-1,
+		  [&count,h]{double _w_ = (count%2) == 0 ?  (2.0*h/3.0) :  (4.0*h/3.0); count++; return _w_;});
+  
+    return weighs;
   };
-  virtual std::vector<double> makeQuadPnts()
+  virtual std::vector<double> makeQuadPnts(double a, double b,int n)
   {
+    double h = (b-a)/(2*n);
+    std::vector<double> xp(2*n+1,0.0); // number of points equispaced
+    double xi = a;
+    std::generate(xp.begin()+1,xp.end(),[&xi,h](){return xi=xi+h;});
+    return xp;
+    
   };
-  double operator()()
+  double operator()(std::function<double (double)> funToInt,double a,double b,int n)
   {
+    // Use the composite trapezoidal rule:
+ 
+    // Divide the interval [a,b] in subintervals and obtain the quadrature points:
+    std::vector<double> w_ = makeQuadWeights(a,b,n);
+    std::vector<double> qp_= makeQuadPnts(a,b,n);
+    
+    // Evaluate function in the quadrature points:
+    std::vector<double> fxi(2*n+1);
+    std::transform(qp_.begin(),qp_.end(),fxi.begin(),funToInt);
+
+    // Return the inner product:
+    return std::inner_product(w_.begin(),w_.end(),fxi.begin(),0.0);
   }
   
 };
-  */
+  
   
 class TrapzQuadrature
 {
@@ -79,7 +108,7 @@ class TrapzQuadrature
   
     double h = (b-a)/n;
     std::vector<double> xp(n+1,0.0); // number of points equispaced
-    double xi = 0;
+    double xi = a;
     std::generate(xp.begin()+1,xp.end(),[&xi,h](){return xi=xi+h;});
     
     return xp;
@@ -120,14 +149,14 @@ public:
     // Equispaced interval
     double h = (b-a)/n;
     std::vector<double> pnts(n,0.0); pnts[0] = h/2;
-    double xi = h/2;
+    double xi = a+h/2;
     std::generate(pnts.begin()+1,pnts.end(),[&xi,h](){return xi=xi+h;});
     return pnts;
   }
   
   double operator()(std::function<double (double)> funToInt,double a,double b,int n) 
   {
-    // Divide the interval [a,b] in subintervals and obtain the quadrature points:
+    // Divide the interval [a,b] in n subintervals and obtain the quadrature points:
     std::vector<double> w_ = makeQuadWeights(a,b,n);
     std::vector<double> qp_    = makeQuadPnts(a,b,n);
 
@@ -158,7 +187,7 @@ public:
 // Function to integrate:
 double ToIntegrate(double x)
 {
-  return -3*x*x*x;
+  return -3*x;
 }
 
 int main()
@@ -170,17 +199,23 @@ int main()
   // the operator () of the interface class and specify
   // the number of points required WITHOUT instanciate
   // any object for the specific quadrature rule.
-  using namespace math_homework2;
+  using namespace Integrate_1D;
   numericalIntegration<MidPointQuadrature> nIntegrationMID;
 
-  double xSTART = 0.0;
-  double xEND   = 1.0;
-  double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,20);
+  double xSTART = 1.0;
+  double xEND   = 3.0;
+  double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,4);
 
   numericalIntegration<TrapzQuadrature> nIntegrationTR;
-  double TRAPZ_RES = nIntegrationTR(ToIntegrate,xSTART,xEND,20);
-   
+  double TRAPZ_RES = nIntegrationTR(ToIntegrate,xSTART,xEND,4);
+
+
+  numericalIntegration<SimpsonQuadrature> nIntegrationSIMPS;
+
+  double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,4);
+  
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRAPZ_RES << "\n";
+   std::cout << "Simpson-result : " << SIMPS_RES << "\n";
   return 0;
 }
