@@ -22,7 +22,16 @@ class DATA_FRAME
 
   bool IsNumeric(unsigned int col) const;
   
-  
+  struct RowIterator
+  {
+    using dataframetype = std::vector<std::vector<std::variant<double,std::string,int> > >;
+    dataframetype::iterator rowPtr;
+    
+    rowIterator(rowPtr):
+      
+      private:
+       
+  }
   
  private:
   //std::vector<std::string> row_structure = {"int","double","string","int","double"};
