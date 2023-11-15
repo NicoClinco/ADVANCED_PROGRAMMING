@@ -187,7 +187,7 @@ public:
 // Function to integrate:
 double ToIntegrate(double x)
 {
-  return -3*x;
+  return -3*x*x;
 }
 
 int main()
@@ -213,7 +213,8 @@ int main()
   numericalIntegration<SimpsonQuadrature> nIntegrationSIMPS;
 
   double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,4);
-  
+ 
+   std::cout << "Exact-result, func: -3x^2 from 1 to 3 :"<< -26.0<<std::endl;
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRAPZ_RES << "\n";
    std::cout << "Simpson-result : " << SIMPS_RES << "\n";
