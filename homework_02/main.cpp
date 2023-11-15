@@ -16,7 +16,7 @@ class DATA_FRAME
 
   void read(std::string file);
 
-  double mean(unsigned int col);
+  // double mean(unsigned int col);
 
   //double stdDev(unsigned int col);
 
@@ -42,12 +42,12 @@ void DATA_FRAME::read(std::string FILEIN)
   std::vector<std::variant<double,std::string,int> > currentRow(row_structure.size());
   // PERFORM THE CHECKS!
 
-  while(std::getline(file_,line))
+  while(file_>>line)
   {
-    std::istringstream iss(line);
+    std::stringstream ss(line);
     std::string _word_;
     int counter = 0;
-    while(iss >> _word_)
+    while(std::getline(ss,_word_,','))
     {
       // check the correctness.
       int token_type = map_[row_structure[counter]];
@@ -64,6 +64,7 @@ void DATA_FRAME::read(std::string FILEIN)
 	break;
       }// end switch
      counter++;
+     std::cout<<_word_<<std::endl;
     }// end row-loop
     dataframe.push_back(currentRow);
   }
@@ -76,6 +77,7 @@ bool DATA_FRAME::IsNumeric(unsigned int col) const
   return (row_structure[col] == "double" || row_structure[col] == "int");
 }
 
+/*
 double DATA_FRAME::mean(unsigned int col) const
 {
   if (IsNumeric(col))
@@ -92,7 +94,7 @@ double DATA_FRAME::mean(unsigned int col) const
     }
   }
 }
-
+*/
 
 
 int main()
@@ -106,7 +108,7 @@ int main()
   DATA_FRAME df(row_structure);
   df.read("input.txt");
 
-  //bool is_numeric = df.IsNumeric(2);
+  bool is_numeric = df.IsNumeric(2);
   std::cout << is_numeric<<std::endl;
 
 
