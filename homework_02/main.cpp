@@ -7,21 +7,6 @@
 #include <variant>
 #include "DATA_FRAME.hpp"
 
-struct MyVisitor
-{
-  // A callable object used for access variant:
-
-    int operator()(int i) const { 
-      return i; 
-    }
-    double operator()(double f) const { 
-      return f; 
-    }
-  std::string operator()( std::string s) const { 
-	return s; 
-    }
-
-};
 
 template<class type,int N>
 type lookup(std::variant<double,std::string,int> v)
