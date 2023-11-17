@@ -83,8 +83,6 @@ private:
   // Get the corresponding column for manipulation:
   template<class colTYPE>
   std::vector<colTYPE> getCol(unsigned int col); 
-
-  //std::vector<std::variant<double,std::string,int> > Getrow(usigned int row);
   
  private:
 
