@@ -163,6 +163,7 @@ unsigned int DATA_FRAME::countWord(unsigned int col,std::string tofind)
 template<class colTYPE>
 std::vector<colTYPE> DATA_FRAME::getCol(unsigned int col) const
 {
+  std::vector<colTYPE> v;
   
 }
 */

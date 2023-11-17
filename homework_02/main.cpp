@@ -23,6 +23,13 @@ struct MyVisitor
 
 };
 
+template<class type>
+type lookup(std::variant<double,std::string,int> v)
+{
+  type x = std::get<type>(v);
+  return x;
+}
+
 
 int main()
 {
@@ -42,6 +49,9 @@ int main()
   double std_dev = df.stdDev(2);
   std::cout << std_dev << "\n";
   std::cout << df.countWord(3,"papera")<<"\n";
+  std::variant<double,std::string,int> var{"lol"};
+  std::string s = lookup<std::string>(var);
+  std::cout << s << std::endl;
   /*
   std::variant<double,std::string,int> _var_ = {double(3.54)};
   double num = 0.0;
