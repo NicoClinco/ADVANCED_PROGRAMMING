@@ -23,7 +23,7 @@ struct MyVisitor
 
 };
 
-template<class type>
+template<class type,int N>
 type lookup(std::variant<double,std::string,int> v)
 {
   type x = std::get<type>(v);
