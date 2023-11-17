@@ -16,6 +16,7 @@ type lookup(std::variant<double,std::string,int> v)
 }
 
 
+
 int main()
 {
   // every row

@@ -160,11 +160,22 @@ unsigned int DATA_FRAME::countWord(unsigned int col,std::string tofind)
 
 
 /*
-template<class colTYPE>
-std::vector<colTYPE> DATA_FRAME::getCol(unsigned int col) const
+template<class colTYPE,std::string type>
+std::vector<colTYPE> DATA_FRAME::getCol(unsigned int col)
 {
-  std::vector<colTYPE> v;
-  
+}
+
+template<std::string,std::string type>
+std::vector<std::string> DATA_FRAME::getCol(unsigned int col)
+{
+  std::vector<std::string> _col_;
+  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
+  {
+   auto item = *(rowIt); // Get the row.
+   std::string item_ = std::get<std::string>(item[col-1]);
+   _col_.push_back(item);
+  }
+ 
 }
 */
 
