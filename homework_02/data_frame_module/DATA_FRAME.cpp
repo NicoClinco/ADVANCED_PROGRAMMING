@@ -180,20 +180,6 @@ std::vector<double> DATA_FRAME::getCol<double>(unsigned int col);
 template
 std::vector<int> DATA_FRAME::getCol<int>(unsigned int col);
 
-/*
-template<>
-std::vector<std::string> DATA_FRAME::getCol(unsigned int col)
-{
-  std::vector<std::string> _col_;
-  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
-  {
-   auto item = *(rowIt); // Get the row.
-   std::string item_ = std::get<std::string>(item[col-1]);
-   _col_.push_back(item);
-  }
- return _col_;
-}
-*/
 
 
 

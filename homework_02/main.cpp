@@ -43,12 +43,7 @@ int main()
   std::vector<int> thirdCol = df.getCol<int>(1);
   for (auto el : thirdCol )
 	std::cout << el << std::endl;
-  /*
-  std::variant<double,std::string,int> _var_ = {double(3.54)};
-  double num = 0.0;
-  std::visit([&num] (const auto& k) { num=k; },_var_);
-  std::cout<<num<<std::endl;
-  */
+
   return 0;
  
 }
