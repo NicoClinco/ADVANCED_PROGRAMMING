@@ -7,6 +7,22 @@
 #include <variant>
 #include "DATA_FRAME.hpp"
 
+struct MyVisitor
+{
+  // A callable object used for access variant:
+
+    int operator()(int i) const { 
+      return i; 
+    }
+    double operator()(double f) const { 
+      return f; 
+    }
+  std::string operator()( std::string s) const { 
+	return s; 
+    }
+
+};
+
 
 int main()
 {
@@ -23,21 +39,15 @@ int main()
   if(!is_numeric)
     throw std::invalid_argument("cannot do the mean\n");
 
-  DATA_FRAME::RowIterator row_iter = df.rowIterbegin();
-  int countRow = 0;
-  for(row_iter;row_iter!=df.rowIterEnd();row_iter++)
-    {
-    auto& bho = *(row_iter);
-    bho[0] = int(3);
-    }
-
-  for(row_iter=df.rowIterbegin();row_iter!=df.rowIterEnd();row_iter++)
-    {
-    auto& bho = *(row_iter);
-    std::cout<<std::get<int>(bho[0]);
-    }
-
- 
+  double std_dev = df.stdDev(2);
+  std::cout << std_dev << "\n";
+  std::cout << df.countWord(3,"papera")<<"\n";
+  /*
+  std::variant<double,std::string,int> _var_ = {double(3.54)};
+  double num = 0.0;
+  std::visit([&num] (const auto& k) { num=k; },_var_);
+  std::cout<<num<<std::endl;
+  */
   return 0;
  
 }

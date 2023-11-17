@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <variant>
+#include <vector>
 #include <map>
 
 
@@ -19,14 +20,10 @@ class DATA_FRAME
  public:
   // Read the row structure:
   DATA_FRAME(std::vector<std::string> rowstructure):
-    row_structure{rowstructure} {};
+    row_structure{rowstructure},_rows_{0} {};
 
   void read(std::string file);
-
-  // double mean(unsigned int col);
-
-  //double stdDev(unsigned int col);
-  //---------------------------------------------------//
+  
   class RowIterator
   {
    public:
@@ -66,12 +63,26 @@ private:
   }
   */
 
-  // Check if the column is numerical type:
+  double mean(unsigned int col);
+
+  double stdDev(unsigned int col);
+
+  double var(unsigned int col);
+  // Check if the column is numerical or categorical:
   bool IsNumeric(unsigned int col) const;
+  bool IsCategorical(unsigned int col) const;
+  
   // Check if the column and the row is valid:
   bool IsColumn(unsigned int col) const;
   bool IsRow(unsigned int row) const;
 
+  // count how many times is present a word:
+  unsigned int countWord(unsigned int col,std::string word);
+
+  // Get the corresponding column for manipulation:
+  /*
+  template<class colTYPE>
+  std::vector<colTYPE> getCol(unsigned int col,? std::string _coltype_) const; */
   
   // Get the column and the row to manipulate data:
   //std::vector<> Getcol(unsigned int col);
@@ -79,7 +90,7 @@ private:
   //std::vector<std::variant<double,std::string,int> > Getrow(usigned int row);
   
  private:
-  //std::vector<std::string> row_structure = {"int","double","string","int","double"};
+
   std::vector<std::string> row_structure;
   std::vector<std::vector<std::variant<double,std::string,int> > > dataframe;
 

@@ -3,6 +3,6 @@
 rm *.o
 rm *.so
 
-g++ -fPIC -c DATA_FRAME.cpp
-g++ -shared *.o -o libDataFrame.so
+g++ -std=c++17 -fPIC -c DATA_FRAME.cpp
+g++ -std=c++17 -shared *.o -o libDataFrame.so
 

@@ -3,6 +3,7 @@
 rm *.o
 
 pathTolib="./data_frame_module/"
+CXXFLAGS="-std=c++17 -Wall -Wpedantic"
 
-g++ -I$pathTolib -c main.cpp
-g++ main.o -L$pathTolib -lDataFrame -o main
+g++ $CXXFLAGS -I$pathTolib -c main.cpp
+g++ $CXXFLAGS main.o -L$pathTolib -lDataFrame -o main
