@@ -159,13 +159,29 @@ unsigned int DATA_FRAME::countWord(unsigned int col,std::string tofind)
 
 
 
-/*
-template<class colTYPE,std::string type>
+// Explicit specialization:
+template<class colTYPE>
 std::vector<colTYPE> DATA_FRAME::getCol(unsigned int col)
 {
+  std::vector<colTYPE> _col_;
+  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
+  {
+   auto item = *(rowIt); // Get the row.
+   colTYPE item_ = std::get<colTYPE>(item[col-1]);
+   _col_.push_back(item_);
+  }
+ return _col_;
 }
 
-template<std::string,std::string type>
+template
+std::vector<std::string> DATA_FRAME::getCol<std::string>(unsigned int col);
+template
+std::vector<double> DATA_FRAME::getCol<double>(unsigned int col);
+template
+std::vector<int> DATA_FRAME::getCol<int>(unsigned int col);
+
+/*
+template<>
 std::vector<std::string> DATA_FRAME::getCol(unsigned int col)
 {
   std::vector<std::string> _col_;
@@ -175,9 +191,10 @@ std::vector<std::string> DATA_FRAME::getCol(unsigned int col)
    std::string item_ = std::get<std::string>(item[col-1]);
    _col_.push_back(item);
   }
- 
+ return _col_;
 }
 */
+
 
 
 

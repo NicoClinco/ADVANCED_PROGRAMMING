@@ -8,7 +8,7 @@
 #include "DATA_FRAME.hpp"
 
 
-template<class type,int N>
+template<class type>
 type lookup(std::variant<double,std::string,int> v)
 {
   type x = std::get<type>(v);
@@ -37,7 +37,12 @@ int main()
   std::cout << df.countWord(3,"papera")<<"\n";
   std::variant<double,std::string,int> var{"lol"};
   std::string s = lookup<std::string>(var);
-  std::cout << s << std::endl;
+
+  //std::vector<std::string> thirdCol = df.getCol<std::string>(3);
+
+  std::vector<int> thirdCol = df.getCol<int>(1);
+  for (auto el : thirdCol )
+	std::cout << el << std::endl;
   /*
   std::variant<double,std::string,int> _var_ = {double(3.54)};
   double num = 0.0;

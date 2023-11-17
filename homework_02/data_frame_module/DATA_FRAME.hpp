@@ -79,10 +79,10 @@ private:
   // count how many times is present a word:
   unsigned int countWord(unsigned int col,std::string word);
 
+  
   // Get the corresponding column for manipulation:
-  /*
   template<class colTYPE>
-  std::vector<colTYPE> getCol(unsigned int col) const; */
+  std::vector<colTYPE> getCol(unsigned int col); 
 
   //std::vector<std::variant<double,std::string,int> > Getrow(usigned int row);
   
