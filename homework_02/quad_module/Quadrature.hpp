@@ -1,10 +1,12 @@
-#include <stdio.h>
+#ifndef _QUADRATURE_HPP_
+#define _QUADRATURE_HPP_
+
+
 #include <iostream>
-#include <boost/math/quadrature/trapezoidal.hpp>
 #include <functional>
 #include <numeric>
 #include <cmath>
-#include <stdio.h>
+
 
 
 namespace Integrate_1D
@@ -68,7 +70,7 @@ public:
   };
   double operator()(std::function<double (double)> funToInt,double a,double b,int n)
   {
-    // Use the composite trapezoidal rule:
+    // Use the composite simpson rule
  
     // Divide the interval [a,b] in subintervals and obtain the quadrature points:
     std::vector<double> w_ = makeQuadWeights(a,b,n);
@@ -169,6 +171,15 @@ public:
   }
 }; // end MidPointQuadrature
   
+  /*
+class GaussLegeandreQuadrature
+{
+public:
+
+  virtual std::vector<double> makeQuadWeights(double a, double b,int n)
+    
+}
+  */
   
 template<class QuadType>
 class numericalIntegration:
@@ -184,39 +195,4 @@ public:
 
 }//end namespace
 
-// Function to integrate:
-double ToIntegrate(double x)
-{
-  return -3*x*x;
-}
-
-int main()
-{
-  // The class numerical Integration inherits from
-  // the specific-quadrature rule used.
-
-  // With this design-pattern we can simply call
-  // the operator () of the interface class and specify
-  // the number of points required WITHOUT instanciate
-  // any object for the specific quadrature rule.
-  using namespace Integrate_1D;
-  numericalIntegration<MidPointQuadrature> nIntegrationMID;
-
-  double xSTART = 1.0;
-  double xEND   = 3.0;
-  double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,4);
-
-  numericalIntegration<TrapzQuadrature> nIntegrationTR;
-  double TRAPZ_RES = nIntegrationTR(ToIntegrate,xSTART,xEND,4);
-
-
-  numericalIntegration<SimpsonQuadrature> nIntegrationSIMPS;
-
-  double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,4);
- 
-   std::cout << "Exact-result, func: -3x^2 from 1 to 3 :"<< -26.0<<std::endl;
-   std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
-   std::cout << "Trapezoidal-result : " << TRAPZ_RES << "\n";
-   std::cout << "Simpson-result : " << SIMPS_RES << "\n";
-  return 0;
-}
+#endif
