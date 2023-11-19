@@ -30,8 +30,6 @@ class DATA_FRAME
 
     using type = std::variant<double,std::string,int>;
     using rowtype = std::vector<type>;
-    using difference_type = std::ptrdiff_t;
-    using iterator_category =std::forward_iterator_tag;
     using ref = std::vector<type>&;
     using pRowIterator = std::vector<rowtype>::iterator;
 
@@ -44,7 +42,8 @@ class DATA_FRAME
   typename RowIterator::ref operator*(){return *(curIter);};
     // Postfix
     
-    RowIterator& operator++(int){curIter++; return *this;}
+    void operator++(int){curIter++;}
+    
     friend bool operator== (const RowIterator& a, const RowIterator& b) { return a.curIter == b.curIter; };
     friend bool operator!= (const RowIterator& a, const RowIterator& b) { return a.curIter != b.curIter; };  
 private:
@@ -56,12 +55,42 @@ private:
 
   RowIterator rowIterEnd(){return RowIterator(dataframe.end());}; //end row-iterator
   //--------------------------------------------------// 
-  /*
+  
   class colIterator
   {
-    TODO
-  }
-  */
+  public:
+    using type = std::variant<double,std::string,int>;
+    using ref = type&;
+    using colVector = std::vector<type>;
+    using colIter = colVector::iterator;
+    
+    // Assert the column!
+    colIterator(RowIterator _rowIter_,size_t col):_colVector_{_rowIter_.operator*()},col_{col}{};
+
+    typename colIterator::colIter operator->(){return _colVector_.begin()+col_;};
+
+    typename colIterator::ref operator*(){return _colVector_[col_];};
+
+    //post-fix
+    void operator++(int){col_++;};
+
+    //prefix
+    void operator++(){++col_;};
+
+    // TO CHECK:
+    friend bool operator== (const colIterator& a,const colIterator& b) { return a.col_==b.col_; };
+    friend bool operator!= (const colIterator& a,const colIterator& b) { return a.col_!=b.col_; };
+    
+    private:
+
+   colVector& _colVector_;
+   size_t col_;
+  };
+
+  colIterator colIterbegin(RowIterator _rowIter_,size_t col){return colIterator(_rowIter_,col);};
+
+  colIterator colIterEnd(RowIterator _rowIter_,size_t col){return colIterator(_rowIter_,col);};
+  
 
   double mean(unsigned int col);
 
