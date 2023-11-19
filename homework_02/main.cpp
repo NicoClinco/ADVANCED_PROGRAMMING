@@ -58,6 +58,10 @@ int main()
 	}
       std::cout<<std::endl;
     }
+
+   auto [w,b] = df.LinearRegression<double,double>(2,5);
+
+   std::cout << "weight :"<<w << " " << "bias: "<< b <<"\n";
   
 
 

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <functional>
+#include <numeric>
 #include <cassert>
 #include <string>
 #include <fstream>
@@ -105,13 +106,19 @@ private:
   bool IsColumn(unsigned int col) const;
   bool IsRow(unsigned int row) const;
 
+ 
   // count how many times is present a word:
   unsigned int countWord(unsigned int col,std::string word);
 
   
-  // Get the corresponding column for manipulation:
+  // Get the corresponding column for manipulation: (value)
   template<class colTYPE>
-  std::vector<colTYPE> getCol(unsigned int col); 
+  std::vector<colTYPE> getCol(size_t col);
+
+
+  // Linear Regression: colY
+  template<class colTYPEX,class colTYPEY>
+  std::tuple<double,double> LinearRegression(size_t colX,size_t colY);
   
  private:
 

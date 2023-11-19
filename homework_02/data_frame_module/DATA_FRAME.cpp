@@ -3,7 +3,6 @@
 
 #include "DATA_FRAME.hpp"
 
-
 void DATA_FRAME::read(std::string FILEIN)
 {
   std::ifstream file_(FILEIN);
@@ -159,9 +158,9 @@ unsigned int DATA_FRAME::countWord(unsigned int col,std::string tofind)
 
 
 
-// Explicit specialization:
+// Explicit specialization: -by value
 template<class colTYPE>
-std::vector<colTYPE> DATA_FRAME::getCol(unsigned int col)
+std::vector<colTYPE> DATA_FRAME::getCol(size_t col)
 {
   std::vector<colTYPE> _col_;
   for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
@@ -174,14 +173,58 @@ std::vector<colTYPE> DATA_FRAME::getCol(unsigned int col)
 }
 
 template
-std::vector<std::string> DATA_FRAME::getCol<std::string>(unsigned int col);
+std::vector<std::string> DATA_FRAME::getCol<std::string>(size_t col);
 template
-std::vector<double> DATA_FRAME::getCol<double>(unsigned int col);
+std::vector<double> DATA_FRAME::getCol<double>(size_t col);
 template
-std::vector<int> DATA_FRAME::getCol<int>(unsigned int col);
+std::vector<int> DATA_FRAME::getCol<int>(size_t col);
 
 
 
+// Linear regression:
+template<class colTYPEX,class colTYPEY>
+std::tuple<double,double> DATA_FRAME::LinearRegression(size_t colX,size_t colY)
+{
+  if(!IsNumeric(colX))
+    throw std::invalid_argument("Cannot do the linear-regression for categorical values");
 
+  if(!IsNumeric(colY))
+    throw std::invalid_argument("Cannot do the linear-regression for categorical values");
+  
+  std::vector<colTYPEX> _colX_;
+  std::vector<colTYPEY> _colY_;
+  
+  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
+  {
+   auto item = *(rowIt); // Get the row.
+   colTYPEX Xitem_ = std::get<colTYPEX>(item[colX-1]);
+   colTYPEY Yitem_ = std::get<colTYPEY>(item[colY-1]);
+   _colX_.push_back(Xitem_);
+   _colY_.push_back(Yitem_);
+  }
 
+  // Calculate y = w*x + b :
 
+   const size_t N    = _colX_.size();
+   const double s_x  = std::accumulate( _colX_.begin(),  _colX_.end(), 0.0);
+   const double s_y  = std::accumulate( _colY_.begin(),  _colY_.end(), 0.0);
+   const double  s_xx = std::inner_product(_colX_.begin(),_colX_.end(),_colX_.begin(), 0.0);
+   const double s_xy = std::inner_product(_colX_.begin(),_colX_.end(), _colY_.begin(), 0.0);
+   const double  w    = (N * s_xy - s_x * s_y) / (N* s_xx - s_x * s_x);
+   const double  b    = (s_y - w*s_x)/N;
+
+   return std::tuple<double,double>(w,b);
+  
+}
+
+template
+std::tuple<double,double> DATA_FRAME::LinearRegression<double,double>(size_t colX,size_t colY);
+
+template
+std::tuple<double,double> DATA_FRAME::LinearRegression<double,int>(size_t colX,size_t colY);
+
+template
+std::tuple<double,double> DATA_FRAME::LinearRegression<int,double>(size_t colX,size_t colY);
+
+template
+std::tuple<double,double> DATA_FRAME::LinearRegression<int,int>(size_t colX,size_t colY);
