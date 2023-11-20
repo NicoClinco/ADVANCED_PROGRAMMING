@@ -5,19 +5,10 @@
 #include <fstream>
 #include <sstream>
 #include <variant>
+#include <optional>
 #include "DATA_FRAME.hpp"
 
-/*
-template<class type>
-type lookup(std::variant<double,std::string,int> v)
-{
-  type x = std::get<type>(v);
-  return x;
-}
-
-*/
-
-
+using namespace CSV_READER;
 
 int main()
 {
@@ -26,6 +17,7 @@ int main()
   //specified by the user: create a map that maps the values given by the user to the integers:
   std::vector<std::string> row_structure = {"int","double","string","int","double"};
 
+  std::map<std::string,size_t> _map_ = {{"double",0},{"string",1},{"int",2}};
   // The user has to pass the data-structure:
   DATA_FRAME df(row_structure);
   df.read("input.txt");
@@ -34,37 +26,36 @@ int main()
   if(!is_numeric)
     throw std::invalid_argument("cannot do the mean\n");
 
-  //double std_dev = df.stdDev(2);
-  //std::cout << std_dev << "\n";
-  //std::cout << df.countWord(3,"papera")<<"\n";
-
+   double mean = df.mean(2);
+   double std_dev = df.stdDev(2);
+   std::cout << std_dev << "\n";
+   std::cout << mean << "\n";
+  std::cout << df.countWord(3,"papera")<<"\n\n\n";
+  
    for(auto itrow = df.rowIterbegin();itrow!=df.rowIterEnd();itrow++)
     {
-      int col=0;
+      size_t col=0;
       
-      for(auto itc = df.colIterbegin(itrow,0);itc!=df.colIterEnd(itrow,3);itc++)
+      for(auto itc = df.colIterbegin(itrow,0);itc!=df.colIterEnd(itrow,2);itc++)
 	{
-	 
-	  if(col==0){
-	     std::cout << std::get<int>(*itc) << " ";
-	     *itc = int(4);
-	     //  std::cout << std::get<int>(*itc)<<" ";
-	       }
-	  if(col==1)
-	    std::cout << std::get<double>(*itc) <<" ";
-	  if(col==2)
-	    std::cout << std::get<std::string>(*itc) <<" ";
+	  size_t token = _map_[row_structure[col]];
+	  auto value = *itc;
+	  if(token==0){(value.has_value()) ? std::cout << std::get<double>(value.value()) : std::cout <<""; }
+	    
+	  if(token==1){(value.has_value()) ? std::cout << std::get<std::string>(value.value()) :std::cout <<""; }
+	   
+	  if(token==2){(value.has_value()) ? std::cout << std::get<int>(value.value()) :std::cout<<""; }
+	  std::cout << " ";
 	  col++;
 	}
       std::cout<<std::endl;
-    }
-
-   auto [w,b] = df.LinearRegression<double,double>(2,5);
-
+	}
+      std::cout<<std::endl;
+   
+  auto [w,b] = df.LinearRegression<int,double>(4,5);
+   
    std::cout << "weight :"<<w << " " << "bias: "<< b <<"\n";
-  
-
-
+ 
 
   
   return 0;

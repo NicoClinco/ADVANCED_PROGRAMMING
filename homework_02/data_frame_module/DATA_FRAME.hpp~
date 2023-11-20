@@ -12,15 +12,10 @@
 #include <fstream>
 #include <sstream>
 #include <variant>
-#include <optional>
 #include <vector>
 #include <map>
 
-namespace CSV_READER{
 
-  using OpVariant = std::optional<std::variant<double,std::string,int>>;
-  using VecOpvar = std::vector<OpVariant>;
-  
 class DATA_FRAME
 {
  public:
@@ -28,30 +23,13 @@ class DATA_FRAME
   DATA_FRAME(std::vector<std::string> rowstructure):
     row_structure{rowstructure},_rows_{0} {};
 
-  // Functions needed for missing values:
-  OpVariant opDouble(std::string s)
-  {
-  return !s.empty() ? OpVariant(double(std::stod(s))) : std::nullopt;
-  }
-
-  OpVariant opString(std::string s)
-  {
-  return !s.empty() ? OpVariant(std::string(s)) : std::nullopt;
-  }
-
-  OpVariant opInt(std::string s)
-  {
-  return !s.empty() ? OpVariant(int(std::stoi(s))) : std::nullopt;
-  }
-
-  
   void read(std::string file);
   
   class RowIterator
   {
    public:
 
-    using type = std::optional<std::variant<double,std::string,int>>;
+    using type = std::variant<double,std::string,int>;
     using rowtype = std::vector<type>;
     using ref = std::vector<type>&;
     using pRowIterator = std::vector<rowtype>::iterator;
@@ -82,7 +60,7 @@ private:
   class colIterator
   {
   public:
-    using type = std::optional<std::variant<double,std::string,int>>;
+    using type = std::variant<double,std::string,int>;
     using ref = type&;
     using colVector = std::vector<type>;
     using colIter = colVector::iterator;
@@ -115,22 +93,22 @@ private:
   colIterator colIterEnd(RowIterator _rowIter_,size_t col){return colIterator(_rowIter_,col);};
   
 
-  double mean(size_t col);
+  double mean(unsigned int col);
 
-  double stdDev(size_t col);
+  double stdDev(unsigned int col);
 
-  double var(size_t col);
+  double var(unsigned int col);
   // Check if the column is numerical or categorical:
-  bool IsNumeric(size_t col) const;
-  bool IsCategorical(size_t col) const;
+  bool IsNumeric(unsigned int col) const;
+  bool IsCategorical(unsigned int col) const;
   
   // Check if the column and the row is valid:
-  bool IsColumn(size_t col) const;
-  bool IsRow(size_t row) const;
+  bool IsColumn(unsigned int col) const;
+  bool IsRow(unsigned int row) const;
 
  
   // count how many times is present a word:
-  size_t countWord(size_t col,std::string word);
+  unsigned int countWord(unsigned int col,std::string word);
 
   
   // Get the corresponding column for manipulation: (value)
@@ -145,13 +123,13 @@ private:
  private:
 
   std::vector<std::string> row_structure;
-  std::vector<CSV_READER::VecOpvar> dataframe;
+  std::vector<std::vector<std::variant<double,std::string,int> > > dataframe;
 
   // Create an std::map which maps the values to indexes:
   std::map<std::string, int> map_{{"double", 0}, {"string", 1}, {"int", 2}};
-  size_t _rows_;
+  unsigned int _rows_;
 };
 
-}
+
 
 #endif
