@@ -1,2 +1,1 @@
-headers_cols = int,double,string,int,double
-
+Header_cols= int,double,string,int, double

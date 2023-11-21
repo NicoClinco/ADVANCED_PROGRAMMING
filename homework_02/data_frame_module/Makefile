@@ -1,5 +1,5 @@
 CXX=g++
-CPPFLAGS=-I.
+CPPFLAGS=-I. 
 CXXFLAGS=-std=c++17 -Wall -Wpedantic -Werror
 
 SRC=DATA_FRAME.cpp

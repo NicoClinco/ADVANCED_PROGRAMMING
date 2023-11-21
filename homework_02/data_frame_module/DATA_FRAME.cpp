@@ -2,27 +2,34 @@
 // Implementation file:
 
 #include "DATA_FRAME.hpp"
-/*
-void CSV_READER::DATA_FRAME(std::string config_file)
+
+CSV_READER::DATA_FRAME::DATA_FRAME(std::string CONFIG_FILE)
 {
-  std::ifstream file_(FILEIN);
+ 
+  std::ifstream config_file(CONFIG_FILE);
   std::string line;
   //check the correctness:
-  if(!file_.good())
+  if(!config_file.good())
     throw("Error: the config-file is corrupted\n");
-  //Read the first line:
-  file_>>line;
-  std::stringstream ss(line);
-  std::string _entry_;
-  while(std::getline(ss,_entry_,',')
-    {
-      
-    }
-	
-    
+
+  std::vector<std::string> SplitVec;
+
+  std::getline(config_file,line);
+ 
+  boost::split(SplitVec,line,boost::is_any_of("= , \t"),
+                       boost::token_compress_on);
+  bool Check_config = false;
+  for(auto x : SplitVec)
+  {
+    if(x=="header_cols")
+      Check_config=true;
+     if(x!="header_cols")
+       row_structure.push_back(x);
+  }
+  std::cout << Check_config << std::endl;
+  Check_config ? (configFile=true) : throw std::invalid_argument("ERROR-WRONG ENTRIES IN THE CONFIG-FILE\n");
 }
 
-*/
 
 void CSV_READER::DATA_FRAME::read(std::string FILEIN)
 {

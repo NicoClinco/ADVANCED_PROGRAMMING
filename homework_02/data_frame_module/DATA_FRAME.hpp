@@ -15,6 +15,8 @@
 #include <optional>
 #include <vector>
 #include <map>
+#include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace CSV_READER{
 
@@ -26,7 +28,7 @@ class DATA_FRAME
  public:
 
   //Read the data-structure from config-file
-  //DATA_FRAME(std::string config_file);
+   DATA_FRAME(std::string CONFIG_FILE);
     
   // Read the row structure:
   DATA_FRAME(std::vector<std::string> rowstructure):
@@ -150,6 +152,7 @@ private:
 
   std::vector<std::string> row_structure;
   std::vector<CSV_READER::VecOpvar> dataframe;
+  bool configFile= false;
 
   // Create an std::map which maps the values to indexes:
   std::map<std::string, int> map_{{"double", 0}, {"string", 1}, {"int", 2}};
