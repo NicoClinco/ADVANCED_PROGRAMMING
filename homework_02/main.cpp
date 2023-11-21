@@ -8,9 +8,13 @@
 #include <optional>
 #include <cassert>
 #include "DATA_FRAME.hpp"
+#include <gsl/gsl_math.h>
 
+// BOOST LIBRARY:
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/histogram.hpp>
+#include <boost/format.hpp>
 
 using namespace CSV_READER;
 
@@ -18,6 +22,7 @@ namespace po = boost::program_options;
 
 int main(int ac,const char* av[])
 {
+
   
   // Specify the files with boost:
   po::options_description desc{"options"};
@@ -70,8 +75,30 @@ int main(int ac,const char* av[])
    double std_dev = df.stdDev(2);
    std::cout << std_dev << "\n";
    std::cout << mean << "\n";
-  std::cout << df.countWord(3,"papera")<<"\n\n\n";
+
+   // PLOT HISTOGRAM of the temperature:
+   using namespace boost::histogram;
+
+   // Generate an histogram for radiation:
+   auto hRad = make_histogram(axis::regular<>(200,10,21, "solar-radiation"));
+
+   auto RadiationData = df.getCol<double>(4);
+   std::for_each(RadiationData.begin(), RadiationData.end(), std::ref(hRad));
+
+   std::ostringstream os;
+   
+   for (auto&& x : indexed(hRad, coverage::all)) {
+     os << boost::format("bin %2i [%4.1f, %4.1f): %i\n")
+       % x.index() % x.bin().lower() % x.bin().upper() % *x;
+   }
+   
+   std::cout << os.str() << std::flush;
+
+   
+   
+   
   
+   /*
    for(auto itrow = df.rowIterbegin();itrow!=df.rowIterEnd();itrow++)
     {
       size_t col=0;
@@ -91,27 +118,12 @@ int main(int ac,const char* av[])
       std::cout<<std::endl;
 	}
       std::cout<<std::endl;
-   
-  auto [w,b] = df.LinearRegression<int,double>(4,5);
-  /*
-  using split_vector_type = std::vector<std::string>;
+   */
 
-  std::string stringa = "header_cols = int,double,string,int,double";
-  split_vector_type SplitVec;
-  split_vector_type _row_structure;
-  boost::split( SplitVec, stringa, boost::is_any_of("= , \t"), boost::token_compress_on );
-  for(auto x : SplitVec)
-  {
-    if(x!="header_cols")
-      _row_structure.push_back(x);  
-  }
-  for(auto x : _row_structure)
-    std::cout << x << " ";
-  std::cout<<"\n"<<std::endl;
-  
-  */
+   // Perform a linear regression for the fourth and fifth column of the csv-file:
+  auto [w,b] = df.LinearRegression<double,double>(4,5);
+ 
 
-  
    std::cout << "weight :"<<w << " " << "bias: "<< b <<"\n";
  
 

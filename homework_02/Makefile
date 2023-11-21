@@ -1,14 +1,17 @@
 CXX=g++
-CPPFLAGS=-I./data_frame_module -I/home/nicopc/Desktop/PHD-COURSES/include
+CPPFLAGS=-I./data_frame_module -I/home/nico/Desktop/PHD-COURSES/MY_BOOST/boost/ \
+	 -I/home/nico/Desktop/PHD-COURSES/gls/include
 CXXFLAGS=-std=c++17 -Wall -Wpedantic
 
 
 LDFLAGS=-Wl,-rpath,data_frame_module/  \
-		   -Wl,-rpath,/home/nicopc/Desktop/PHD-COURSES/lib \
-		   -Ldata_frame_module \
-		   -L/home/nicopc/Desktop/PHD-COURSES/lib
+	-Wl,-rpath,/home/nico/Desktop/PHD-COURSES/MY_BOOST/lib \
+	-Wl,-rpath,/home/nico/Desktop/PHD-COURSES/gls/lib \
+	-Ldata_frame_module \
+	-L/home/nico/Desktop/PHD-COURSES/MY_BOOST/lib \
+	-L/home/nico/Desktop/PHD-COURSES/gls/lib
 
-LDLIBS=-lDataFrame -lboost_program_options
+LDLIBS=-lDataFrame -lboost_program_options -lgsl -lgslcblas
 
 
 SRC=main.cpp
