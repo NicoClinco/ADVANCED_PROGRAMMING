@@ -24,6 +24,10 @@ namespace CSV_READER{
 class DATA_FRAME
 {
  public:
+
+  //Read the data-structure from config-file
+  //DATA_FRAME(std::string config_file);
+    
   // Read the row structure:
   DATA_FRAME(std::vector<std::string> rowstructure):
     row_structure{rowstructure},_rows_{0} {};
@@ -44,7 +48,7 @@ class DATA_FRAME
   return !s.empty() ? OpVariant(int(std::stoi(s))) : std::nullopt;
   }
 
-  
+  //Read from input-file
   void read(std::string file);
   
   class RowIterator

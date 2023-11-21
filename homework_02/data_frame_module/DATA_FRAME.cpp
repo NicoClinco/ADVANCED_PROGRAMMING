@@ -2,8 +2,27 @@
 // Implementation file:
 
 #include "DATA_FRAME.hpp"
+/*
+void CSV_READER::DATA_FRAME(std::string config_file)
+{
+  std::ifstream file_(FILEIN);
+  std::string line;
+  //check the correctness:
+  if(!file_.good())
+    throw("Error: the config-file is corrupted\n");
+  //Read the first line:
+  file_>>line;
+  std::stringstream ss(line);
+  std::string _entry_;
+  while(std::getline(ss,_entry_,',')
+    {
+      
+    }
+	
+    
+}
 
-
+*/
 
 void CSV_READER::DATA_FRAME::read(std::string FILEIN)
 {

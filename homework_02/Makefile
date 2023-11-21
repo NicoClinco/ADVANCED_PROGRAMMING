@@ -1,8 +1,12 @@
 CXX=g++
-CPPFLAGS=-I./data_frame_module -I/home/nico/Desktop/TEMPORARY/homework_02/boost_1_83_0
+CPPFLAGS=-I./data_frame_module -I/home/nicopc/Desktop/PHD-COURSES/include
 CXXFLAGS=-std=c++17 -Wall -Wpedantic
 
-LDFLAGS=-Wl,-rpath,data_frame_module/ -Wl,-rpath,/home/nico/Desktop/TEMPORARY/homework_02/boost_1_83_0/stage/lib -Ldata_frame_module/ -L/home/nico/Desktop/TEMPORARY/homework_02/boost_1_83_0/stage/lib
+
+LDFLAGS=-Wl,-rpath,data_frame_module/  \
+		   -Wl,-rpath,/home/nicopc/Desktop/PHD-COURSES/lib \
+		   -Ldata_frame_module \
+		   -L/home/nicopc/Desktop/PHD-COURSES/lib
 
 LDLIBS=-lDataFrame -lboost_program_options
 

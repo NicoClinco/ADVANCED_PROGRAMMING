@@ -9,6 +9,7 @@
 #include "DATA_FRAME.hpp"
 
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace CSV_READER;
 
@@ -16,7 +17,7 @@ namespace po = boost::program_options;
 
 int main(int ac,const char* av[])
 {
-
+  
   // Specify the files with boost:
   po::options_description desc{"options"};
 
@@ -37,7 +38,8 @@ int main(int ac,const char* av[])
 
   if(MAP.count("input-file"))
     std::cout << MAP["input-file"].as<std::string>() <<" \n";
-
+  
+  
   //specified by the user: create a map that maps the values given by the user to the integers:
   std::vector<std::string> row_structure = {"int","double","string","int","double"};
 
@@ -77,7 +79,18 @@ int main(int ac,const char* av[])
       std::cout<<std::endl;
    
   auto [w,b] = df.LinearRegression<int,double>(4,5);
-   
+
+  using split_vector_type = std::vector<std::string>;
+
+  std::string stringa = "headers_cols = int,double,string,int,double";
+  split_vector_type SplitVec;
+  boost::split( SplitVec, stringa, boost::is_any_of("= , \t"), boost::token_compress_on );
+  for(auto x : SplitVec)
+    std::cout <<x << " "<< std::endl;
+  
+  
+
+  
    std::cout << "weight :"<<w << " " << "bias: "<< b <<"\n";
  
 

@@ -1,0 +1,2 @@
+headers = int,double,string,int,double
+input_file = "input.txt"
