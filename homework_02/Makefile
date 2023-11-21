@@ -1,9 +1,10 @@
 CXX=g++
-CPPFLAGS=-I./data_frame_module
+CPPFLAGS=-I./data_frame_module -I/home/nico/Desktop/TEMPORARY/homework_02/boost_1_83_0
 CXXFLAGS=-std=c++17 -Wall -Wpedantic
 
-LDFLAGS=-Wl,-rpath,data_frame_module/ -Ldata_frame_module/ # For dynamic linking.
-LDLIBS=-lDataFrame
+LDFLAGS=-Wl,-rpath,data_frame_module/ -Wl,-rpath,/home/nico/Desktop/TEMPORARY/homework_02/boost_1_83_0/stage/lib -Ldata_frame_module/ -L/home/nico/Desktop/TEMPORARY/homework_02/boost_1_83_0/stage/lib
+
+LDLIBS=-lDataFrame -lboost_program_options
 
 
 SRC=main.cpp

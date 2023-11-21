@@ -8,11 +8,35 @@
 #include <optional>
 #include "DATA_FRAME.hpp"
 
+#include <boost/program_options.hpp>
+
 using namespace CSV_READER;
 
-int main()
+namespace po = boost::program_options;
+
+int main(int ac,const char* av[])
 {
-  // every row
+
+  // Specify the files with boost:
+  po::options_description desc{"options"};
+
+  desc.add_options()
+    ("help,h","helper function")
+    ("config-file,c",po::value<std::string>(),"Configuration file for row-structure")
+    ("input-file,f",po::value<std::string>(),"Input file where the data is stores");
+
+  po::variables_map MAP;
+  po::store(po::parse_command_line(ac,av,desc),MAP);
+  po::notify(MAP);
+
+  if(MAP.count("help"))
+     std::cout << desc <<std::endl;
+
+  if(MAP.count("config-file"))
+    std::cout << MAP["config-file"].as<std::string>() <<" \n";
+
+  if(MAP.count("input-file"))
+    std::cout << MAP["input-file"].as<std::string>() <<" \n";
 
   //specified by the user: create a map that maps the values given by the user to the integers:
   std::vector<std::string> row_structure = {"int","double","string","int","double"};
