@@ -82,11 +82,18 @@ int main(int ac,const char* av[])
 
   using split_vector_type = std::vector<std::string>;
 
-  std::string stringa = "headers_cols = int,double,string,int,double";
+  std::string stringa = "header_cols = int,double,string,int,double";
   split_vector_type SplitVec;
+  split_vector_type _row_structure;
   boost::split( SplitVec, stringa, boost::is_any_of("= , \t"), boost::token_compress_on );
   for(auto x : SplitVec)
-    std::cout <<x << " "<< std::endl;
+  {
+    if(x!="header_cols")
+      _row_structure.push_back(x);  
+  }
+  for(auto x : _row_structure)
+    std::cout << x << " ";
+  std::cout<<"\n"<<std::endl;
   
   
 
