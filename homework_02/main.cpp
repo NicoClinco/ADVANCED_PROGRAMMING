@@ -9,6 +9,7 @@
 #include <cassert>
 #include "DATA_FRAME.hpp"
 #include <gsl/gsl_math.h>
+#include "quad_module/QuadratureV1.hpp"
 
 // BOOST LIBRARY:
 #include <boost/program_options.hpp>
@@ -80,7 +81,7 @@ int main(int ac,const char* av[])
    using namespace boost::histogram;
 
    // Generate an histogram for radiation:
-   auto hRad = make_histogram(axis::regular<>(200,10,21, "solar-radiation"));
+   auto hRad = make_histogram(axis::regular<>(21,10,200, "solar-radiation"));
 
    auto RadiationData = df.getCol<double>(4);
    std::for_each(RadiationData.begin(), RadiationData.end(), std::ref(hRad));
@@ -92,7 +93,7 @@ int main(int ac,const char* av[])
        % x.index() % x.bin().lower() % x.bin().upper() % *x;
    }
    
-   std::cout << os.str() << std::flush;
+   std::cout << os.str() << "\n\n";
 
    
    
@@ -121,13 +122,66 @@ int main(int ac,const char* av[])
    */
 
    // Perform a linear regression for the fourth and fifth column of the csv-file:
-  auto [w,b] = df.LinearRegression<double,double>(4,5);
+   auto [w,b] = df.LinearRegression<double,double>(4,5);
  
 
    std::cout << "weight :"<<w << " " << "bias: "<< b <<"\n";
  
 
-  
+
+   using namespace Integrate_1D;
+
+   std::cout <<"********************************************\n";
+   std::cout<< "  TESTING OF THE QUADRATURE-POINTS CLASS  \n";
+   std::cout<< "********************************************\n";
+
+   auto squareFun = [](double x){return x*x*x;};
+
+   double xSTART = 1.0;
+   double xEND   = 6.0;
+   const unsigned int N_ =5;
+   
+   NumericalIntegration<MidPointQuadrature,N_> nIntegrationMID;
+   double MID_RES = nIntegrationMID(squareFun,xSTART,xEND);
+
+   NumericalIntegration<SimpsonQuadrature,N_> nIntegrationSIMPS;
+   double SIMPS_RES = nIntegrationSIMPS(squareFun,xSTART,xEND);
+
+   NumericalIntegration<GaussLegendreQuadrature,N_> nIntegrationGL;
+   double GL_RES = nIntegrationGL(squareFun,xSTART,xEND);
+
+   NumericalIntegration<TrapzQuadrature,N_> nIntegrationTR;
+   double TRAPZ_RES = nIntegrationTR(squareFun,xSTART,xEND);
+
+   std::cout << "********** TEST WITH N=5 **************\n";
+   std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+   std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
+   std::cout << "Trapezoidal-result : " << TRAPZ_RES << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
+
+
+   const unsigned int N2=10;
+   
+   NumericalIntegration<MidPointQuadrature,N2> nIntegrationMID2;
+   double MID_RES2 = nIntegrationMID2(squareFun,xSTART,xEND);
+   
+   NumericalIntegration<SimpsonQuadrature,N2> nIntegrationSIMPS2;
+   double SIMPS_RES2 = nIntegrationSIMPS2(squareFun,xSTART,xEND);
+   
+   NumericalIntegration<TrapzQuadrature,N2> nIntegrationTR2;
+   double TRAPZ_RES2 = nIntegrationTR2(squareFun,xSTART,xEND);
+   
+   NumericalIntegration<GaussLegendreQuadrature,N2> nIntegrationGL2;
+   double GL_RES2 = nIntegrationGL2(squareFun,xSTART,xEND);
+   
+   std::cout << "********** TEST WITH N=5 **************\n";
+   std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+   std::cout << "Mid-point-result : "   <<   MID_RES2 << "\n";
+   std::cout << "Trapezoidal-result : " << TRAPZ_RES2 << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES2 << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES2 << "\n";
+   
   return 0;
 
   

@@ -177,21 +177,37 @@ class GaussLegendreQuadrature
   virtual std::vector<double> makeWeights(double a,double b)
   {
     // Obtain the weights from BOOST:
-    auto weights = this->GaussIntegrator.weights();
+    std::vector<double> abscissa = makeQuadPnts();
+    std::vector<double> weights(abscissa.size(),0.0);
+    
+    for (unsigned i = 0; i < abscissa.size(); ++i)
+      {
+	x = abscissa[i];
+	double p = boost::math::legendre_p_prime(N, x);
+	result[i] = 2 / ((1 - x * x) * p * p);
+      }
     return weights;
   }
   virtual std::vector<double> makeQuadPnts(double a,double b)
   {
-    auto points_ = this->GaussIntegrator.abscissa();
-    //std::vector<double> points_ = boost::math::legendre_p_zeros<double>(N);
+    //auto points_ = this->GaussIntegrator.abscissa();
+    std::vector<double> points_ = boost::math::legendre_p_zeros<double>(N);
     return points_;
   }
   double operator()(std::function<double (double)> funToInt,double a,double b)
   {
-    return GaussIntegrator.integrate(funToInt,a,b);
+   std::vector<double> w_ = makeWeights(a,b);
+   std::vector<double> qp_    = makeQuadPnts(a,b);
+
+   // Evaluate function in the quadrature points:
+   std::vector<double> fxi(N);
+   std::transform(qp_.begin(),qp_.end(),fxi.begin(),funToInt);
+
+   // Return the inner product:
+   return std::inner_product(w_.begin(),w_.end(),fxi.begin(),0.0); 
   }
 private:
-  boost::math::quadrature::gauss<double,N> GaussIntegrator;
+  //boost::math::quadrature::gauss<double,N> GaussIntegrator;
 };
   
 
