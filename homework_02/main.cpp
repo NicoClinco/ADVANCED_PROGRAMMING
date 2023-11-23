@@ -9,6 +9,8 @@
 #include <cassert>
 #include "DATA_FRAME.hpp"
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_integration.h>
+#include <gsl/gsl_sf_gamma.h>
 #include "quad_module/QuadratureV1.hpp"
 
 // BOOST LIBRARY:
@@ -172,15 +174,29 @@ int main(int ac,const char* av[])
    NumericalIntegration<TrapzQuadrature,N2> nIntegrationTR2;
    double TRAPZ_RES2 = nIntegrationTR2(squareFun,xSTART,xEND);
    
-   NumericalIntegration<GaussLegendreQuadrature,N2> nIntegrationGL2;
-   double GL_RES2 = nIntegrationGL2(squareFun,xSTART,xEND);
+   //NumericalIntegration<GaussLegendreQuadrature,N2> nIntegrationGL2;
+   //double GL_RES2 = nIntegrationGL2(squareFun,xSTART,xEND);
    
    std::cout << "********** TEST WITH N=5 **************\n";
    std::cout << "EXACT-RESULT of the integration: 323.75 \n";
    std::cout << "Mid-point-result : "   <<   MID_RES2 << "\n";
    std::cout << "Trapezoidal-result : " << TRAPZ_RES2 << "\n";
    std::cout << "Simpson-result : " <<     SIMPS_RES2 << "\n";
-   std::cout << "Gauss-Legeandre-result : "<< GL_RES2 << "\n";
+   //std::cout << "Gauss-Legeandre-result : "<< GL_RES2 << "\n";
+
+
+   std::unique_ptr<gsl_integration_glfixed_table> gslft(gsl_integration_glfixed_table_alloc(10));// = std::make_unique<gsl_integration_glfixed_table>();
+   //gslft.get() = gsl_integration_glfixed_table_alloc(10);
+
+   std::vector<double> pnts(N2);
+   std::vector<double> weights(N2);
+   for (size_t i=0;i<N2;i++)
+     {
+       gsl_integration_glfixed_point(xSTART,xEND,i,&pnts[i],&weights[i],gslft.get());
+       std::cout << pnts[i] << "\n" << weights[i] << "\n";
+     }
+   
+   gsl_integration_glfixed_table_free(gslft.release());
    
   return 0;
 

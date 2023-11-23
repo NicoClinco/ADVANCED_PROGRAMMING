@@ -177,8 +177,22 @@ class GaussLegeandreQuadrature
 public:
 
   virtual std::vector<double> makeQuadWeights(double a, double b,int n)
-    
-}
+  {
+   std::vector<double> weights(n);
+  }
+  virtual std::vector<double> makeQuadPnts(double a,double b,int n)
+  {
+   std::vector<double> pnts(n);
+  }
+  double operator()(std::function<double (double)> funToInt,double a,double b,int n)
+  {
+  }
+  private:
+
+  gsl_integration_glfixed_table pTable;
+  
+  
+}; // END GAUSS-LEGEANDRE INTEGRATION.
   */
   
 template<class QuadType>
