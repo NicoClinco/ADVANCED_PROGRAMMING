@@ -5,20 +5,12 @@
 #include <numeric>
 #include <cmath>
 #include <stdio.h>
-#include <QuadratureV1.hpp>
+#include <Quadrature.hpp>
 
 // Function to integrate:
-constexpr double ToIntegrate(double x)
+double ToIntegrate(double x)
 {
-  return -3*x*x;
-}
-
-template<int n>
-double integrator_(double a,double b,std::function<double(double)> f)
-{
-
-  boost::math::quadrature::gauss<double,n> integrator;
-  return integrator.integrate(f,a,b);
+  return x*x*x;
 }
 
 
@@ -32,42 +24,61 @@ int main()
   // the number of points required WITHOUT instanciate
   // any object for the specific quadrature rule.
   using namespace Integrate_1D;
-  //numericalIntegration<MidPointQuadrature> nIntegrationMID;
-
+  numericalIntegration<MidPointQuadrature> nIntegrationMID;
+  numericalIntegration<GaussLegeandreQuadrature> nIntegrationGL;
+  numericalIntegration<SimpsonQuadrature> nIntegrationSIMPS;
+  numericalIntegration<TrapzQuadrature> nIntegrationTRAPZ;
+  
+  
   double xSTART = 1.0;
-  double xEND   = 3.0;
-  //double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,4);
+  double xEND   = 6.0;
+  unsigned int N = 5;
+  double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
+  double TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
+  double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
+  double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
+
+  std::cout <<"********************************************\n";
+  std::cout<< "  TESTING OF THE QUADRATURE-POINTS CLASS  \n";
+  std::cout<< "********************************************\n";
   
-  const int N =4;
-  NumericalIntegration<TrapzQuadrature,4> nIntegrationTR;
-  double TRAPZ_RES = nIntegrationTR(ToIntegrate,xSTART,xEND);
+  std::cout << "********** TEST WITH N=5 **************\n";
+  std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+  std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
+  std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
+  std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
+  std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
 
-
-  NumericalIntegration<SimpsonQuadrature,N> nIntegrationSIMPS;
-  double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND);
-
-  NumericalIntegration<GaussLegendreQuadrature,N> nIntegrationGL;
-  double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND);
-  // Gauss quadrature:
-  const int nPoints = 4;
-  boost::math::quadrature::gauss<double,nPoints> integrator;
+  std::cout << "***************************************\n";
+  N=10;
+  MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
+  TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
+  SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
+  GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
   
-  /*
-  auto weights = integrator.weights();
-  auto points_ = integrator.abscissa();
-  int i = 0;
-  for(auto it = weights.begin();it!=weights.end();++it)
-    {
-      std::cout << *it << " "<<points_[i] <<std::endl; i++; 
-    }
-  */
-  //double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,4);
-   
-   std::cout << "Exact-result, func: -3x^2 from 1 to 3 :"<< -26.0<<std::endl;
-   //std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
-   std::cout << "Trapezoidal-result : " << TRAPZ_RES << "\n";
-   std::cout << "Simpson-result : " << SIMPS_RES << "\n";
-   std::cout << "Gauss-result : "<< integrator.integrate(ToIntegrate,xSTART,xEND) << "\n";
-   std::cout << "Gauss-result-myfun : "<<GL_RES << "\n";
+  
+  std::cout << "********** TEST WITH N=10 **************\n";
+    std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+  std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
+  std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
+  std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
+  std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
+
+  std::cout << "***************************************\n";
+  N=20;
+  MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
+  TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
+  SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
+  GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
+  
+  
+  std::cout << "********** TEST WITH N=20 **************\n";
+  std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+  std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
+  std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
+  std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
+  std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
+
+  
   return 0;
 }

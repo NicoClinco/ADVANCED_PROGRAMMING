@@ -6,6 +6,9 @@
 #include <functional>
 #include <numeric>
 #include <cmath>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_integration.h>
+#include <gsl/gsl_sf_gamma.h>
 
 
 
@@ -84,7 +87,7 @@ public:
     return std::inner_product(w_.begin(),w_.end(),fxi.begin(),0.0);
   }
   
-};
+}; // END SIMPSON-RULE
   
   
 class TrapzQuadrature
@@ -171,29 +174,57 @@ public:
   }
 }; // end MidPointQuadrature
   
-  /*
+  
 class GaussLegeandreQuadrature
 {
 public:
 
-  virtual std::vector<double> makeQuadWeights(double a, double b,int n)
+  virtual std::vector<double> makeQuadWeights(double a, double b,unsigned int n)
   {
-   std::vector<double> weights(n);
+    std::unique_ptr<gsl_integration_glfixed_table> gslft(gsl_integration_glfixed_table_alloc(n));
+    std::vector<double> weights(n);
+    std::vector<double> pnts(n);
+    //fill weights:
+    for (unsigned int i =0;i<n;i++)
+      gsl_integration_glfixed_point(a,b,i,&pnts[i],&weights[i],gslft.get());
+
+    gsl_integration_glfixed_table_free(gslft.release()); // free memory
+    assert(gslft==nullptr);
+    
+    return weights;
   }
-  virtual std::vector<double> makeQuadPnts(double a,double b,int n)
+  virtual std::vector<double> makeQuadPnts(double a,double b,unsigned int n)
   {
-   std::vector<double> pnts(n);
+    std::vector<double> weights(n);
+    std::vector<double> pnts(n);
+    std::unique_ptr<gsl_integration_glfixed_table> gslft(gsl_integration_glfixed_table_alloc(n));
+    for (unsigned int i =0;i<n;i++)
+      gsl_integration_glfixed_point(a,b,i,&pnts[i],&weights[i],gslft.get());
+    
+    gsl_integration_glfixed_table_free(gslft.release()); // free memory
+    
+    assert(gslft==nullptr); 
+    
+    return pnts;
   }
   double operator()(std::function<double (double)> funToInt,double a,double b,int n)
   {
-  }
-  private:
+    //get the quadrature points and the weights:
+    std::vector<double> w_ = makeQuadWeights(a,b,n);
+    std::vector<double> qp_ = makeQuadPnts(a,b,n);
 
-  gsl_integration_glfixed_table pTable;
+    // Evaluate function in the quadrature points:
+    std::vector<double> fxi(n);
+    std::transform(qp_.begin(),qp_.end(),fxi.begin(),funToInt);
+
+    // Return the inner product:
+    return std::inner_product(w_.begin(),w_.end(),fxi.begin(),0.0);
+    
+  }
   
   
 }; // END GAUSS-LEGEANDRE INTEGRATION.
-  */
+ 
   
 template<class QuadType>
 class numericalIntegration:
@@ -203,7 +234,7 @@ public:
 
   double operator () (std::function<double (double)> funToInt,double a, double b,int n) 
   {
-    return  QuadType::operator()(funToInt,a,b,n);
+    return QuadType::operator()(funToInt,a,b,n);
   }
 };
 

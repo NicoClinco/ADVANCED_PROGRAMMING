@@ -11,7 +11,10 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_sf_gamma.h>
+//#include "quad_module/Quadrature.hpp"
 #include "quad_module/QuadratureV1.hpp"
+
+#include <cassert>
 
 // BOOST LIBRARY:
 #include <boost/program_options.hpp>
@@ -185,9 +188,9 @@ int main(int ac,const char* av[])
    //std::cout << "Gauss-Legeandre-result : "<< GL_RES2 << "\n";
 
 
+   /*
    std::unique_ptr<gsl_integration_glfixed_table> gslft(gsl_integration_glfixed_table_alloc(10));// = std::make_unique<gsl_integration_glfixed_table>();
-   //gslft.get() = gsl_integration_glfixed_table_alloc(10);
-
+   
    std::vector<double> pnts(N2);
    std::vector<double> weights(N2);
    for (size_t i=0;i<N2;i++)
@@ -197,6 +200,9 @@ int main(int ac,const char* av[])
      }
    
    gsl_integration_glfixed_table_free(gslft.release());
+
+   assert(gslft == nullptr);
+   */
    
   return 0;
 
