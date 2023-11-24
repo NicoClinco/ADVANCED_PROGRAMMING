@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.12)
+
+project(homework2 VERSION 1.0
+		DESCRIPTION "homework2-clinco'
+		LANGUAGES CXX)
+
+# adding the two libraries:
+
+set(GSLPATH "/u/n/nclinco/Downloads/ADV_PROGRAMMING/gsl" CACHE STRING "/path/to/gsl")
+set(BOOSTPATH "/u/n/nclinco/Downloads/ADV_PROGRAMMING/boost" CACHE STRING "/path/to/boost")
+
+add_executable(main main.cpp)
+
+
+target_include_directories(main PUBLIC ${GSLPATH}/include)
+target_include_directories(ex1 PUBLIC ${BOOSTPATH}/include)
+
+target_link_directories(main PUBLIC ${GSLPATH}/lib)
+target_link_directories(main PUBLIC ${BOOSTPATH}/lib)
+
+target_link_libraries(main boost_program_options gsl gslcblas)

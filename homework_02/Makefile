@@ -1,21 +1,30 @@
 CXX=g++
-CPPFLAGS=-I./data_frame_module -I/home/nico/Desktop/PHD-COURSES/MY_BOOST/boost/ \
-	 -I/home/nico/Desktop/PHD-COURSES/gls/include
+
+
+BOOST_PATH=/u/n/nclinco/Downloads/ADV_PROGRAMMING/boost
+
+GSL_PATH=/u/n/nclinco/Downloads/ADV_PROGRAMMING/gsl
+
+CPPFLAGS=-I./data_frame_module -I$(BOOST_PATH)/include \
+	     -I$(GSL_PATH)/include
+
 CXXFLAGS=-std=c++17 -Wall -Wpedantic
 
 
 LDFLAGS=-Wl,-rpath,data_frame_module/  \
-	-Wl,-rpath,/home/nico/Desktop/PHD-COURSES/MY_BOOST/lib \
-	-Wl,-rpath,/home/nico/Desktop/PHD-COURSES/gls/lib \
+	-Wl,-rpath,$(BOOST_PATH)/lib \
+	-Wl,-rpath,$(GSL_PATH)/lib \
 	-Ldata_frame_module \
-	-L/home/nico/Desktop/PHD-COURSES/MY_BOOST/lib \
-	-L/home/nico/Desktop/PHD-COURSES/gls/lib
+	-L$(BOOST_PATH)/lib \
+	-L$(GSL_PATH)/lib
 
 LDLIBS=-lDataFrame -lboost_program_options -lgsl -lgslcblas
 
 
 SRC=main.cpp
 OBJ=$(SRC:.cpp=.o)
+
+.PHONY : all clean
 
 all: main
 
@@ -25,4 +34,4 @@ main: $(OBJ)
 	$(CXX) -c $< $(CPPFLAGS) $(CXXFLAGS) -o $@
 
 clean:
-	rm -f *.o ex1
+	rm -f *.o main
