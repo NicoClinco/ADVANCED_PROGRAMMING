@@ -8,14 +8,12 @@
 #include <optional>
 #include <cassert>
 #include "DATA_FRAME.hpp"
-
 #include "quad_module/Quadrature.hpp"
 
 #include <cassert>
 
 // BOOST LIBRARY:
 #include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
 #include <boost/histogram.hpp>
 #include <boost/format.hpp>
 
@@ -28,7 +26,7 @@ int main(int ac,const char* av[])
 
   
   // Specify the files with boost:
-  po::options_description desc{"options"};
+  po::options_description desc{"Please, specify the config file and the .csv file:"};
 
   desc.add_options()
     ("help,h","helper function")
@@ -50,34 +48,41 @@ int main(int ac,const char* av[])
     
   if(MAP.count("config-file"))
     {
-      std::cout << "CONFIGURATION-FILE: ";
+      std::cout << "CONFIGURATION-FILE SELECTED: ";
       std::cout << MAP["config-file"].as<std::string>() <<" \n";
     }
 
   if(MAP.count("input-file"))
     {
-      std::cout << "INPUT .CSV FILE: ";
+      std::cout << "INPUT .CSV FILE SELECTED: ";
       std::cout << MAP["input-file"].as<std::string>() <<" \n";
     }
   
   //specified by the user: create a map that maps the values given by the user to the integers:
-  std::vector<std::string> row_structure = {"int","double","string","int","double"};
+  //std::vector<std::string> row_structure = {"int","double","string","int","double"};
 
-  std::map<std::string,size_t> _map_ = {{"double",0},{"string",1},{"int",2}};
-  
-  // Construct from the row-structure:
+  //********* FOLLOW THIS PIECE OF CODE TO UNDERSTAND ****** 
+
+  //Step-1: Creating the object data-frame from the config-file:
   DATA_FRAME df(MAP["config-file"].as<std::string>());
+
   
+  //Step-2: Reading the .csv file in input:
   df.read(MAP["input-file"].as<std::string>());
 
-  bool is_numeric = df.IsNumeric(1);
-  if(!is_numeric)
-    throw std::invalid_argument("cannot do the mean\n");
 
-   double mean = df.mean(2);
-   double std_dev = df.stdDev(2);
-   std::cout << std_dev << "\n";
-   std::cout << mean << "\n";
+  //We can perform the average or the standard deviation
+  //of a column : e.g. for the column in the CSV:
+
+  // Suppose to take the sixth-column
+  // which is the mean temperature in a whole day:
+  
+   double mean = df.mean(6);
+   double std_dev = df.stdDev(6);
+
+   std::cout << "AVERAGE OF THE MEAN TEMPERATURE: "<< mean <<std::endl;
+   std::cout<< "STANDARD DEVIATION OF THE MEAN TEMPERATURE: "<<std_dev <<std::endl;
+   
 
    // PLOT HISTOGRAM of the temperature:
    using namespace boost::histogram;
@@ -97,12 +102,20 @@ int main(int ac,const char* av[])
    
    std::cout << os.str() << "\n\n";
 
+
    
-   
+   // EXAMPLE for using the iterator:
    /* PRINT THE FIRST TWO COLUMNS: JUST TO CHECK IF THE ITERATOR WORKS:*/
-	  
+
+
+   //Map used in the class for the variant:
+   std::map<std::string,int> _map_ = df.map();
+
+   // Row structure
+   std::vector<std::string> row_structure =df.rowstructure();
+   
    int counter = 0;
-   for(auto itrow = df.rowIterbegin()+30;itrow!=df.rowIterEnd()-100;itrow++)
+   for(auto itrow = df.rowIterbegin()+30;itrow!=df.rowIterEnd()-15000;itrow++)
     {
       size_t col=0;
       
@@ -118,7 +131,7 @@ int main(int ac,const char* av[])
 	  std::cout << " ";
 	  col++;
 	}
-      counter++;
+   
       std::cout<<std::endl;
 	}
    std::cout << counter << "\n";

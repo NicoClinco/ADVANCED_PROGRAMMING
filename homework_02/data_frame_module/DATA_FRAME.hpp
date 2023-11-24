@@ -15,6 +15,7 @@
 #include <optional>
 #include <vector>
 #include <map>
+#include <cmath>
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -27,10 +28,11 @@ class DATA_FRAME
 {
  public:
 
-  //Read the data-structure from config-file
+  //Read the data-structure from config-file where the structure
+  //of the row is stored:
    DATA_FRAME(std::string CONFIG_FILE);
     
-  // Read the row structure:
+  // Construct from the data-structure given by the user:
   DATA_FRAME(std::vector<std::string> rowstructure):
     row_structure{rowstructure},_rows_{0} {};
 
@@ -52,7 +54,8 @@ class DATA_FRAME
 
   //Read from input-file
   void read(std::string file);
-  
+
+  //Iterator for ROWS:
   class RowIterator
   {
    public:
@@ -92,7 +95,8 @@ private:
 
   RowIterator rowIterEnd(){return RowIterator(dataframe.end());}; //end row-iterator
   //--------------------------------------------------// 
-  
+
+  //ITERATOR for COLUMNS:
   class colIterator
   {
   public:
@@ -127,12 +131,21 @@ private:
   colIterator colIterbegin(RowIterator _rowIter_,size_t col){return colIterator(_rowIter_,col);};
 
   colIterator colIterEnd(RowIterator _rowIter_,size_t col){return colIterator(_rowIter_,col);};
-  
 
+
+  //Return the map needed for accessing the variant object:
+  std::map<std::string, int> map() const;
+
+  //Return the row-structure:
+  std::vector<std::string> rowstructure() const;
+  
+  //mean of a column:
   double mean(size_t col);
 
+  //standard deviation of a column
   double stdDev(size_t col);
 
+  // variance of a column
   double var(size_t col);
   // Check if the column is numerical or categorical:
   bool IsNumeric(size_t col) const;
@@ -160,7 +173,7 @@ private:
 
   std::vector<std::string> row_structure;
   std::vector<CSV_READER::VecOpvar> dataframe;
-  bool configFile= false;
+  bool configFile = false;
 
   // Create an std::map which maps the values to indexes:
   std::map<std::string, int> map_{{"double", 0}, {"string", 1}, {"int", 2}};

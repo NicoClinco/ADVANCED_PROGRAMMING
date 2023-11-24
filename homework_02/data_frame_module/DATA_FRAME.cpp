@@ -102,6 +102,16 @@ bool CSV_READER::DATA_FRAME::IsRow(size_t row) const
    return (row <= _rows_);
 }
 
+std::map<std::string, int> CSV_READER::DATA_FRAME::map() const
+{
+  return map_;
+}
+
+std::vector<std::string> CSV_READER::DATA_FRAME::rowstructure() const
+{
+  return row_structure;
+}
+
 double CSV_READER::DATA_FRAME::mean(size_t col) 
 {
   if(!IsNumeric(col))
@@ -171,7 +181,13 @@ double CSV_READER::DATA_FRAME::stdDev(size_t col)
     }
    } //end loop trough the rows.
    stddev/=nRowsvalid;
-   return stddev;
+   return sqrt(stddev);
+}
+
+double CSV_READER::DATA_FRAME::var(size_t col)
+{
+  double stddev = stdDev(col);
+  return (stddev*stddev);
 }
 
 size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind)
@@ -195,7 +211,7 @@ size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind)
 
 
 
-// Explicit specialization: -by value
+// Explicit specialization:
 template<class colTYPE>
 std::vector<colTYPE> CSV_READER::DATA_FRAME::getCol(size_t col)
 {
