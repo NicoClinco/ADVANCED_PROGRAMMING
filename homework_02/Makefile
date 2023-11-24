@@ -1,6 +1,5 @@
 CXX=g++
 
-
 BOOST_PATH=/u/n/nclinco/Downloads/ADV_PROGRAMMING/boost
 
 GSL_PATH=/u/n/nclinco/Downloads/ADV_PROGRAMMING/gsl

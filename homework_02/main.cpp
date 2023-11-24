@@ -8,9 +8,6 @@
 #include <optional>
 #include <cassert>
 #include "DATA_FRAME.hpp"
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_integration.h>
-#include <gsl/gsl_sf_gamma.h>
 
 #include "quad_module/Quadrature.hpp"
 
