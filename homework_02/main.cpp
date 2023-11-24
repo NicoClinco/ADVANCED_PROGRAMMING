@@ -99,9 +99,10 @@ int main(int ac,const char* av[])
 
    
    
-   /* PRINT THE FIRST TWO COLUMNS: JUST TO CHECK IF THE ITERATOR WORKS:
-   
-   for(auto itrow = df.rowIterbegin();itrow!=df.rowIterEnd();itrow++)
+   /* PRINT THE FIRST TWO COLUMNS: JUST TO CHECK IF THE ITERATOR WORKS:*/
+	  
+   int counter = 0;
+   for(auto itrow = df.rowIterbegin()+30;itrow!=df.rowIterEnd()-100;itrow++)
     {
       size_t col=0;
       
@@ -117,11 +118,13 @@ int main(int ac,const char* av[])
 	  std::cout << " ";
 	  col++;
 	}
+      counter++;
       std::cout<<std::endl;
 	}
+   std::cout << counter << "\n";
       std::cout<<std::endl;
    
-   */
+   
    // Perform a linear regression for the fourth and fifth column of the csv-file:
    auto [w,b] = df.LinearRegression<double,double>(4,5);
  

@@ -72,6 +72,14 @@ class DATA_FRAME
     // Postfix
     
     void operator++(int){curIter++;}
+
+	//void operator+(int n){curIter=curIter+n;}
+
+	RowIterator operator+(int n){curIter=curIter+n;return *this;}
+
+	//void operator-(int n){curIter=curIter-n;}
+
+	RowIterator operator-(int n){curIter=curIter-n;return *this;}
     
     friend bool operator== (const RowIterator& a, const RowIterator& b) { return a.curIter == b.curIter; };
     friend bool operator!= (const RowIterator& a, const RowIterator& b) { return a.curIter != b.curIter; };  
