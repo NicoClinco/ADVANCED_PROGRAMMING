@@ -59,7 +59,50 @@ class DATA_FRAME
   //Read from input-file
   void read(std::string file);
 
-  //Iterator for ROWS:
+
+  // COSTANT-ROW-ITERATOR:
+  class cRowIterator
+  {
+  public:
+
+    using type = std::optional<std::variant<double,std::string,int>>;
+    using rowtype = std::vector<type>;
+    using ref_ = const std::vector<type>&;
+    using pRowIterator = std::vector<rowtype>::const_iterator;
+
+    cRowIterator(std::vector<rowtype>::const_iterator it):curIter(it){};
+
+    // Iterator:
+    typename cRowIterator::pRowIterator operator->(){return curIter;};
+
+    // Reference:
+    typename cRowIterator::ref_ operator*(){return *(curIter);};
+    // Postfix
+    
+    void operator++(int){curIter++;}
+
+    //void operator+(int n){curIter=curIter+n;}
+
+    cRowIterator operator+(int n){curIter=curIter+n;return *this;}
+
+    //void operator-(int n){curIter=curIter-n;}
+
+    cRowIterator operator-(int n){curIter=curIter-n;return *this;}
+    
+    friend bool operator== (const cRowIterator& a, const cRowIterator& b) { return a.curIter == b.curIter; };
+    friend bool operator!= (const cRowIterator& a, const cRowIterator& b) { return a.curIter != b.curIter; };  
+  private:
+  
+    std::vector<rowtype>::const_iterator curIter;
+  };
+  
+  cRowIterator crowIterbegin() const {return cRowIterator(dataframe.begin());};
+
+  cRowIterator crowIterEnd() const {return cRowIterator(dataframe.end());}; //end row-iterator
+  
+  //*********************************************************************//
+
+  //Iterator for ROWS (non-const)
   class RowIterator
   {
    public:
@@ -136,6 +179,41 @@ private:
 
   colIterator colIterEnd(RowIterator _rowIter_,size_t col){return colIterator(_rowIter_,col);};
 
+  class ccolIterator
+  {
+  public:
+    using type = std::optional<std::variant<double,std::string,int>>;
+    using ref_ = type;
+    using colVector = std::vector<type>;
+    using colIter = colVector::const_iterator;
+    
+    // Assert the column!
+    ccolIterator(cRowIterator _rowIter_,size_t col):_colVector_{_rowIter_.operator*()},col_{col}{};
+
+    typename ccolIterator::colIter operator->(){return _colVector_.begin()+col_;};
+
+    typename ccolIterator::ref_ operator*(){return _colVector_[col_];};
+
+    //post-fix
+    void operator++(int){col_++;};
+
+    //prefix
+    void operator++(){++col_;};
+
+    // TO CHECK:
+    friend bool operator== (const ccolIterator& a,const ccolIterator& b) { return a.col_==b.col_; };
+    friend bool operator!= (const ccolIterator& a,const ccolIterator& b) { return a.col_!=b.col_; };
+    
+  private:
+
+    const colVector& _colVector_;
+    size_t col_;
+  };
+
+  ccolIterator ccolIterbegin(cRowIterator _rowIter_,size_t col){return ccolIterator(_rowIter_,col);};
+
+  ccolIterator ccolIterEnd(cRowIterator _rowIter_,size_t col){return ccolIterator(_rowIter_,col);};
+
 
   //Return the map needed for accessing the variant object:
   std::map<std::string, int> map() const;
@@ -165,7 +243,7 @@ private:
 
   // Get the corresponding column for manipulation: (value)
   template<class colTYPE>
-  std::vector<colTYPE> getCol(size_t col);
+  std::vector<colTYPE> getCol(size_t col) const;
 
 
   // Linear Regression: y = w*x+b

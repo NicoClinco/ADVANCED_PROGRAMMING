@@ -122,7 +122,7 @@ double CSV_READER::DATA_FRAME::mean(size_t col)
    double _mean_ = 0.0;
    int token_type = map_[row_structure[col-1]]; 
    unsigned int nRowsvalid = 0;
-   for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
+   for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
    {
     auto item =*(rowIt); // Get the row:
     if(item[col-1].has_value())
@@ -167,7 +167,7 @@ double CSV_READER::DATA_FRAME::stdDev(size_t col)
   // Perform a loop
    int token_type = map_[row_structure[col-1]]; 
    unsigned int nRowsvalid = 0;
-   for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
+   for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
    {
     auto item = *(rowIt); // Get the row.
     if(item[col-1].has_value())
@@ -215,13 +215,13 @@ double CSV_READER::DATA_FRAME::var(size_t col)
   return var;
 }
 
-size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind) 
+size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind)
 {
   if(!IsCategorical(col))
     throw std::invalid_argument("Tried to count word from a numerical column");
 
   unsigned int nFrequencies = 0;
-  for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
+  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
     {
       auto item = *(rowIt); // Get the row.
       if(item[col-1].has_value()){
@@ -241,10 +241,10 @@ size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind)
 
 // Explicit specialization:
 template<class colTYPE>
-std::vector<colTYPE> CSV_READER::DATA_FRAME::getCol(size_t col) const
+std::vector<colTYPE> CSV_READER::DATA_FRAME::getCol(size_t col)
 {
   std::vector<colTYPE> _col_;
-  for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
+  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
   {
    auto item = *(rowIt); // Get the row.
    if (item[col-1].has_value())
@@ -257,11 +257,11 @@ std::vector<colTYPE> CSV_READER::DATA_FRAME::getCol(size_t col) const
 }
 
 template
-std::vector<std::string> CSV_READER::DATA_FRAME::getCol<std::string>(size_t col) const;
+std::vector<std::string> CSV_READER::DATA_FRAME::getCol<std::string>(size_t col);
 template
-std::vector<double> CSV_READER::DATA_FRAME::getCol<double>(size_t col) const;
+std::vector<double> CSV_READER::DATA_FRAME::getCol<double>(size_t col);
 template
-std::vector<int> CSV_READER::DATA_FRAME::getCol<int>(size_t col) const;
+std::vector<int> CSV_READER::DATA_FRAME::getCol<int>(size_t col);
 
 
 

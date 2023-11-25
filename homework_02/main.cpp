@@ -17,6 +17,7 @@
 #include <boost/program_options.hpp>
 #include <boost/histogram.hpp>
 #include <boost/format.hpp>
+#include "matplotlibcpp.h"
 
 
 using namespace CSV_READER;
@@ -125,14 +126,15 @@ int main(int ac,const char* av[])
 
    /* --------- ITERATOR -----------------*/
    // EXAMPLE : PRINT [1,5) COLUMNS:
-   /*
+   
    size_t col_begin=1;
    size_t col_end = 5;
    size_t col = 0;
-   for(auto itrow = df.rowIterbegin()+30;itrow!=df.rowIterEnd()-15100;itrow++)
+   for(auto itrow = df.crowIterbegin()+30;itrow!=df.crowIterEnd()-15100;itrow++)
     {
       col=col_begin;
-      for(auto itc = df.colIterbegin(itrow,col_begin);itc!=df.colIterEnd(itrow,col_end);itc++)
+      
+      for(auto itc = df.ccolIterbegin(itrow,col_begin);itc!=df.ccolIterEnd(itrow,col_end);itc++)
 	{
 	  size_t token = _map_[row_structure[col]];
 	  auto value = *itc;
@@ -149,7 +151,7 @@ int main(int ac,const char* av[])
 	}
   
       std::cout<<std::endl;
-      */
+      
    
    // Perform a linear regression for the fourth and fifth column of the csv-file:
    auto [w,b] = df.LinearRegression<double,double>(4,5);
@@ -260,6 +262,11 @@ int main(int ac,const char* av[])
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
    
+
+   namespace plt = matplotlibcpp;
+
+   plt::plot({1,3,2,4});
+   plt::show();
    
   return 0;
 
