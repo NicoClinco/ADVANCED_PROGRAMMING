@@ -7,6 +7,7 @@
 #include <variant>
 #include <optional>
 #include <cassert>
+
 #include "DATA_FRAME.hpp"
 #include "quad_module/Quadrature.hpp"
 
@@ -16,6 +17,7 @@
 #include <boost/program_options.hpp>
 #include <boost/histogram.hpp>
 #include <boost/format.hpp>
+
 
 using namespace CSV_READER;
 
@@ -31,7 +33,8 @@ int main(int ac,const char* av[])
   desc.add_options()
     ("help,h","helper function")
     ("config-file,c",po::value<std::string>(),"Configuration file for row-structure")
-    ("input-file,f",po::value<std::string>(),"path/to/input.csv file where the csv file is stored");
+    ("input-file,f",po::value<std::string>(),"path/to/input.csv file where the csv file is stored")
+    ("output-file,o",po::value<std::string>(),"path/to/output.txt file where various operations are saved");
 
   po::variables_map MAP;
   po::store(po::parse_command_line(ac,av,desc),MAP);
@@ -56,6 +59,12 @@ int main(int ac,const char* av[])
     {
       std::cout << "INPUT .CSV FILE SELECTED: ";
       std::cout << MAP["input-file"].as<std::string>() <<" \n";
+    }
+
+  if(MAP.count("output-file"))
+    {
+      std::cout << "OUTPUT FILE SELECTED:  ";
+      std::cout << MAP["output-file"].as<std::string>() <<" \n";
     }
   
   //specified by the user: create a map that maps the values given by the user to the integers:
@@ -83,6 +92,7 @@ int main(int ac,const char* av[])
    std::cout << "AVERAGE OF THE MEAN TEMPERATURE: "<< mean <<std::endl;
    std::cout<< "STANDARD DEVIATION OF THE MEAN TEMPERATURE: "<<std_dev <<std::endl;
    
+   
 
    // PLOT HISTOGRAM of the temperature:
    using namespace boost::histogram;
@@ -103,10 +113,8 @@ int main(int ac,const char* av[])
    std::cout << os.str() << "\n\n";
 
 
-   
    // EXAMPLE for using the iterator:
    /* PRINT THE FIRST TWO COLUMNS: JUST TO CHECK IF THE ITERATOR WORKS:*/
-
 
    //Map used in the class for the variant:
    std::map<std::string,int> _map_ = df.map();
@@ -114,12 +122,17 @@ int main(int ac,const char* av[])
    // Row structure
    std::vector<std::string> row_structure =df.rowstructure();
    
-   int counter = 0;
-   for(auto itrow = df.rowIterbegin()+30;itrow!=df.rowIterEnd()-15000;itrow++)
+
+   /* --------- ITERATOR -----------------*/
+   // EXAMPLE : PRINT [1,5) COLUMNS:
+   /*
+   size_t col_begin=1;
+   size_t col_end = 5;
+   size_t col = 0;
+   for(auto itrow = df.rowIterbegin()+30;itrow!=df.rowIterEnd()-15100;itrow++)
     {
-      size_t col=0;
-      
-      for(auto itc = df.colIterbegin(itrow,0);itc!=df.colIterEnd(itrow,2);itc++)
+      col=col_begin;
+      for(auto itc = df.colIterbegin(itrow,col_begin);itc!=df.colIterEnd(itrow,col_end);itc++)
 	{
 	  size_t token = _map_[row_structure[col]];
 	  auto value = *itc;
@@ -134,18 +147,56 @@ int main(int ac,const char* av[])
    
       std::cout<<std::endl;
 	}
-   std::cout << counter << "\n";
+  
       std::cout<<std::endl;
-   
+      */
    
    // Perform a linear regression for the fourth and fifth column of the csv-file:
    auto [w,b] = df.LinearRegression<double,double>(4,5);
- 
-
    std::cout << "weight :"<<w << " " << "bias: "<< b <<"\n";
 
+   // WRITE in the output file as specified by the user:
+   if(MAP.count("output-file"))
+     {
+       std::string outfile = MAP["output-file"].as<std::string>();
+       df.setOutputfile(outfile); 
+     }
+
+   // FROM HERE, THE MEAN, THE STD DEVIATION RESULTS WILL BE PUTTED INTO
+   // THE FILE SPECIFIED IN OUTPUT:
+   df.write(" "); //Specify the separator between the entries, default tab
+
+   double mean6 = df.mean(6);
+   double std_dev6 = df.stdDev(6);
+
+   // Make the histogram, and report it into a file:
+   df.makeHistogram<double>(6,"Mean temperature statistics",20);
+   
+   df.closeOutput();
+   
+   double mean5 = df.mean(5);
 
    
+   /*
+   if(MAP.count("output-file"))
+     {
+       std::string outfile = MAP["output-file"].as<std::string>();
+       std::string separator=" ";
+       CSV_WRITER writer(outfile,separator);
+
+       // The user must specify where starting write.
+       writer.write();
+
+       writer<<"AVERAGE OF THE MEAN TEMPERATURE: "<< mean;
+       writer.endrow();
+       writer<<"STANDARD-DEVIATION OF THE MEAN TEMPERATURE: " << std_dev;
+       writer.endrow();
+       
+       // The user must specify where the file can be closed.
+       writer.close();
+     }
+
+   */
    using namespace Integrate_1D;
    numericalIntegration<MidPointQuadrature> nIntegrationMID;
    numericalIntegration<GaussLegeandreQuadrature> nIntegrationGL;
@@ -208,6 +259,7 @@ int main(int ac,const char* av[])
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
+   
    
   return 0;
 

@@ -142,6 +142,11 @@ double CSV_READER::DATA_FRAME::mean(size_t col)
    } //end loop trough the rows.
 
   _mean_/=nRowsvalid;
+
+  // if it is writing, write to file:
+  std::string title = "Mean of column " + std::to_string(col)+ +":";
+  this->WriteEntry(title,_mean_);
+  
   return _mean_;
 }
 
@@ -150,8 +155,13 @@ double CSV_READER::DATA_FRAME::stdDev(size_t col)
   if(!IsNumeric(col))
     throw std::invalid_argument("Cannot do the std-dev for categorical values");
 
-  //Obtain the mean:
+  // Avoid to write the mean if it is possible to write:
+  bool prevWritestate = Iswriting;
+  if(Iswriting==true)
+    Iswriting=false;
+  
   double mean = this->mean(col);
+  Iswriting = prevWritestate;
   
   double stddev = 0.0;
   // Perform a loop
@@ -181,31 +191,49 @@ double CSV_READER::DATA_FRAME::stdDev(size_t col)
     }
    } //end loop trough the rows.
    stddev/=nRowsvalid;
-   return sqrt(stddev);
+   stddev=sqrt(stddev);
+
+   std::string title = "Standard deviation of column " + std::to_string(col) +":";
+   this->WriteEntry(title,stddev);
+   return stddev;
 }
 
 double CSV_READER::DATA_FRAME::var(size_t col)
 {
+  // Avoid to write the mean if it is possible to write:
+  bool prevWritestate = Iswriting;
+  if(Iswriting==true)
+    Iswriting=false;
   double stddev = stdDev(col);
-  return (stddev*stddev);
+  Iswriting=prevWritestate;
+
+  double var = stddev*stddev;
+
+  std::string title = "Variance of column " + std::to_string(col) +":";
+  this->WriteEntry(title,var);
+    
+  return var;
 }
 
 size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind)
 {
   if(!IsCategorical(col))
-	throw std::invalid_argument("Tried to count word from a numerical column");
+    throw std::invalid_argument("Tried to count word from a numerical column");
 
   unsigned int nFrequencies = 0;
-   for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
-   {
-    auto item = *(rowIt); // Get the row.
-    if(item[col-1].has_value()){
-    std::string item_ = std::get<std::string>(item[col-1].value());
-    if(item_==tofind)
-      nFrequencies++;
-    }
-   }//end row loop
-   return nFrequencies;
+  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
+    {
+      auto item = *(rowIt); // Get the row.
+      if(item[col-1].has_value()){
+	std::string item_ = std::get<std::string>(item[col-1].value());
+	if(item_==tofind)
+	  nFrequencies++;
+      }
+    }//end row loop
+
+  std::string title = "frequency count of world " + tofind +" in column "+std::to_string(col) +":";
+  this->WriteEntry(title,nFrequencies);
+  return nFrequencies;
 } //end loop trough the rows.
    
 
@@ -288,3 +316,90 @@ std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,double>(s
 
 template
 std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,int>(size_t colX,size_t colY);
+
+template<class T>
+void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned int n_interval)
+{
+  if(IsNumeric(col))
+    {
+      using namespace boost::histogram;
+      auto data = this->getCol<T>(col);
+      // Get the maxium and the minimum element in the vector
+      double xMin = *(std::min_element(data.begin(), data.end()));
+      double xMax = *(std::max_element(data.begin(), data.end()));
+      
+      // Generate the histogram:
+      auto hdata = make_histogram(axis::regular<>(n_interval,xMin,xMax,title));
+      // Fill the istogram:
+      std::for_each(data.begin(),data.end(),std::ref(hdata));
+
+      std::ostringstream os;
+      std::string to_print;
+      for (auto&& x : indexed(hdata)) {
+	os << boost::format("from-to [%4.1f, %4.1f): %i\n")
+	  % x.bin().lower() % x.bin().upper() % *x;
+      }
+      to_print = os.str();
+      title=title+"\n";
+      // Write to file in the writing mode:
+      this->WriteEntry(title,to_print);
+    }
+}
+
+template
+void CSV_READER::DATA_FRAME::makeHistogram<double>(size_t col,std::string title,unsigned int n_interval);
+
+template
+void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval);
+
+ 
+void CSV_READER::DATA_FRAME::setOutputfile(std::string _outfile_)
+{
+  outputfile_ = _outfile_;
+}
+
+void CSV_READER::DATA_FRAME::write(std::string separator)
+{
+  // if it is null:
+  if(!pWriter_){
+    pWriter_=std::unique_ptr<CSV_WRITER>(new CSV_WRITER(outputfile_,separator));
+  }
+  pWriter_->write();
+  Iswriting=true;
+}
+
+void CSV_READER::DATA_FRAME::closeOutput()
+{
+  if(pWriter_)
+    pWriter_->close();
+  Iswriting=false;
+}
+
+template<class T>
+void CSV_READER::DATA_FRAME::WriteEntry(std::string word,const T& val)
+{
+  if(Iswriting && pWriter_){
+    *pWriter_ <<word;
+    *pWriter_ << val;
+    pWriter_->endrow();
+  }
+}
+
+// Functions needed to write in a file:
+
+template
+void CSV_READER::DATA_FRAME::WriteEntry<double>(std::string word,const double& val);
+
+template
+void CSV_READER::DATA_FRAME::WriteEntry<int>(std::string word,const int& val);
+
+template
+void CSV_READER::DATA_FRAME::WriteEntry<std::string>(std::string word,const std::string& val);
+
+
+template
+void CSV_READER::DATA_FRAME::WriteEntry<std::vector<double>>(std::string word,const std::vector<double>& val);
+
+
+template
+void CSV_READER::DATA_FRAME::WriteEntry<std::vector<std::string>>(std::string word,const std::vector<std::string>& val);

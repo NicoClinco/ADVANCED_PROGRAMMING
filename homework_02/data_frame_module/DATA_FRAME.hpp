@@ -16,8 +16,12 @@
 #include <vector>
 #include <map>
 #include <cmath>
-#include <boost/program_options.hpp>
+#include <memory>
+#include "CSV_WRITER.hpp"
+
 #include <boost/algorithm/string.hpp>
+#include <boost/histogram.hpp>
+#include <boost/format.hpp>
 
 namespace CSV_READER{
 
@@ -159,25 +163,53 @@ private:
   // count how many times is present a word:
   size_t countWord(size_t col,std::string word);
 
-  
   // Get the corresponding column for manipulation: (value)
   template<class colTYPE>
   std::vector<colTYPE> getCol(size_t col);
 
 
-  // Linear Regression: colY
+  // Linear Regression: y = w*x+b
+  // colX : x-column
+  // colY : y-column
   template<class colTYPEX,class colTYPEY>
   std::tuple<double,double> LinearRegression(size_t colX,size_t colY);
+
+  template<class T>
+  void makeHistogram(size_t col,std::string title,unsigned int n_interval);
+
+  //*****OUTPUT FILE MANAGER***********//
+  void setOutputfile(std::string _outfile_);
+
   
+  void write(std::string separator=" ");
+
+  void closeOutput();
+
+  template<class T>
+  void WriteEntry(std::string word,const T& val);
+
+  // Destructor:
+  
+  ~DATA_FRAME()
+  {
+    this->closeOutput();
+  };
+  //**********************************//
  private:
 
   std::vector<std::string> row_structure;
   std::vector<CSV_READER::VecOpvar> dataframe;
+  
   bool configFile = false;
 
   // Create an std::map which maps the values to indexes:
   std::map<std::string, int> map_{{"double", 0}, {"string", 1}, {"int", 2}};
   size_t _rows_;
+
+  // Pointer to the CSV_WRITER:
+  std::unique_ptr<CSV_WRITER> pWriter_;
+  std::string outputfile_;
+  bool Iswriting; 
 };
 
 }
