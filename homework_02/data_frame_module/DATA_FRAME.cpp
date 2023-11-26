@@ -112,7 +112,7 @@ std::vector<std::string> CSV_READER::DATA_FRAME::rowstructure() const
   return row_structure;
 }
 
-double CSV_READER::DATA_FRAME::mean(size_t col) 
+double CSV_READER::DATA_FRAME::mean(size_t col) const
 {
   if(!IsNumeric(col))
      throw std::invalid_argument("Cannot do the mean of categorical values");
@@ -120,7 +120,7 @@ double CSV_READER::DATA_FRAME::mean(size_t col)
      
    // Perform a loop trough the vector and calculate the mean
    double _mean_ = 0.0;
-   int token_type = map_[row_structure[col-1]]; 
+   int token_type = map_.at(row_structure[col-1]); 
    unsigned int nRowsvalid = 0;
    for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
    {
@@ -150,7 +150,7 @@ double CSV_READER::DATA_FRAME::mean(size_t col)
   return _mean_;
 }
 
-double CSV_READER::DATA_FRAME::stdDev(size_t col) 
+double CSV_READER::DATA_FRAME::stdDev(size_t col) const
 {
   if(!IsNumeric(col))
     throw std::invalid_argument("Cannot do the std-dev for categorical values");
@@ -165,40 +165,40 @@ double CSV_READER::DATA_FRAME::stdDev(size_t col)
   
   double stddev = 0.0;
   // Perform a loop
-   int token_type = map_[row_structure[col-1]]; 
-   unsigned int nRowsvalid = 0;
-   for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
-   {
-    auto item = *(rowIt); // Get the row.
-    if(item[col-1].has_value())
+  int token_type = map_.at(row_structure[col-1]); 
+  unsigned int nRowsvalid = 0;
+  for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
     {
-    switch (token_type)
-    {
-	case 0:
-	  {
-	    double item_ = std::get<double>(item[col-1].value());
-	    stddev+=(item_-mean)*(item_-mean);
-	  break;
-      }
-	case 2:
-	  {
-	    int item_ = std::get<int>(item[col-1].value());
-	    stddev+=(item_-mean)*(item_-mean);
-           break;
-          }
+      auto item = *(rowIt); // Get the row.
+      if(item[col-1].has_value())
+	{
+	  switch (token_type)
+	    {
+	    case 0:
+	      {
+		double item_ = std::get<double>(item[col-1].value());
+		stddev+=(item_-mean)*(item_-mean);
+		break;
+	      }
+	    case 2:
+	      {
+		int item_ = std::get<int>(item[col-1].value());
+		stddev+=(item_-mean)*(item_-mean);
+		break;
+	      }
+	    }
+	  nRowsvalid++;
 	}
-     nRowsvalid++;
-    }
-   } //end loop trough the rows.
-   stddev/=nRowsvalid;
-   stddev=sqrt(stddev);
+    } //end loop trough the rows.
+  stddev/=nRowsvalid;
+  stddev=sqrt(stddev);
 
-   std::string title = "Standard deviation of column " + std::to_string(col) +":";
-   this->WriteEntry(title,stddev);
-   return stddev;
+  std::string title = "Standard deviation of column " + std::to_string(col) +":";
+  this->WriteEntry(title,stddev);
+  return stddev;
 }
 
-double CSV_READER::DATA_FRAME::var(size_t col)
+double CSV_READER::DATA_FRAME::var(size_t col) const
 {
   // Avoid to write the mean if it is possible to write:
   bool prevWritestate = Iswriting;
@@ -215,7 +215,7 @@ double CSV_READER::DATA_FRAME::var(size_t col)
   return var;
 }
 
-size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind) 
+size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind) const
 {
   if(!IsCategorical(col))
     throw std::invalid_argument("Tried to count word from a numerical column");
@@ -267,7 +267,7 @@ std::vector<int> CSV_READER::DATA_FRAME::getCol<int>(size_t col) const;
 
 // Linear regression:
 template<class colTYPEX,class colTYPEY>
-std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression(size_t colX,size_t colY)
+std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression(size_t colX,size_t colY) const
 {
   if(!IsNumeric(colX))
     throw std::invalid_argument("Cannot do the linear-regression for categorical values");
@@ -278,7 +278,7 @@ std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression(size_t colX,s
   std::vector<colTYPEX> _colX_;
   std::vector<colTYPEY> _colY_;
   
-  for (auto rowIt = this->rowIterbegin();rowIt!=this->rowIterEnd();rowIt++)
+  for (auto rowIt = this->crowIterbegin();rowIt!=this->crowIterEnd();rowIt++)
   {
    auto item = *(rowIt); // Get the row.
    if(item[colX-1].has_value() && item[colY-1].has_value())
@@ -306,19 +306,19 @@ std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression(size_t colX,s
 
 // EXPLICIT INSTATION FOR Linear Regression:
 template
-std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<double,double>(size_t colX,size_t colY);
+std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<double,double>(size_t colX,size_t colY) const;
 
 template
-std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<double,int>(size_t colX,size_t colY);
+std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<double,int>(size_t colX,size_t colY) const;
 
 template
-std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,double>(size_t colX,size_t colY);
+std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,double>(size_t colX,size_t colY) const;
 
 template
-std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,int>(size_t colX,size_t colY);
+std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,int>(size_t colX,size_t colY) const;
 
 template<class T>
-void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned int n_interval)
+void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned int n_interval) const
 {
   if(IsNumeric(col))
     {
@@ -347,10 +347,10 @@ void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned
 }
 
 template
-void CSV_READER::DATA_FRAME::makeHistogram<double>(size_t col,std::string title,unsigned int n_interval);
+void CSV_READER::DATA_FRAME::makeHistogram<double>(size_t col,std::string title,unsigned int n_interval) const;
 
 template
-void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval);
+void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval) const;
 
  
 void CSV_READER::DATA_FRAME::setOutputfile(std::string _outfile_)
@@ -376,7 +376,7 @@ void CSV_READER::DATA_FRAME::closeOutput()
 }
 
 template<class T>
-void CSV_READER::DATA_FRAME::WriteEntry(std::string word,const T& val)
+void CSV_READER::DATA_FRAME::WriteEntry(std::string word,const T& val) const
 {
   if(Iswriting && pWriter_){
     *pWriter_ <<word;
@@ -388,18 +388,18 @@ void CSV_READER::DATA_FRAME::WriteEntry(std::string word,const T& val)
 // Functions needed to write in a file:
 
 template
-void CSV_READER::DATA_FRAME::WriteEntry<double>(std::string word,const double& val);
+void CSV_READER::DATA_FRAME::WriteEntry<double>(std::string word,const double& val) const;
 
 template
-void CSV_READER::DATA_FRAME::WriteEntry<int>(std::string word,const int& val);
+void CSV_READER::DATA_FRAME::WriteEntry<int>(std::string word,const int& val) const;
 
 template
-void CSV_READER::DATA_FRAME::WriteEntry<std::string>(std::string word,const std::string& val);
-
-
-template
-void CSV_READER::DATA_FRAME::WriteEntry<std::vector<double>>(std::string word,const std::vector<double>& val);
+void CSV_READER::DATA_FRAME::WriteEntry<std::string>(std::string word,const std::string& val) const;
 
 
 template
-void CSV_READER::DATA_FRAME::WriteEntry<std::vector<std::string>>(std::string word,const std::vector<std::string>& val);
+void CSV_READER::DATA_FRAME::WriteEntry<std::vector<double>>(std::string word,const std::vector<double>& val) const;
+
+
+template
+void CSV_READER::DATA_FRAME::WriteEntry<std::vector<std::string>>(std::string word,const std::vector<std::string>& val) const;

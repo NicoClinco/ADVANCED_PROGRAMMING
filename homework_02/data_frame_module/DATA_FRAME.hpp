@@ -222,13 +222,13 @@ private:
   std::vector<std::string> rowstructure() const;
   
   //mean of a column:
-  double mean(size_t col);
+  double mean(size_t col) const;
 
   //standard deviation of a column
-  double stdDev(size_t col);
+  double stdDev(size_t col) const;
 
   // variance of a column
-  double var(size_t col);
+  double var(size_t col) const;
   // Check if the column is numerical or categorical:
   bool IsNumeric(size_t col) const;
   bool IsCategorical(size_t col) const;
@@ -239,7 +239,7 @@ private:
 
  
   // count how many times is present a word:
-  size_t countWord(size_t col,std::string word);
+  size_t countWord(size_t col,std::string word) const;
 
   // Get the corresponding column for manipulation: (value)
   template<class colTYPE>
@@ -250,10 +250,10 @@ private:
   // colX : x-column
   // colY : y-column
   template<class colTYPEX,class colTYPEY>
-  std::tuple<double,double> LinearRegression(size_t colX,size_t colY);
+  std::tuple<double,double> LinearRegression(size_t colX,size_t colY) const;
 
   template<class T>
-  void makeHistogram(size_t col,std::string title,unsigned int n_interval);
+  void makeHistogram(size_t col,std::string title,unsigned int n_interval) const;
 
   //*****OUTPUT FILE MANAGER***********//
   void setOutputfile(std::string _outfile_);
@@ -264,7 +264,7 @@ private:
   void closeOutput();
 
   template<class T>
-  void WriteEntry(std::string word,const T& val);
+  void WriteEntry(std::string word,const T& val) const;
 
   // Destructor:
   
@@ -285,9 +285,9 @@ private:
   size_t _rows_;
 
   // Pointer to the CSV_WRITER:
-  std::unique_ptr<CSV_WRITER> pWriter_;
+  mutable std::unique_ptr<CSV_WRITER> pWriter_;
   std::string outputfile_;
-  bool Iswriting; 
+  mutable bool Iswriting; 
 };
 
 }

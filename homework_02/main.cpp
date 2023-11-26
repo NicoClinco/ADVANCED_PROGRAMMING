@@ -210,23 +210,25 @@ int main(int ac,const char* av[])
 
    auto ToIntegrate = [](double x)
    {
-     return x*x*x;
+     return (x*x*x);
    };
   
-   double xSTART = 1.0;
-   double xEND   = 6.0;
+   double xSTART = 0.0;
+   double xEND   = 8.0;
    unsigned int N = 5;
    double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
    double TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
    double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
    double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
 
+
+   double EXACT_RES = 4.0;
    std::cout <<"********************************************\n";
    std::cout<< "  TESTING OF THE QUADRATURE-POINTS CLASS  \n";
    std::cout<< "********************************************\n";
   
    std::cout << "********** TEST WITH N=5 **************\n";
-   std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
@@ -241,7 +243,7 @@ int main(int ac,const char* av[])
   
   
    std::cout << "********** TEST WITH N=10 **************\n";
-   std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
@@ -256,17 +258,17 @@ int main(int ac,const char* av[])
   
   
    std::cout << "********** TEST WITH N=50 **************\n";
-   std::cout << "EXACT-RESULT of the integration: 323.75 \n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
    
 
-   namespace plt = matplotlibcpp;
+   //namespace plt = matplotlibcpp;
 
-   plt::plot({1,3,2,4});
-   plt::show();
+   //plt::plot({1,3,2,4});
+   //plt::show();
    
   return 0;
 
