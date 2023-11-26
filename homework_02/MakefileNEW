@@ -14,7 +14,7 @@ CPPFLAGS=-I./data_frame_module -I$(BOOST_PATH)/include \
 	     -I$(GSL_PATH)/include -I/usr/include/python3.10 \
 	 -I/home/nico/Desktop/TEMPORARY/matplotplusplus-master/source/
 
-CXXFLAGS=-std=c++17 -Wall -Wpedantic
+CXXFLAGS=-std=c++17 -Wall -Wpedantic #-Werror
 
 
 LDFLAGS=-Wl,-rpath,data_frame_module/  \
@@ -38,12 +38,16 @@ OBJ=$(SRC:.cpp=.o)
 
 .PHONY : all clean
 
-all: main
+all: dataLib main
 
 main: $(OBJ)
 	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) $(LDLIBS) -o $@
 %.o: %.cpp
 	$(CXX) -c $< $(CPPFLAGS) $(CXXFLAGS) -o $@
+
+#Generate the library for data_frame automatically:
+dataLib:
+	$(MAKE) -C data_frame_module
 
 clean:
 	rm -f *.o main
