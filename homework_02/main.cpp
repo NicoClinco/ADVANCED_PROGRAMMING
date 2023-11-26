@@ -214,19 +214,23 @@ int main(int ac,const char* av[])
    };
   
    double xSTART = 0.0;
-   double xEND   = 8.0;
-   unsigned int N = 5;
-   double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
-   double TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
-   double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
-   double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
-
-
+   double xEND   = 2.0;
+   unsigned int N;
+   std::vector<unsigned int> degrees;
+   std::vector<std::vector<double>> errors_(3,std::vector<double>(4));
+   std::vector<double> currErrors(4);
+   
    double EXACT_RES = 4.0;
    std::cout <<"********************************************\n";
    std::cout<< "  TESTING OF THE QUADRATURE-POINTS CLASS  \n";
    std::cout<< "********************************************\n";
-  
+
+   N=5;
+   degrees.push_back(N);
+   double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
+   double TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
+   double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
+   double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
    std::cout << "********** TEST WITH N=5 **************\n";
    std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
@@ -234,14 +238,20 @@ int main(int ac,const char* av[])
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
 
+   // Fill the error vector:
+   std::vector<double>& v = errors_[0];
+   v[0] = abs(MID_RES-EXACT_RES);
+   v[1] = TRPZ_RES;
+   v[2] = SIMPS_RES;
+   v[3] = GL_RES;
    std::cout << "***************************************\n";
+   
    N=10;
+   degrees.push_back(N);
    MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
    TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
    SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
-   GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
-  
-  
+   GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N); 
    std::cout << "********** TEST WITH N=10 **************\n";
    std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
@@ -249,8 +259,16 @@ int main(int ac,const char* av[])
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
 
+   // Fill the error vector:
+   v = errors_[1];
+   v[0] = abs(MID_RES-EXACT_RES);
+   v[1] = TRPZ_RES;
+   v[2] = SIMPS_RES;
+   v[3] = GL_RES;
    std::cout << "***************************************\n";
    N=50;
+   degrees.push_back(N);
+ 
    MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
    TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
    SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
@@ -264,11 +282,16 @@ int main(int ac,const char* av[])
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
    
-
-   //namespace plt = matplotlibcpp;
-
-   //plt::plot({1,3,2,4});
-   //plt::show();
+   // Fill the error vector:
+   v = errors_[2];
+   v[0] = abs(MID_RES-EXACT-RES);
+   v[1] = TRPZ_RES;
+   v[2] = SIMPS_RES;
+   v[3] = GL_RES;
+   namespace plt = matplotlibcpp;
+   std::vector mid_error = {errors_[0][0],errors_[1][0],errors_[2][0]};
+   plt::plot(degrees,mid_error,"r--");
+   plt::show();
    
   return 0;
 
