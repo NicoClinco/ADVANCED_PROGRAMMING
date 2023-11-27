@@ -253,7 +253,7 @@ private:
   std::tuple<double,double> LinearRegression(size_t colX,size_t colY) const;
 
   template<class T>
-  void makeHistogram(size_t col,std::string title,unsigned int n_interval) const;
+  void makeHistogram(size_t col,std::string title,unsigned int n_interval,bool stdOutput=true) const;
 
   //*****OUTPUT FILE MANAGER***********//
   void setOutputfile(std::string _outfile_);

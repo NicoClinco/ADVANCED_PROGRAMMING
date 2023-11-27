@@ -318,7 +318,7 @@ template
 std::tuple<double,double> CSV_READER::DATA_FRAME::LinearRegression<int,int>(size_t colX,size_t colY) const;
 
 template<class T>
-void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned int n_interval) const
+void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned int n_interval,bool stdOutput) const
 {
   if(IsNumeric(col))
     {
@@ -340,17 +340,23 @@ void CSV_READER::DATA_FRAME::makeHistogram(size_t col,std::string title,unsigned
 	  % x.bin().lower() % x.bin().upper() % *x;
       }
       to_print = os.str();
+
       title=title+"\n";
+      if(stdOutput)
+	{
+	  std::cout << title;
+	  std::cout << to_print<<std::endl;
+	}
       // Write to file in the writing mode:
       this->WriteEntry(title,to_print);
     }
 }
 
 template
-void CSV_READER::DATA_FRAME::makeHistogram<double>(size_t col,std::string title,unsigned int n_interval) const;
+void CSV_READER::DATA_FRAME::makeHistogram<double>(size_t col,std::string title,unsigned int n_interval,bool stdOutput) const;
 
 template
-void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval) const;
+void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval,bool stdOutput) const;
 
  
 void CSV_READER::DATA_FRAME::setOutputfile(std::string _outfile_)
@@ -379,7 +385,7 @@ template<class T>
 void CSV_READER::DATA_FRAME::WriteEntry(std::string word,const T& val) const
 {
   if(Iswriting && pWriter_){
-    *pWriter_ <<word;
+    *pWriter_ << word;
     *pWriter_ << val;
     pWriter_->endrow();
   }

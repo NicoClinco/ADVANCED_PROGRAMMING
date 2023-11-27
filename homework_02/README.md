@@ -45,8 +45,8 @@ WARNING:
     can easily specify the column of the CSV file.
    -For plotting an histogram for the statistics, the user has to specify
     the column, the title, and the number of intervals, and optionally, he
-    can specify if he want to print the result in the command line.
-   -The user can extract a sepcific column of the csv by getCol() method,
+    can specify if he want to print the result in the terminal.
+   -The user can extract a specific column of the csv by getCol() method,
     by specifying the column.
    -For data-traversal, two types of iterators are implemented:
      -A const and a non-const iterator per row,
@@ -61,7 +61,7 @@ WARNING:
 
      1) Specify the output file (in the main is parsed by cmd line)
      
-        df.setOutputfile(outfile); 
+        df.setOutputfile(outfileName); 
 
      2) Write to the file, specifying the separator between the entries:
 
@@ -83,8 +83,8 @@ WARNING:
        the output in APPEND mode, for example, in the main:
 
        df.write() ------------
-        // df.mean(col) -> the result is written in the output
-        // df.stdDev(col) -> the result is written in the output
+        // df.mean(col) -> the result is written in the output file
+        // df.stdDev(col) -> the result is written in the output file
 	// df.makeHistogram(col,"title",intervals) ...
        df.closeOutput() ------
 
@@ -97,7 +97,7 @@ WARNING:
 	   and vectors since the class CSV_WRITER has the operator <<
 	   overloaded for these types, future versions will extend
 	   the operator to other types.
-   ------------------------------------------------------OUTPUT------
+   ----------------------------------------------OUTPUT FILE------
   }
 
 -See main.cpp for basic usage

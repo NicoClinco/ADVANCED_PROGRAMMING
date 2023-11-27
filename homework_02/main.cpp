@@ -17,10 +17,9 @@
 #include <boost/program_options.hpp>
 #include <boost/histogram.hpp>
 #include <boost/format.hpp>
-#include "matplotlibcpp.h"
+//#include "matplotlibcpp.h"
+#include <matplot/matplot.h>
 
-
-using namespace CSV_READER;
 
 namespace po = boost::program_options;
 
@@ -68,9 +67,8 @@ int main(int ac,const char* av[])
       std::cout << MAP["output-file"].as<std::string>() <<" \n";
     }
   
-  //specified by the user: create a map that maps the values given by the user to the integers:
-  //std::vector<std::string> row_structure = {"int","double","string","int","double"};
 
+  using namespace CSV_READER;
   //********* FOLLOW THIS PIECE OF CODE TO UNDERSTAND ****** 
 
   //Step-1: Creating the object data-frame from the config-file:
@@ -99,6 +97,7 @@ int main(int ac,const char* av[])
    using namespace boost::histogram;
 
    // Generate an histogram for radiation:
+   /*
    auto hRad = make_histogram(axis::regular<>(21,10,200, "solar-radiation"));
 
    auto RadiationData = df.getCol<double>(4);
@@ -112,7 +111,7 @@ int main(int ac,const char* av[])
    }
    
    std::cout << os.str() << "\n\n";
-
+   */
 
    // EXAMPLE for using the iterator:
    /* PRINT THE FIRST TWO COLUMNS: JUST TO CHECK IF THE ITERATOR WORKS:*/
@@ -162,43 +161,23 @@ int main(int ac,const char* av[])
      {
        std::string outfile = MAP["output-file"].as<std::string>();
        df.setOutputfile(outfile); 
-     }
+    
 
-   // FROM HERE, THE MEAN, THE STD DEVIATION RESULTS WILL BE PUTTED INTO
-   // THE FILE SPECIFIED IN OUTPUT:
-   df.write(" "); //Specify the separator between the entries, default tab
-
-   double mean6 = df.mean(6);
-   double std_dev6 = df.stdDev(6);
-
-   // Make the histogram, and report it into a file:
-   df.makeHistogram<double>(6,"Mean temperature statistics",20);
-   
-   df.closeOutput();
-   
-   double mean5 = df.mean(5);
-
-   
-   /*
-   if(MAP.count("output-file"))
-     {
-       std::string outfile = MAP["output-file"].as<std::string>();
-       std::string separator=" ";
-       CSV_WRITER writer(outfile,separator);
-
-       // The user must specify where starting write.
-       writer.write();
-
-       writer<<"AVERAGE OF THE MEAN TEMPERATURE: "<< mean;
-       writer.endrow();
-       writer<<"STANDARD-DEVIATION OF THE MEAN TEMPERATURE: " << std_dev;
-       writer.endrow();
+       df.write(" "); //Specify the separator between the entries, default tab
        
-       // The user must specify where the file can be closed.
-       writer.close();
+       // FROM HERE, THE MEAN, THE STD DEVIATION RESULTS WILL BE PUTTED INTO
+       // THE FILE SPECIFIED IN OUTPUT:
+       double mean6 = df.mean(6);
+       double std_dev6 = df.stdDev(6);
+
+       // Make the histogram, and report it into a file:
+       df.makeHistogram<double>(6,"Mean temperature statistics",20);
+   
+       df.closeOutput();
      }
 
-   */
+
+   /*--- MODULE FOR NUMERICAL INTEGRATION --TESTING------- */
    using namespace Integrate_1D;
    numericalIntegration<MidPointQuadrature> nIntegrationMID;
    numericalIntegration<GaussLegeandreQuadrature> nIntegrationGL;
@@ -206,32 +185,31 @@ int main(int ac,const char* av[])
    numericalIntegration<TrapzQuadrature> nIntegrationTRAPZ;
 
 
-   // Example : Integration of f(x) = x^3:
-
+   // Example : Integration of f(x) = sin(x):
    auto ToIntegrate = [](double x)
    {
-     return (x*x*x);
+     return sin(x);
    };
   
    double xSTART = 0.0;
-   double xEND   = 2.0;
+   double xEND   = M_PI;
    unsigned int N;
-   std::vector<unsigned int> degrees;
-   std::vector<std::vector<double>> errors_(3,std::vector<double>(4));
+   std::vector<double> degrees;
+   std::vector<std::vector<double>> errors_(4,std::vector<double>(4));
    std::vector<double> currErrors(4);
    
-   double EXACT_RES = 4.0;
+   double EXACT_RES = 2.0;
    std::cout <<"********************************************\n";
    std::cout<< "  TESTING OF THE QUADRATURE-POINTS CLASS  \n";
    std::cout<< "********************************************\n";
 
-   N=5;
-   degrees.push_back(N);
+   N=2;
+   degrees.push_back(double(N));
    double MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
    double TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
    double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
    double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
-   std::cout << "********** TEST WITH N=5 **************\n";
+   std::cout << "********** TEST WITH N=1 **************\n";
    std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
@@ -241,18 +219,18 @@ int main(int ac,const char* av[])
    // Fill the error vector:
    std::vector<double>& v = errors_[0];
    v[0] = abs(MID_RES-EXACT_RES);
-   v[1] = TRPZ_RES;
-   v[2] = SIMPS_RES;
-   v[3] = GL_RES;
+   v[1] = abs(TRPZ_RES-EXACT_RES);
+   v[2] = abs(SIMPS_RES-EXACT_RES);
+   v[3] = abs(GL_RES-EXACT_RES);
    std::cout << "***************************************\n";
    
-   N=10;
-   degrees.push_back(N);
+   N=4;
+   degrees.push_back(double(N));
    MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
    TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
    SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
    GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N); 
-   std::cout << "********** TEST WITH N=10 **************\n";
+   std::cout << "********** TEST WITH N="<<N<<"**************\n";
    std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
@@ -260,14 +238,14 @@ int main(int ac,const char* av[])
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
 
    // Fill the error vector:
-   v = errors_[1];
-   v[0] = abs(MID_RES-EXACT_RES);
-   v[1] = TRPZ_RES;
-   v[2] = SIMPS_RES;
-   v[3] = GL_RES;
+   errors_[1][0] = abs(MID_RES-EXACT_RES);
+   errors_[1][1] = abs(TRPZ_RES-EXACT_RES);
+   errors_[1][2] = abs(SIMPS_RES-EXACT_RES);
+   errors_[1][3] = abs(GL_RES-EXACT_RES);
    std::cout << "***************************************\n";
-   N=50;
-   degrees.push_back(N);
+   
+   N=5;
+   degrees.push_back(double(N));
  
    MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
    TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
@@ -275,7 +253,7 @@ int main(int ac,const char* av[])
    GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
   
   
-   std::cout << "********** TEST WITH N=50 **************\n";
+   std::cout << "********** TEST WITH N="<<N<<"**************\n";
    std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
@@ -283,15 +261,96 @@ int main(int ac,const char* av[])
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
    
    // Fill the error vector:
-   v = errors_[2];
-   v[0] = abs(MID_RES-EXACT-RES);
-   v[1] = TRPZ_RES;
-   v[2] = SIMPS_RES;
-   v[3] = GL_RES;
-   namespace plt = matplotlibcpp;
-   std::vector mid_error = {errors_[0][0],errors_[1][0],errors_[2][0]};
-   plt::plot(degrees,mid_error,"r--");
+   errors_[2][0] = abs(MID_RES-EXACT_RES);
+   errors_[2][1] = abs(TRPZ_RES-EXACT_RES);
+   errors_[2][2] = abs(SIMPS_RES-EXACT_RES);
+   errors_[2][3] = abs(GL_RES-EXACT_RES);
+   std::cout << "***************************************\n";
+   N=8;
+   degrees.push_back(double(N));
+ 
+   MID_RES = nIntegrationMID(ToIntegrate,xSTART,xEND,N);
+   TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
+   SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
+   GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
+  
+  
+   std::cout << "********** TEST WITH N="<<N<<"**************\n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
+   std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
+   std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
+   
+   // Fill the error vector:
+   errors_[3][0] = abs(MID_RES-EXACT_RES);
+   errors_[3][1] = abs(TRPZ_RES-EXACT_RES);
+   errors_[3][2] = abs(SIMPS_RES-EXACT_RES);
+   errors_[3][3] = abs(GL_RES-EXACT_RES);
+   std::cout << "***************************************\n";
+   
+   //namespace plt = matplotlibcpp;
+   std::vector<double> mid_error = {errors_[0][0],errors_[1][0],errors_[2][0],errors_[3][0]};
+   std::vector<double> trz_error = {errors_[0][1],errors_[1][1],errors_[2][1],errors_[3][1]};
+   std::vector<double> simps_error = {errors_[0][2],errors_[1][2],errors_[2][2],errors_[3][2]};
+   std::vector<double> gl_error = {errors_[0][3],errors_[1][3],errors_[2][3],errors_[3][3]};
+
+   /*
+   N=9;
+   degrees.push_back(double(N));
+
+   std::cout << "********** TEST WITH N="<<N<<"**************\n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
+   std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
+   std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
+   
+   // Fill the error vector:
+   errors_[4][0] = abs(MID_RES-EXACT_RES);
+   errors_[4][1] = abs(TRPZ_RES-EXACT_RES);
+   errors_[4][2] = abs(SIMPS_RES-EXACT_RES);
+   errors_[4][3] = abs(GL_RES-EXACT_RES);
+   
+   
+   //namespace plt = matplotlibcpp;
+   std::vector<double> mid_error = {errors_[0][0],errors_[1][0],errors_[2][0],errors_[3][0],errors_[4][0]};
+   std::vector<double> trz_error = {errors_[0][1],errors_[1][1],errors_[2][1],errors_[3][1],errors_[4][1]};
+   std::vector<double> simps_error = {errors_[0][2],errors_[1][2],errors_[2][2],errors_[3][2],errors_[4][2]};
+   std::vector<double> gl_error = {errors_[0][3],errors_[1][3],errors_[2][3],errors_[3][3],errors_[4][3]};
+   */
+  
+   using namespace matplot;
+   hold(on);
+
+   semilogy(degrees,mid_error)->line_width(2);
+   semilogy(degrees,trz_error)->line_width(2);
+   semilogy(degrees,gl_error,"--")->line_width(2);
+   semilogy(degrees,simps_error,"-")->line_width(2);
+   xlabel("N");
+   ylabel("absolute-error");
+   title("Error analysis");
+   ::matplot::legend({"midpoint", "trapz","gauss-legeandre","simpson"});
+   
+   show();
+   /*
+   // std::map<std::string,std::string> _mappa_ = {{"label", "log(x)"}};
+   plt::semilogy(degrees,mid_error, "label:red");
+   plt::semilogy(degrees,trz_error,"tab:blue");
+   plt::semilogy(degrees,simps_error,"tab:green");
+   plt::semilogy(degrees,gl_error,"tab:orange");
+   plt::xlabel("Number of intervals");
+   plt::ylabel("absolute error");
+   //plt::xlim(5.0,20.0);
    plt::show();
+   //plt::xlabel("Number of intervals");
+   //plt::ylabel("absolute error");
+   //plt::xlim(5.0,20.0);
+   //plt::title("Convergence");
+   //plt::legend({{"MidPoint","best"}});
+   //plt::savefig("Example.png");
+   */
+
    
   return 0;
 
