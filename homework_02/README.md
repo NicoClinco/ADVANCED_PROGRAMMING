@@ -24,8 +24,37 @@ and output some "basic" operation performed on data such as:
 WARNING:
  -In order to run main.cpp the user need to have:
    -boost library (dataframe module, parse input/output file)
- 
-  NOTE (REALLY BASIC USAGE)
+
+  (PREREQUISITE)
+  {
+   You need to have installed in your system the following packages:
+    -the boost library  https://www.boost.org/
+    -the gsl library    https://www.gnu.org/software/gsl/
+    -matplotpluspls     https://alandefreitas.github.io/matplotplusplus/
+   -The latter is required for plotting graphs.
+
+   NOTE - In order to use matplot++, you can follow the instruction
+          on the site (and use CMake to link your app to the program)
+	  or link the two libraries needed by specifing them as in my Makefile:
+
+          If you have installed matplot++ in a directory, you have just to include:
+	  libmatplot.a (that is located in INSTALLATION_DIR/lib/libmatplot.a)
+	  and libnodesoup.a (located in INSTALLATION_DIR/lib/Matplot++/libnodesoup.a)
+
+	  follow the Makefile in this directory for clarity "MATPLOTPLUSPLUS" is
+	  the INSTALLATION_DIR where matplot++ is installed.
+
+   }
+   
+  (INSTALLATION WITH MAKEFILE)
+  {
+   -In the principal directory is contained a Makefile
+    that allows us to build the dataframe module and
+    the quadrature module:
+     run "Make all" after having specified 
+  }
+
+  (REALLY BASIC USAGE)
   {
    After the compilation and the linking, the user can run
    the main program specifying an input file and an output file
@@ -35,6 +64,10 @@ WARNING:
   The user has to run the main with the following command:
 
    ./main -c <configFile> -f <CSVfile> -o <outputfile>
+
+  In our case:
+
+   ./main -c configCSV.txt -f london_weather.csv -o STATISTICS.txt
 
    -In the config file it is specified the structure of the row of the csv file.
    -The CSVfile is the file where we read data
