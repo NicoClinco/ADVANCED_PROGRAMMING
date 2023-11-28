@@ -22,8 +22,6 @@ and output some "basic" operation performed on data such as:
 -Save output to a file specified by the user.
 
 WARNING:
- -In order to run main.cpp the user need to have:
-   -boost library (dataframe module, parse input/output file)
 
   (PREREQUISITE)
   {
@@ -37,12 +35,13 @@ WARNING:
           on the site (and use CMake to link your app to the program)
 	  or link the two libraries needed by specifing them as in my Makefile:
 
-          If you have installed matplot++ in a directory, you have just to include:
+          If you have installed matplot++ in a directory (INSTALLATION_DIR),
+          you have just to include:
 	  libmatplot.a (that is located in INSTALLATION_DIR/lib/libmatplot.a)
 	  and libnodesoup.a (located in INSTALLATION_DIR/lib/Matplot++/libnodesoup.a)
 
 	  follow the Makefile in this directory for clarity "MATPLOTPLUSPLUS" is
-	  the INSTALLATION_DIR where matplot++ is installed.
+	  the INSTALLATION_DIR where matplot++ is installed in my case.
 
    }
    
@@ -51,7 +50,8 @@ WARNING:
    -In the principal directory is contained a Makefile
     that allows us to build the dataframe module and
     the quadrature module:
-     run "Make all" after having specified 
+     run "Make all" after having specified the path to 
+     boost, gsl and matplot++ lib.
   }
 
   (REALLY BASIC USAGE)
@@ -108,7 +108,7 @@ WARNING:
      3) df.closeOutput(); // close the output file
 
      NOTE:
-      -By default, the file is opened in the "append mode", thus, if
+      -By default, the file is opened in the "ouput/append mode", thus, if
        a file with the same name exist, the entries are appended.
       
       -The mean, the standard deviation, the histogram functions when
@@ -133,7 +133,28 @@ WARNING:
    ----------------------------------------------OUTPUT FILE------
   }
 
--See main.cpp for basic usage
+-See main.cpp for basic usage:
+ I selected the london weather dataset from kaggle
+ https://www.kaggle.com/datasets/emmanuelfwerr/london-weather-data
+ that contains some information about measured wheater data (such as
+ the pressure, temperature...) of London measured from 1970.
+
+
+ A Few details about the data-storage:
+ 
+  -In order to have the same "data-structure" as the original 
+   file (to see everything like a matrix), i've decided to create
+   a vector of vector of optional of variants, stored by rows:
+   In this manner, it is easy to iterate trough the data thanks
+   to the iterators, however, a weakness of the approach is that
+   the method could be not fast as in the case we have stored by 
+   column.
+   
+  -In the class data_frame it is stored a smart pointer to a class
+   (CSV_WRITER) that handles the output: the idea is to have an 
+   easy way to write various operations in the file by using
+   the DATA_FRAME class.
+
 }
 
 
@@ -151,13 +172,19 @@ numericalIntegration class for calculating 1D integrals
  -See "quad_module/Quadrature.hpp" if you want to extend
   the function to other types of quadrature.
  -See main.cpp for the basic usage
- -In order to show the order of convergence between the four methods,
-  it is plotted a graph that show the order of convergence between them (error.png)
-  for the function f(x) = sin(x) x from [0,π]
-  generated with the lib matplotplusplus: https://github.com/alandefreitas/matplotplusplus
-  Note that:
-   -The trapezoidal and the midpoint show the same order of convergence (N^-2)
-   -The Simpson-rule is faster (N^-4)
-   -The Gauss-Legeandre is even more faster
+  -In the main i've reported two examples:
+  -f(x)=x : The results confirm that all the quadrature formulas are exact naturally,
+            since f'' = 0.
+            I've not plotted the convergence lines because the library gives some
+            problems with plotting with small numbers...  
+  -f(x)=sin(x) :
+  -In order to show the order of convergence between the four methods,
+   it is plotted a graph that show the order of convergence between them (error.png)
+   for the function f(x) = sin(x) x from [0,π]
+   generated with the lib matplotplusplus: https://github.com/alandefreitas/matplotplusplus
+   Note that:
+    -The trapezoidal and the midpoint show the same order of convergence (N^-2)
+    -The Simpson-rule is faster (N^-4)
+    -The Gauss-Legeandre is even more faster
 }
 

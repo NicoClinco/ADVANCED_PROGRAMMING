@@ -17,7 +17,6 @@
 #include <boost/program_options.hpp>
 #include <boost/histogram.hpp>
 #include <boost/format.hpp>
-//#include "matplotlibcpp.h"
 #include <matplot/matplot.h>
 
 
@@ -97,21 +96,7 @@ int main(int ac,const char* av[])
    using namespace boost::histogram;
 
    // Generate an histogram for radiation:
-   /*
-   auto hRad = make_histogram(axis::regular<>(21,10,200, "solar-radiation"));
 
-   auto RadiationData = df.getCol<double>(4);
-   std::for_each(RadiationData.begin(), RadiationData.end(), std::ref(hRad));
-
-   std::ostringstream os;
-   
-   for (auto&& x : indexed(hRad, coverage::all)) {
-     os << boost::format("bin %2i [%4.1f, %4.1f): %i\n")
-       % x.index() % x.bin().lower() % x.bin().upper() % *x;
-   }
-   
-   std::cout << os.str() << "\n\n";
-   */
 
    // EXAMPLE for using the iterator:
    /* PRINT THE FIRST TWO COLUMNS: JUST TO CHECK IF THE ITERATOR WORKS:*/
@@ -170,6 +155,7 @@ int main(int ac,const char* av[])
        double mean6 = df.mean(6);
        double std_dev6 = df.stdDev(6);
 
+      
        // Make the histogram, and report it into a file:
        df.makeHistogram<double>(6,"Mean temperature statistics",20);
    
@@ -185,14 +171,96 @@ int main(int ac,const char* av[])
    numericalIntegration<TrapzQuadrature> nIntegrationTRAPZ;
 
 
+   // Example : Integration of f(x) = x:
+
+   // All the formulas has to be exact for this function:
+   auto ToIntegrate0 = [](double x)
+   {
+     return x;
+   };
+
+   double xSTART = 0.0;
+   double xEND   = 2.0;
+   double EXACT_RES0 = 2.0;
+   unsigned int N0;
+   std::vector<double> degrees0;
+   std::vector<std::vector<double>> errors0_(3,std::vector<double>(4));
+
+
+   std::cout <<"********************************************\n";
+   std::cout<< "  TESTING FOR f(x) =x                       \n";
+   std::cout<< "********************************************\n";
+
+   N0=2;
+   double MID_RES0 = nIntegrationMID(ToIntegrate0,xSTART,xEND,N0);
+   double TRPZ_RES0 = nIntegrationTRAPZ(ToIntegrate0,xSTART,xEND,N0);
+   double SIMPS_RES0 = nIntegrationSIMPS(ToIntegrate0,xSTART,xEND,N0);
+   double GL_RES0 = nIntegrationGL(ToIntegrate0,xSTART,xEND,N0);
+   
+   std::cout << "********** TEST WITH N="<<N0<<"**************\n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES0 <<"\n";
+   std::cout << "Mid-point-result : "   <<   MID_RES0 << "\n";
+   std::cout << "Trapezoidal-result : " << TRPZ_RES0 << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES0 << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES0 << "\n";
+
+   errors0_[0][0] = abs(MID_RES0-EXACT_RES0);
+   errors0_[0][1]= abs(TRPZ_RES0-EXACT_RES0);
+   errors0_[0][2] = abs(SIMPS_RES0-EXACT_RES0);
+   errors0_[0][3] = abs(GL_RES0-EXACT_RES0);
+
+   std::cout << "***************************************\n";
+
+   N0=4;
+   MID_RES0 = nIntegrationMID(ToIntegrate0,xSTART,xEND,N0);
+   TRPZ_RES0 = nIntegrationTRAPZ(ToIntegrate0,xSTART,xEND,N0);
+   SIMPS_RES0 = nIntegrationSIMPS(ToIntegrate0,xSTART,xEND,N0);
+   GL_RES0 = nIntegrationGL(ToIntegrate0,xSTART,xEND,N0);
+   
+   std::cout << "********** TEST WITH N="<<N0<<"**************\n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES0 <<"\n";
+   std::cout << "Mid-point-result : "   <<   MID_RES0 << "\n";
+   std::cout << "Trapezoidal-result : " << TRPZ_RES0 << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES0 << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES0 << "\n";
+
+   // Fill the error vector:
+   errors0_[1][0] = abs(MID_RES0-EXACT_RES0);
+   errors0_[1][1] = abs(TRPZ_RES0-EXACT_RES0);
+   errors0_[1][2] = abs(SIMPS_RES0-EXACT_RES0);
+   errors0_[1][3] = abs(GL_RES0-EXACT_RES0);
+   std::cout << "***************************************\n";
+
+   N0=8;
+   MID_RES0 = nIntegrationMID(ToIntegrate0,xSTART,xEND,N0);
+   TRPZ_RES0 = nIntegrationTRAPZ(ToIntegrate0,xSTART,xEND,N0);
+   SIMPS_RES0 = nIntegrationSIMPS(ToIntegrate0,xSTART,xEND,N0);
+   GL_RES0 = nIntegrationGL(ToIntegrate0,xSTART,xEND,N0);
+   
+   std::cout << "********** TEST WITH N="<<N0<<"**************\n";
+   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES0 <<"\n";
+   std::cout << "Mid-point-result : "   <<   MID_RES0 << "\n";
+   std::cout << "Trapezoidal-result : " << TRPZ_RES0 << "\n";
+   std::cout << "Simpson-result : " <<     SIMPS_RES0 << "\n";
+   std::cout << "Gauss-Legeandre-result : "<< GL_RES0 << "\n";
+
+   std::cout << "ERROR FOR N=8 : f(x)=x" <<std::endl;
+   std::cout << "trapz: " << TRPZ_RES0-EXACT_RES0<<std::endl;
+   std::cout << "midpoint: " << MID_RES0-EXACT_RES0<<std::endl;
+   std::cout << "simpson: " << SIMPS_RES0-EXACT_RES0<<std::endl;
+   std::cout << "GaussLegeandre: " << GL_RES0-EXACT_RES0<<std::endl;
+   std::cout << "******************************************\n";
+   std::cout << "******************************************\n";
+   std::cout << "*******END TEST FOR f(x) = x *********\n\n\n\n";
+   
    // Example : Integration of f(x) = sin(x):
    auto ToIntegrate = [](double x)
    {
      return sin(x);
    };
   
-   double xSTART = 0.0;
-   double xEND   = M_PI;
+   xSTART = 0.0;
+   xEND   = M_PI;
    unsigned int N;
    std::vector<double> degrees;
    std::vector<std::vector<double>> errors_(4,std::vector<double>(4));
@@ -200,7 +268,7 @@ int main(int ac,const char* av[])
    
    double EXACT_RES = 2.0;
    std::cout <<"********************************************\n";
-   std::cout<< "  TESTING OF THE QUADRATURE-POINTS CLASS  \n";
+   std::cout<< "  TESTING FOR f(x) = sin(x)                 \n";
    std::cout<< "********************************************\n";
 
    N=2;
@@ -209,19 +277,17 @@ int main(int ac,const char* av[])
    double TRPZ_RES = nIntegrationTRAPZ(ToIntegrate,xSTART,xEND,N);
    double SIMPS_RES = nIntegrationSIMPS(ToIntegrate,xSTART,xEND,N);
    double GL_RES = nIntegrationGL(ToIntegrate,xSTART,xEND,N);
-   std::cout << "********** TEST WITH N=1 **************\n";
+   std::cout << "********** TEST WITH N="<<N<<"**************\n";
    std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
    std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
    std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
    std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
    std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
 
-   // Fill the error vector:
-   std::vector<double>& v = errors_[0];
-   v[0] = abs(MID_RES-EXACT_RES);
-   v[1] = abs(TRPZ_RES-EXACT_RES);
-   v[2] = abs(SIMPS_RES-EXACT_RES);
-   v[3] = abs(GL_RES-EXACT_RES);
+   errors_[0][0] = abs(MID_RES-EXACT_RES);
+   errors_[0][1]= abs(TRPZ_RES-EXACT_RES);
+   errors_[0][2] = abs(SIMPS_RES-EXACT_RES);
+   errors_[0][3] = abs(GL_RES-EXACT_RES);
    std::cout << "***************************************\n";
    
    N=4;
@@ -289,40 +355,16 @@ int main(int ac,const char* av[])
    errors_[3][3] = abs(GL_RES-EXACT_RES);
    std::cout << "***************************************\n";
    
-   //namespace plt = matplotlibcpp;
    std::vector<double> mid_error = {errors_[0][0],errors_[1][0],errors_[2][0],errors_[3][0]};
    std::vector<double> trz_error = {errors_[0][1],errors_[1][1],errors_[2][1],errors_[3][1]};
    std::vector<double> simps_error = {errors_[0][2],errors_[1][2],errors_[2][2],errors_[3][2]};
    std::vector<double> gl_error = {errors_[0][3],errors_[1][3],errors_[2][3],errors_[3][3]};
 
-   /*
-   N=9;
-   degrees.push_back(double(N));
 
-   std::cout << "********** TEST WITH N="<<N<<"**************\n";
-   std::cout << "EXACT-RESULT of the integration: "<<EXACT_RES <<"\n";
-   std::cout << "Mid-point-result : "   <<   MID_RES << "\n";
-   std::cout << "Trapezoidal-result : " << TRPZ_RES << "\n";
-   std::cout << "Simpson-result : " <<     SIMPS_RES << "\n";
-   std::cout << "Gauss-Legeandre-result : "<< GL_RES << "\n";
-   
-   // Fill the error vector:
-   errors_[4][0] = abs(MID_RES-EXACT_RES);
-   errors_[4][1] = abs(TRPZ_RES-EXACT_RES);
-   errors_[4][2] = abs(SIMPS_RES-EXACT_RES);
-   errors_[4][3] = abs(GL_RES-EXACT_RES);
-   
-   
-   //namespace plt = matplotlibcpp;
-   std::vector<double> mid_error = {errors_[0][0],errors_[1][0],errors_[2][0],errors_[3][0],errors_[4][0]};
-   std::vector<double> trz_error = {errors_[0][1],errors_[1][1],errors_[2][1],errors_[3][1],errors_[4][1]};
-   std::vector<double> simps_error = {errors_[0][2],errors_[1][2],errors_[2][2],errors_[3][2],errors_[4][2]};
-   std::vector<double> gl_error = {errors_[0][3],errors_[1][3],errors_[2][3],errors_[3][3],errors_[4][3]};
-   */
-  
    using namespace matplot;
+   
    hold(on);
-
+   
    semilogy(degrees,mid_error)->line_width(2);
    semilogy(degrees,trz_error)->line_width(2);
    semilogy(degrees,gl_error,"--")->line_width(2);
@@ -333,23 +375,7 @@ int main(int ac,const char* av[])
    ::matplot::legend({"midpoint", "trapz","gauss-legeandre","simpson"});
    
    show();
-   /*
-   // std::map<std::string,std::string> _mappa_ = {{"label", "log(x)"}};
-   plt::semilogy(degrees,mid_error, "label:red");
-   plt::semilogy(degrees,trz_error,"tab:blue");
-   plt::semilogy(degrees,simps_error,"tab:green");
-   plt::semilogy(degrees,gl_error,"tab:orange");
-   plt::xlabel("Number of intervals");
-   plt::ylabel("absolute error");
-   //plt::xlim(5.0,20.0);
-   plt::show();
-   //plt::xlabel("Number of intervals");
-   //plt::ylabel("absolute error");
-   //plt::xlim(5.0,20.0);
-   //plt::title("Convergence");
-   //plt::legend({{"MidPoint","best"}});
-   //plt::savefig("Example.png");
-   */
+
 
    
   return 0;
