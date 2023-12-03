@@ -1,4 +1,3 @@
-
 #ifndef DATA_FRAME_H
 #define DATA_FRAME_H
 
@@ -19,6 +18,7 @@
 #include <memory>
 #include "CSV_WRITER.hpp"
 
+#include <boost/optional.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/histogram.hpp>
 #include <boost/format.hpp>
@@ -57,7 +57,7 @@ class DATA_FRAME
   }
 
   //Read from input-file
-  void read(std::string file);
+  void read(std::string file,bool HasHeader);
 
 
   // COSTANT-ROW-ITERATOR:
@@ -245,7 +245,10 @@ private:
   template<class colTYPE>
   std::vector<colTYPE> getCol(size_t col) const;
 
-
+  template<class colTYPE>
+  std::vector<colTYPE> getCol(std::string col) const;
+  
+  
   // Linear Regression: y = w*x+b
   // colX : x-column
   // colY : y-column
@@ -267,7 +270,6 @@ private:
   void WriteEntry(std::string word,const T& val) const;
 
   // Destructor:
-  
   ~DATA_FRAME()
   {
     this->closeOutput();
@@ -277,7 +279,7 @@ private:
 
   std::vector<std::string> row_structure;
   std::vector<CSV_READER::VecOpvar> dataframe;
-  
+  std::map<std::string,unsigned int> header_;
   bool configFile = false;
 
   // Create an std::map which maps the values to indexes:

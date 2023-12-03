@@ -1,5 +1,5 @@
 CXX=g++
-CPPFLAGS=-I. -I/u/n/nclinco/Downloads/ADV_PROGRAMMING/boost/include
+CPPFLAGS=-I. -I$(BOOST_PATH)/include
 CXXFLAGS=-std=c++17 -Wall -Wpedantic -Werror
 
 SRC=DATA_FRAME.cpp
@@ -8,8 +8,7 @@ DEPS=DATA_FRAME.hpp
 
 LIB_NAME_SHARED=libDataFrame.so
 
-LD_FLAGS=-Wl,-rpath,/u/n/nclinco/Downloads/ADV_PROGRAMMING/boost/lib \
-		 -L/u/n/nclinco/Downloads/ADV_PROGRAMMING/boost/lib
+# WE DON'T LINK ANY LIBRARY OF BOOST SINCE HISTOGRAM IS HEADER-ONLY.
 
 all : shared
 

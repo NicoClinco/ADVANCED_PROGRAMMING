@@ -1,1 +1,0 @@
-Header_cols= int,double,string,int, double

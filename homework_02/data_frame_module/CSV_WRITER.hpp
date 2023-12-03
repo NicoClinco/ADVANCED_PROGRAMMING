@@ -8,8 +8,8 @@ class CSV_WRITER
 {
 public:
   
-  CSV_WRITER(std::string _fileout,const std::string separator = " ",std::string mode="new"):
-    outfile_(_fileout),separator_{separator},mode_{mode}
+  CSV_WRITER(std::string _fileout,const std::string separator = " "):
+    outfile_(_fileout),separator_{separator}
   {
   };
 
@@ -40,8 +40,7 @@ public:
   {
     return isActive_;
   }
-  // Operator
-  /*
+    // Operator: callable
     CSV_WRITER& operator << ( CSV_WRITER& (* val)(CSV_WRITER&))
     {
     if(!isActive())
@@ -49,14 +48,13 @@ public:
     
     return val(*this);
     }
-  */
+  
   
   CSV_WRITER& operator << (const char* val)
   {
     if(!isActive())
       throw std::runtime_error("Error the output stream is not active\n");
-    
-    //outstream_ << '"' << val << '"' << separator_;
+   
     outstream_  << val  << separator_;
     return *this;
   }
@@ -66,7 +64,6 @@ public:
     if(!isActive())
       throw std::runtime_error("Error the output stream is not active\n");
     
-    //outstream_ << '"' << val << '"' << separator_;
     outstream_  << val << separator_;
     return *this;
   }
@@ -115,7 +112,6 @@ private:
   std::ofstream outstream_;
   std::string outfile_;
   std::string separator_=" ";
-  std::string mode_="new";
   bool isActive_=false;
   
 };

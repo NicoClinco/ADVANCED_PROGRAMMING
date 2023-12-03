@@ -26,12 +26,12 @@ CSV_READER::DATA_FRAME::DATA_FRAME(std::string CONFIG_FILE)
      if(x!="header_cols")
        row_structure.push_back(x);
   }
-  std::cout << Check_config << std::endl;
+ 
   Check_config ? (configFile=true) : throw std::invalid_argument("ERROR-WRONG ENTRIES IN THE CONFIG-FILE\n");
 }
 
 
-void CSV_READER::DATA_FRAME::read(std::string FILEIN)
+void CSV_READER::DATA_FRAME::read(std::string FILEIN,bool HasHeader)
 {
   std::ifstream file_(FILEIN);
   std::string line;
@@ -42,6 +42,19 @@ void CSV_READER::DATA_FRAME::read(std::string FILEIN)
   // check if the file is good:
   if(!file_.good())
     throw("Error: the file does not exist\n");
+
+  // Read the first row in case the header is present:
+  if(HasHeader){
+    file_>>line;
+    std::stringstream ss(line);
+    std::string _word_;
+    unsigned int counterH = 0;
+    while(std::getline(ss,_word_,',')){
+      header_[_word_] = counterH;
+      counterH++;
+    }
+  }
+
   
   while(file_>>line)
   {
@@ -49,7 +62,7 @@ void CSV_READER::DATA_FRAME::read(std::string FILEIN)
     std::stringstream ss(line);
     std::string _word_;
     int counter = 0;
-    
+   
     while(std::getline(ss,_word_,','))
     {
       	  
@@ -237,6 +250,20 @@ size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind) const
 } //end loop trough the rows.
    
 
+template<class colTYPE>
+std::vector<colTYPE> CSV_READER::DATA_FRAME::getCol(std::string col) const
+{
+  if(header_.empty())
+    return std::vector<colTYPE>();
+  
+  auto it = header_.find(col);
+  if(it == header_.end())
+    {
+      throw std::invalid_argument("--Wrong column-name called--");
+    }
+  return getCol<colTYPE>(it->second+1); 
+}
+ 
 
 
 // Explicit specialization:
@@ -255,6 +282,14 @@ std::vector<colTYPE> CSV_READER::DATA_FRAME::getCol(size_t col) const
   }
  return _col_;
 }
+
+template
+std::vector<std::string> CSV_READER::DATA_FRAME::getCol<std::string>(std::string col) const;
+template
+std::vector<double> CSV_READER::DATA_FRAME::getCol<double>(std::string col) const;
+template
+std::vector<int> CSV_READER::DATA_FRAME::getCol<int>(std::string col) const;
+
 
 template
 std::vector<std::string> CSV_READER::DATA_FRAME::getCol<std::string>(size_t col) const;
@@ -409,3 +444,5 @@ void CSV_READER::DATA_FRAME::WriteEntry<std::vector<double>>(std::string word,co
 
 template
 void CSV_READER::DATA_FRAME::WriteEntry<std::vector<std::string>>(std::string word,const std::vector<std::string>& val) const;
+
+
