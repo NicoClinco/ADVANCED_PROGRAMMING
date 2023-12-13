@@ -111,7 +111,6 @@ public:
 		{
 		  if(!item.empty())
 		    {
-		      std::cout << item <<std::endl;
 		      data[counter].push_back(item);
 		    }
 		  counter++; 
