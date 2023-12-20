@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wall -Werror -Wpedantic -Wall -Werror -Wpedantic -shared -Wl,-soname,libdataframe.so -o libdataframe.so CMakeFiles/dataframe.dir/data_frame.cpp.o 

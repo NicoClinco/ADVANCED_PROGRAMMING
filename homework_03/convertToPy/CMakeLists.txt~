@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.12)
+
+project(convertToPy VERSION 1.0 DESCRIPTION
+	"Statistics module conversion"
+	LANGUAGES CXX)
+
+set(INCLUDE_DIR_HPP /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/headers)
+set(LIB_DIR /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/libs)
+
+set(PYBIND11_DIR /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/pybind11-cmakedir)
+
+add_subdirectory(${PYBIND11_DIR} pybind11-cmakedir)
+pybind11_add_module(pyDF dataFrameBind.cpp)
+
+target_include_directories(pyDF ${INCLUDE_DIR_HPP})
+target_link_directories(pyDF ${LIB_DIR})
+target_link_libraries(pyDF dataframe)
