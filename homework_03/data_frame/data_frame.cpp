@@ -18,7 +18,7 @@ void CSV_READER::dataframe::Read(bool HasHeader)
 
   //Read the first line:
   std::vector<std::string> firstline_;
-  std::getline(filestream,line);
+  filestream>>line;
   boost::split(firstline_,line,boost::is_any_of(","),boost::token_compress_on);
   dataframe::IterableType v_(firstline_.size(),std::vector<std::string>(0));
   v = v_; // Copy the data-structure, then we can append datas to v.
@@ -38,7 +38,7 @@ void CSV_READER::dataframe::Read(bool HasHeader)
       headersName = firstline_;
     }
 
-  while(std::getline(filestream,line))
+  while(filestream>>line)
     {
       std::stringstream ss(line);
       std::string _word_;
@@ -55,5 +55,5 @@ void CSV_READER::dataframe::Read(bool HasHeader)
       //Check the lecture:
       assert(counter == firstline_.size());
     }
-
+  filestream.close();
 }
