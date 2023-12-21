@@ -1,0 +1,25 @@
+// File used for converting the newton solver
+// in python
+
+#include "newton.hpp"
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/functional.h>
+#include <sstream>
+#include <cmath>
+
+namespace py = pybind11;
+
+using funDouble = std::function<double(const double&)>&;
+
+
+PYBIND11_MODULE(newton_py,m)
+{
+  m.doc() = "pybind-11 newton converted";
+  
+  py::class_<NewtonSolver<double>>(m, "NewtonSolver")
+  .def(py::init<funDouble,funDouble,double&,double&,unsigned int&>())
+  .def("solve",&NewtonSolver<double>::solve);
+    
+    
+}

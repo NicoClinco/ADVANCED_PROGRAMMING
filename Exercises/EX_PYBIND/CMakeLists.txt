@@ -3,4 +3,4 @@ project(example)
 
 
 add_subdirectory(pybind11-cmakedir)
-pybind11_add_module(example example.cpp)
+pybind11_add_module()
