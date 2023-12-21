@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
 #include "DATA_FRAME.hpp"
 
 
@@ -17,7 +18,12 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("IsString",&CSV_READER::DATA_FRAME::opString);
   pyDF.def("IsInt",&CSV_READER::DATA_FRAME::opInt);
   pyDF.def("read",&CSV_READER::DATA_FRAME::read);
-  //.def_read("internalData", &CSV_READER::DATA_FRAME::dataframe)
+  pyDF.def("crowIterbegin",&CSV_READER::DATA_FRAME::crowIterbegin);
+  pyDF.def("crowIterEnd",&CSV_READER::DATA_FRAME::crowIterEnd);
+  pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column by index");
+  pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column by index");
+  pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column, depending on the header names");
+  pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column, depending on the header names");
   pyDF.def("__repr__",
 	   [](const CSV_READER::DATA_FRAME &a) {
 	     // TO FIX the output:

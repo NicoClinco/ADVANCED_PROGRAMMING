@@ -1,1 +1,1 @@
-header_cols= int,double,double,double,double,double,double,double,double,double
+header_cols= string,double,double,double,double,double,double,double,double,double
