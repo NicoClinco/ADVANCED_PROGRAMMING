@@ -258,6 +258,15 @@ private:
   template<class T>
   void makeHistogram(size_t col,std::string title,unsigned int n_interval,bool stdOutput=true) const;
 
+
+  // Accessing operator (writing)
+  std::vector<CSV_READER::VecOpvar>& data();
+
+
+  // Indexing operator (writing)
+  CSV_READER::OpVariant& operator() (size_t row,size_t col);
+  
+
   //*****OUTPUT FILE MANAGER***********//
   void setOutputfile(std::string _outfile_);
 

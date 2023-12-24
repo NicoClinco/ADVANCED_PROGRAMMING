@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC -flto -shared  -o newton_py.cpython-310-x86_64-linux-gnu.so CMakeFiles/newton_py.dir/newton.cpp.o CMakeFiles/newton_py.dir/newton_py.cpp.o 
+/usr/bin/c++ -fPIC -flto -shared  -o ../newton_py.cpython-310-x86_64-linux-gnu.so CMakeFiles/newton_py.dir/newton.cpp.o CMakeFiles/newton_py.dir/newton_py.cpp.o 

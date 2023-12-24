@@ -393,7 +393,20 @@ void CSV_READER::DATA_FRAME::makeHistogram<double>(size_t col,std::string title,
 template
 void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval,bool stdOutput) const;
 
- 
+
+// Return the internal data:
+std::vector<CSV_READER::VecOpvar>& CSV_READER::DATA_FRAME::data()
+{
+  return dataframe;
+}
+
+// Return the specific entry:
+CSV_READER::OpVariant& CSV_READER::DATA_FRAME::operator() (size_t row,size_t col)
+{
+  assert(row < dataframe.size() && col < dataframe[0].size());
+  return dataframe[row][col];
+}
+
 void CSV_READER::DATA_FRAME::setOutputfile(std::string _outfile_)
 {
   outputfile_ = _outfile_;

@@ -262,7 +262,7 @@ private:
   // Accessing operator (writing)
   std::vector<CSV_READER::VecOpvar>& data();
 
-
+  
   // Indexing operator (writing)
   CSV_READER::OpVariant& operator() (size_t row,size_t col);
   

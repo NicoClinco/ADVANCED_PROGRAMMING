@@ -24,6 +24,9 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column by index");
   pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column, depending on the header names");
   pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column, depending on the header names");
+  pyDF.def("__call__",&CSV_READER::DATA_FRAME::operator(),"Return the specific entry");
+  pyDF.def("data",&CSV_READER::DATA_FRAME::data,"Return the internal data-structure");
+ 
   pyDF.def("__repr__",
 	   [](const CSV_READER::DATA_FRAME &a) {
 	     // TO FIX the output:
