@@ -1,0 +1,20 @@
+
+// Intereface class:
+// type: could be a Eigen::vectorXd or double
+// Timestepping is the specified numerical method
+// which i have implemented
+
+template<template<class> class TimeStepping, class type>
+class TimeIntegrator:
+  public TimeStepping<type>
+{
+public:
+  TimeIntegrator():
+    TimeStepping<type>{} {};
+
+  type solve(const double& tInit,const double& tFinal,std::function<type(type)> RHS,const type& x0)
+  {
+    //remember to put write_every
+    return TimeStepping<type>::solve(tInit,tFinal,RHS,x0);
+  }
+};
