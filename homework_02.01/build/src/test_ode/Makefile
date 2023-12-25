@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/CMakeFiles /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/CMakeFiles /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/test_ode//CMakeFiles/progress.marks
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/test_ode/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/test_ode/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,44 +103,56 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/test_ode/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/test_ode/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named ode_module
+# Convenience name for target.
+src/test_ode/CMakeFiles/main_ODE.dir/rule:
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/test_ode/CMakeFiles/main_ODE.dir/rule
+.PHONY : src/test_ode/CMakeFiles/main_ODE.dir/rule
 
-# Build rule for target.
-ode_module: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ode_module
-.PHONY : ode_module
-
-# fast build rule for target.
-ode_module/fast:
-	$(MAKE) $(MAKESILENT) -f src/ode_module/CMakeFiles/ode_module.dir/build.make src/ode_module/CMakeFiles/ode_module.dir/build
-.PHONY : ode_module/fast
-
-#=============================================================================
-# Target rules for targets named main_ODE
-
-# Build rule for target.
-main_ODE: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main_ODE
+# Convenience name for target.
+main_ODE: src/test_ode/CMakeFiles/main_ODE.dir/rule
 .PHONY : main_ODE
 
 # fast build rule for target.
 main_ODE/fast:
-	$(MAKE) $(MAKESILENT) -f src/test_ode/CMakeFiles/main_ODE.dir/build.make src/test_ode/CMakeFiles/main_ODE.dir/build
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f src/test_ode/CMakeFiles/main_ODE.dir/build.make src/test_ode/CMakeFiles/main_ODE.dir/build
 .PHONY : main_ODE/fast
+
+main_ODE.o: main_ODE.cpp.o
+.PHONY : main_ODE.o
+
+# target to build an object file
+main_ODE.cpp.o:
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f src/test_ode/CMakeFiles/main_ODE.dir/build.make src/test_ode/CMakeFiles/main_ODE.dir/main_ODE.cpp.o
+.PHONY : main_ODE.cpp.o
+
+main_ODE.i: main_ODE.cpp.i
+.PHONY : main_ODE.i
+
+# target to preprocess a source file
+main_ODE.cpp.i:
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f src/test_ode/CMakeFiles/main_ODE.dir/build.make src/test_ode/CMakeFiles/main_ODE.dir/main_ODE.cpp.i
+.PHONY : main_ODE.cpp.i
+
+main_ODE.s: main_ODE.cpp.s
+.PHONY : main_ODE.s
+
+# target to generate assembly for a file
+main_ODE.cpp.s:
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(MAKE) $(MAKESILENT) -f src/test_ode/CMakeFiles/main_ODE.dir/build.make src/test_ode/CMakeFiles/main_ODE.dir/main_ODE.cpp.s
+.PHONY : main_ODE.cpp.s
 
 # Help Target
 help:
@@ -151,7 +163,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... main_ODE"
-	@echo "... ode_module"
+	@echo "... main_ODE.o"
+	@echo "... main_ODE.i"
+	@echo "... main_ODE.s"
 .PHONY : help
 
 
@@ -163,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

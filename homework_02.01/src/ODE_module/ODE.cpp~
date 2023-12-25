@@ -1,8 +1,0 @@
-
-template<class type>
-EULER_FIRST_ORDER<type>::EULER_FIRST_ORDER()
-{
-  // Initialize the butcher coefficients,
-  // Initalize the vector b_{ij}
-  
-}
