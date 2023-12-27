@@ -407,6 +407,15 @@ CSV_READER::OpVariant& CSV_READER::DATA_FRAME::operator() (size_t row,size_t col
   return dataframe[row][col];
 }
 
+
+std::vector<std::string> CSV_READER::DATA_FRAME::HeaderNames() const
+{
+  std::vector<std::string> header;
+  for(const auto& [key, value] : header_)
+    header.push_back(key);
+  return header;
+}
+
 void CSV_READER::DATA_FRAME::setOutputfile(std::string _outfile_)
 {
   outputfile_ = _outfile_;

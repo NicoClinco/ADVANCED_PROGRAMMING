@@ -265,6 +265,9 @@ private:
 
   // Indexing operator (writing)
   CSV_READER::OpVariant& operator() (size_t row,size_t col);
+
+  // Header map:
+  std::vector<std::string> HeaderNames() const;
   
 
   //*****OUTPUT FILE MANAGER***********//

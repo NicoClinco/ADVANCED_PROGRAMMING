@@ -1,13 +1,15 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 
 #include "DATA_FRAME.hpp"
 
 
-
-
+PYBIND11_MAKE_OPAQUE(std::vector<std::string>);
 
 namespace py = pybind11;
+
+
 PYBIND11_MODULE(dataFrameBind, m) {
   m.doc() = "Conversion of the class DataFrame"; // optional module docstring
 
@@ -26,7 +28,7 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column, depending on the header names");
   pyDF.def("__call__",&CSV_READER::DATA_FRAME::operator(),"Return the specific entry");
   pyDF.def("data",&CSV_READER::DATA_FRAME::data,"Return the internal data-structure");
- 
+  pyDF.def("header_names",(std::vector<std::string> (CSV_READER::DATA_FRAME::*)() const) & CSV_READER::DATA_FRAME::HeaderNames);
   pyDF.def("__repr__",
 	   [](const CSV_READER::DATA_FRAME &a) {
 	     // TO FIX the output:

@@ -1,21 +1,18 @@
 import quadBind as qb
 import matplotlib.pyplot as plt
 
-"""
- TO DO: Inherits from the base class and create a
-        decorator for plotting convergence for each method.
-"""
 
 def plotConvergenceHistory(eval):
     
     def wrapPlot(self,*args,**kwargs):
-        fig, ax = plt.subplots(figsize=(5,5));
+        ax_ = args[5];
         errors = eval(self,*args,*kwargs);
-        ax.plot(args[3],errors,linewidth=3);
-        ax.set_xlabel("Number of points");
-        ax.set_ylabel("Absolute-error");
-        ax.set_xticks(args[3]);
-        plt.show();
+        ax_.semilogy(args[3],errors,linewidth=3,label=self.__str__());
+        ax_.set_xlabel("Number of points");
+        ax_.set_ylabel("Absolute error");
+        ax_.set_xticks(args[3]);
+        ax_.set_title("Absolute error for different numerical quadrature formulas");
+        ax_.legend(loc='best');
         return errors;
 
     return wrapPlot;
@@ -42,7 +39,7 @@ class pyQuadrature:
         return self.__call__(to_integrate,x_start,x_end,N);
 
     @plotConvergenceHistory
-    def evaluate(self,to_integrate : callable , x_start : float, x_end : float , N : list, analytic_res : float):
+    def evaluate(self,to_integrate : callable , x_start : float, x_end : float , N : list, analytic_res : float, ax : plt.matplotlib.axes.Axes.plot):
         """
         Evaluating the goodness of the quadrature
         formula
@@ -62,14 +59,21 @@ class pyQuadrature:
                 match QuadType:
                     case "Simpson":
                         self.integrator = qb.pyNumSimp();
+                        self.type = "Simpson";
                     case "Trapezoidal":
                         self.integrator = qb.pyNumTrapz();
+                        self.type = "Trapezoidal";
                     case "MidPoint":
                         self.integrator = qb.pyNumMid();
+                        self.type = "MidPoint";
                     case "GaussLegeandre":
                         self.integrator = qb.pyNumGaussLeg();
+                        self.type = "Gauss-Legeandre";
         except(KeyError):
-            print("Error- Invalid numerical quadrature-type\n");
+            print("Error- Invalid numerical quadrature-type-selected \n");
+
+    def __str__(self):
+        return self.type;
 
 
 class EvalQuadFormulas:
@@ -78,30 +82,29 @@ class EvalQuadFormulas:
     of different quadrature formulas
     """
     def __init__(self,to_integrate : callable, QuadTypes : list,x_start : float,
-                 x_end : float, N : list,analytic_result : float):
+                 x_end : float, N : list, analytic_result : float):
+    
 
-        # Check if the quadrature formulas are exact:
-        try:
-            if( not (all(QuadTypes) in pyQuadrature.quad_available_types) ):
-                
-                raise KeyError("Invalid numerical quadrature type found while evaluating various quadrature formulas.")
-            else:
-                self.formulas = [];
-                for quad in QuadTypes:
-                    self.formulas.append(pyQuadrature(quad));
+        
+            for quadType in QuadTypes:
+                if(quadType not in pyQuadrature.quad_available_types):
+                    raise KeyError(f'Invalid numerical quadrature type "{quadType}" found while evaluating various quadrature formulas.');
+            
+            self.formulas = [];
+            for quad in QuadTypes:
+                self.formulas.append(pyQuadrature(quad));
                 self.to_integrate = to_integrate;
                 self.x_start = x_start;
                 self.x_end = x_end;
                 self.N = N;
                 self.analytic_result = analytic_result;
-                
-        except(KeyError):
-            print("Invalid numerical quadrature type found while evaluating various quadrature formulas.")
+
             
     def plotResults(self):
-        for formula in self.formulas:
-            formula.evaluate(self.to_integrate,self.x_start,self.x_end,self.N,self.analytic_result);
-
+        fig,axs = plt.subplots(1,1,figsize=(15,5));
+        for indx,formula in enumerate(self.formulas):
+            formula.evaluate(self.to_integrate,self.x_start,self.x_end,self.N,self.analytic_result,axs);
+        plt.show();
             
 def Results(functionList : list,functionNameList : list):
     """
@@ -123,9 +126,9 @@ MidPointInterface = qb.pyNumMid();
 
 GLInterface = qb.pyNumGaussLeg();
 
-to_integrate = lambda x: x*x;
+to_integrate = lambda x: x*x*x*x;
 x_start = 0.0;
-x_end = 3.0;
+x_end = 1.0;
 N = 2;
 
 funList = [SimpsonInterface,TrapzInterface,MidPointInterface,GLInterface];
@@ -147,10 +150,8 @@ res2 = integrator(to_integrate,x_start,x_end,N);
 
 print(res,res2);
 
-history = EvalQuadFormulas(to_integrate,["Simpson","Trapezoidal","MidPoint"],x_start,x_end,[1,5,10,20],9.0);
+history = EvalQuadFormulas(to_integrate,["Simpson","Trapezoidal","MidPoint","GaussLegeandre"],x_start,x_end,[2,4,6,8,10],0.2);
 
-x = [1,2,3];
-y= [1,2,3,4,5,6];
+history.plotResults();
 
-print( (all(["Simpson","Trapezoidal","MidPoint","GaussLegeandre"]) in pyQuadrature.quad_available_types))
 
