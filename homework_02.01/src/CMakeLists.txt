@@ -34,7 +34,7 @@ if(BUILD_LIB_QUAD)
 endif(BUILD_LIB_QUAD)
 
 if(BUILD_LIB_ODE)
-	add_subdirectory(ODE_module)
+	add_subdirectory(ode_module)
 endif(BUILD_LIB_ODE)
 
 if(BUILD_TEST_STATISTICS)

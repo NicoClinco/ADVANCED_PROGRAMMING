@@ -52,7 +52,7 @@ class CLASSIC_RK4
 public:
   CLASSIC_RK4();
 
-  type solve(const double& tInit,const double& tFinal,std::function< type (double,type)> RHS,const type& x0);
+  type solve(const double& tInit,const double& tFinal,std::function< type (double,type)> RHS,const type& x0,const unsigned int N);
 
 protected:
   // Coefficient for temporal schemes:
