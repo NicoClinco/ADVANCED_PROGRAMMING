@@ -1,16 +1,13 @@
 cmake_minimum_required(VERSION 3.12)
 
 #Output of the library:
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOP_TREE}/pyDirLib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOP_TREE}/pyDirLib/quadrature)
 
 #headers for data_frame and quadrature:
 set(INCLUDE_DIR_HPP ${TOP_TREE}/Headers)
 
 #.so of dataframe and quadrature
 set(LIB_DIR ${TOP_TREE}/Libraries)
-
-#set(PYBIND11_DIR "../pybind11")
-#add_subdirectory(${PYBIND11_DIR})
 
 find_package(pybind11 REQUIRED)
 pybind11_add_module(quadBind quadBind.cpp)
