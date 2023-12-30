@@ -6,6 +6,8 @@
 
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::string>);
+PYBIND11_MAKE_OPAQUE(std::vector<CSV_READER::VecOpvar>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<CSV_READER::VecOpvar>>);
 
 namespace py = pybind11;
 
@@ -20,26 +22,69 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("IsString",&CSV_READER::DATA_FRAME::opString);
   pyDF.def("IsInt",&CSV_READER::DATA_FRAME::opInt);
   pyDF.def("read",&CSV_READER::DATA_FRAME::read);
-  pyDF.def("crowIterbegin",&CSV_READER::DATA_FRAME::crowIterbegin);
-  pyDF.def("crowIterEnd",&CSV_READER::DATA_FRAME::crowIterEnd);
+
+  // Magic methods to get the column:
   pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column by index");
   pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column by index");
   pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column, depending on the header names");
   pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column, depending on the header names");
-  pyDF.def("__call__",&CSV_READER::DATA_FRAME::operator(),"Return the specific entry");
+
+  // Methods for statistical operations:
+  pyDF.def("mean",&CSV_READER::DATA_FRAME::mean,"Mean of a specified column");
+  pyDF.def("stdDev",&CSV_READER::DATA_FRAME::stdDev,"Standard deviation of a specified column");
+  pyDF.def("var",&CSV_READER::DATA_FRAME::var,"Variance of a column");
+
+  // Check the goodness of the dataframe:
+  pyDF.def("IsNumeric",&CSV_READER::DATA_FRAME::IsNumeric,"True if the column has numerical values");
+  pyDF.def("IsCategorical",&CSV_READER::DATA_FRAME::IsNumeric,"True if the column has string values");
+  pyDF.def("IsColumn",&CSV_READER::DATA_FRAME::IsColumn,"True if the index of the column is in the correct range");
+  pyDF.def("IsRow",&CSV_READER::DATA_FRAME::IsRow,"True if the index of the row is in the correct range");
+  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<int,double>,"Perform the linear regression of two columns");
+  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<double,double>,"Perform the linear regression of two columns");
+  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<double,int>,"Perform the linear regression of two columns");
+  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<int,int>,"Perform the linear regression of two columns");
+  
+	   
+  pyDF.def("__call__",&CSV_READER::DATA_FRAME::operator(),"Return the specific entry in the dataframe");
   pyDF.def("data",&CSV_READER::DATA_FRAME::data,"Return the internal data-structure");
-  pyDF.def("header_names",(std::vector<std::string> (CSV_READER::DATA_FRAME::*)() const) & CSV_READER::DATA_FRAME::HeaderNames);
+  pyDF.def("header_names",(std::vector<std::string> (CSV_READER::DATA_FRAME::*)() const) &CSV_READER::DATA_FRAME::HeaderNames);
+
+  pyDF.def
+    (
+     "__iter__",
+     [](CSV_READER::DATA_FRAME &df){return py::make_iterator(df.data().begin(),df.data().end());},
+     py::keep_alive<0, 1>() /* Essential: keep object alive while iterator exists */);
+
   pyDF.def("__repr__",
 	   [](const CSV_READER::DATA_FRAME &a) {
 	     // TO FIX the output:
 	     return "A generic class for parsing CSV FILE";
 	   });
-
-  py::class_<CSV_READER::DATA_FRAME::cRowIterator>(pyDF,"cRowIterator")
-    .def(py::init<typename CSV_READER::DATA_FRAME::cRowIterator::pRowIterator>())
+  
+	   
+  py::class_<CSV_READER::DATA_FRAME::RowIterator>(pyDF,"RowIterator")
+    // Constructor
+    .def(py::init<typename CSV_READER::DATA_FRAME::RowIterator::pRowIterator>())
+    .def("__iter__",
+	 [](CSV_READER::DATA_FRAME::RowIterator& rowIter){
+	   return rowIter;},
+	 py::keep_alive<0,1>())
+    .def("__next__",
+	 [](CSV_READER::DATA_FRAME::RowIterator& rowIter){
+	   rowIter++;
+	 },
+	 py::keep_alive<0,1>()
+	 )
+    .def("getEntry",[](CSV_READER::DATA_FRAME::RowIterator& rowIter)
+    {
+      return rowIter.operator*();
+    })
+    
     .def("__repr__",
-	 [](const CSV_READER::DATA_FRAME::cRowIterator &a) {
-	   // TO FIX the output:
+	 [](CSV_READER::DATA_FRAME::RowIterator &RowIter) {
 	   return "Iterator used for iter trough the rows of the data-frame";
 	 });
+
+  pyDF.def("rowIterbegin",&CSV_READER::DATA_FRAME::rowIterbegin);
+  pyDF.def("rowIterEnd",&CSV_READER::DATA_FRAME::rowIterEnd);
 }

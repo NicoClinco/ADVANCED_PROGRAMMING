@@ -81,11 +81,7 @@ class DATA_FRAME
     
     void operator++(int){curIter++;}
 
-    //void operator+(int n){curIter=curIter+n;}
-
     cRowIterator operator+(int n){curIter=curIter+n;return *this;}
-
-    //void operator-(int n){curIter=curIter-n;}
 
     cRowIterator operator-(int n){curIter=curIter-n;return *this;}
     
