@@ -1,13 +1,15 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include <pybind11/operators.h>
 
 #include "DATA_FRAME.hpp"
 
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::string>);
+PYBIND11_MAKE_OPAQUE(CSV_READER::VecOpvar);
 PYBIND11_MAKE_OPAQUE(std::vector<CSV_READER::VecOpvar>);
-PYBIND11_MAKE_OPAQUE(std::vector<std::vector<CSV_READER::VecOpvar>>);
+
 
 namespace py = pybind11;
 
@@ -15,6 +17,10 @@ namespace py = pybind11;
 PYBIND11_MODULE(dataFrameBind, m) {
   m.doc() = "Conversion of the class DataFrame"; // optional module docstring
 
+  py::bind_vector<std::vector<std::string>>(m, "VectorString");
+  py::bind_vector<CSV_READER::VecOpvar>(m,"VecOpvar");
+  py::bind_vector<std::vector<CSV_READER::VecOpvar>>(m,"vVecOpvar");
+  
   py::class_<CSV_READER::DATA_FRAME> pyDF(m,"pyDF");
   pyDF.def(py::init<const std::string>());
   pyDF.def(py::init<std::vector<std::string>>());
@@ -47,8 +53,14 @@ PYBIND11_MODULE(dataFrameBind, m) {
 	   
   pyDF.def("__call__",&CSV_READER::DATA_FRAME::operator(),"Return the specific entry in the dataframe");
   pyDF.def("data",&CSV_READER::DATA_FRAME::data,"Return the internal data-structure");
-  pyDF.def("header_names",(std::vector<std::string> (CSV_READER::DATA_FRAME::*)() const) &CSV_READER::DATA_FRAME::HeaderNames);
-
+  pyDF.def("header_names",[](const CSV_READER::DATA_FRAME& df){
+    // Reorder the map by the values:
+    auto mapNames = df.HeaderNames();
+    std::vector<std::string> names(mapNames.size(),"");
+    for (auto const& x : mapNames)
+      names[x.second] = x.first;
+    return names;  
+  },"Get the header names for columns");
   pyDF.def
     (
      "__iter__",
@@ -61,9 +73,9 @@ PYBIND11_MODULE(dataFrameBind, m) {
 	     return "A generic class for parsing CSV FILE";
 	   });
   
-	   
+  // Iterator for rows:
   py::class_<CSV_READER::DATA_FRAME::RowIterator>(pyDF,"RowIterator")
-    // Constructor
+   
     .def(py::init<typename CSV_READER::DATA_FRAME::RowIterator::pRowIterator>())
     .def("__iter__",
 	 [](CSV_READER::DATA_FRAME::RowIterator& rowIter){
@@ -77,9 +89,12 @@ PYBIND11_MODULE(dataFrameBind, m) {
 	 )
     .def("getEntry",[](CSV_READER::DATA_FRAME::RowIterator& rowIter)
     {
+      // Get the entire row:
       return rowIter.operator*();
     })
-    
+    //Operators for inequalities:
+    .def(py::self == py::self)
+    .def(py::self != py::self)
     .def("__repr__",
 	 [](CSV_READER::DATA_FRAME::RowIterator &RowIter) {
 	   return "Iterator used for iter trough the rows of the data-frame";
@@ -87,4 +102,39 @@ PYBIND11_MODULE(dataFrameBind, m) {
 
   pyDF.def("rowIterbegin",&CSV_READER::DATA_FRAME::rowIterbegin);
   pyDF.def("rowIterEnd",&CSV_READER::DATA_FRAME::rowIterEnd);
+
+
+  //Iterator for columns:
+  py::class_<CSV_READER::DATA_FRAME::colIterator>(pyDF,"ColIterator")
+    .def(py::init<CSV_READER::DATA_FRAME::RowIterator,size_t>())
+    .def("__iter__",
+	 [](CSV_READER::DATA_FRAME::colIterator& colIter){
+	   return colIter;
+	 },
+	 py::keep_alive<0,1>())
+    .def("__next__",
+	 [](CSV_READER::DATA_FRAME::colIterator& colIter){
+	   colIter++;
+	 })
+    .def("getEntry",
+	 [](CSV_READER::DATA_FRAME::colIterator& colIter){
+	   return colIter.operator*();
+	 })
+    
+    //Operators for inequalities:
+    .def(py::self == py::self)
+    .def(py::self != py::self)
+    .def("__repr__",
+	 [](CSV_READER::DATA_FRAME::RowIterator &RowIter) {
+	   return "Iterator used for iter trough the rows of the data-frame";
+	 });
+
+  pyDF.def("colIterbegin",&CSV_READER::DATA_FRAME::colIterbegin);
+  pyDF.def("colIterEnd",&CSV_READER::DATA_FRAME::colIterEnd);
+	 
+       
+       
+
+
+  
 }

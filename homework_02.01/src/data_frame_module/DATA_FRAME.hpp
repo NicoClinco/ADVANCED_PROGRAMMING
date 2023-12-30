@@ -162,8 +162,8 @@ private:
     void operator++(){++col_;};
 
     // TO CHECK:
-    friend bool operator== (const colIterator& a,const colIterator& b) { return a.col_==b.col_; };
-    friend bool operator!= (const colIterator& a,const colIterator& b) { return a.col_!=b.col_; };
+    friend bool operator== (const colIterator& a,const colIterator& b) { return a.col_==b.col_;};
+    friend bool operator!= (const colIterator& a,const colIterator& b) { return a.col_!=b.col_;};
     
     private:
 
@@ -263,7 +263,7 @@ private:
   CSV_READER::OpVariant& operator() (size_t row,size_t col);
 
   // Header map:
-  std::vector<std::string> HeaderNames() const;
+  std::map<std::string,unsigned int> HeaderNames() const;
   
 
   //*****OUTPUT FILE MANAGER***********//

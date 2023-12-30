@@ -26,7 +26,11 @@ class pyDataFrame(dfb.pyDF):
         #Convert to a pandas dataframe for speed:
         self.data = pd.DataFrame(self.data());
         
-        #Renaming the columns
+        #Renaming the columns:
+        #headers = [];
+        #for header in self.header_names():
+        #    headers.append(header);
+        #self.data.columns=headers;
         self.data.columns=["date","cloud_cover","sunshine","global_radiation","max_temp","mean_temp",
                            "min_temp","precipitation","pressure","snow_depth"];
         
