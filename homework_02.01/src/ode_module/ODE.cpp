@@ -2,12 +2,42 @@
 #include "ODE.hpp"
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
+
+
+
+//Write double to outstream:
+template<>
+void writeSolution<double>(const double& time,const double& sol,
+	      std::ofstream& outs,std::string separator)
+{
+  if(outs.is_open())
+    outs<<time<<separator<<sol<<std::endl;
+}
+
+//write Eigen::VectorXd to outstream:
+template<>
+void writeSolution<Eigen::VectorXd>(const double& time,const Eigen::VectorXd& sol,
+	      std::ofstream& outs,std::string separator)
+{
+  if(outs.is_open())
+    {
+      outs << time;
+      for(auto elem : sol)
+	outs<<separator<<elem;
+      outs<<std::endl;
+    }
+  
+}
+
 
 template<class type>
-EULER_FIRST_ORDER<type>::EULER_FIRST_ORDER():
+EULER_FIRST_ORDER<type>::EULER_FIRST_ORDER(std::string filename,bool write):
   m_aij(1,1),
   m_bj(1),
-  m_ci(1)
+  m_ci(1),
+  filename_(filename),
+  write_(write)
 {
   // Initialize the butcher coefficients,
   // For explicit Euler everything is simple.
@@ -47,6 +77,14 @@ double EULER_FIRST_ORDER<double>::solve
   
   Eigen::MatrixXd K(stages,variables);
 
+  std::ofstream outstream;
+  if(write_)
+    {
+    outstream.open(filename_,std::ios::out | std::ios::app);
+    //remember to create the outstringstream.
+    writeSolution<double>(time_,x0,outstream,",");
+    }
+  
   while(counter<Nstep)
     {
       // Compute stage-values:
@@ -58,10 +96,11 @@ double EULER_FIRST_ORDER<double>::solve
       // Compute end of the stage values:
       for(unsigned int j=0;j<m_bj.size();j++)
 	x_current=x_current+m_bj(j)*dt*K(j,0);
-
+      if(write_)
+	writeSolution<double>(time_+dt,x0,outstream,",");
       time_ = time_ + dt;
       counter++;
-    }
+    }//end time-stepping
   return x_current;
 }
 
@@ -90,6 +129,13 @@ Eigen::VectorXd EULER_FIRST_ORDER<Eigen::VectorXd>::solve
   
   Eigen::MatrixXd K= Eigen::MatrixXd::Zero(stages,variables);
 
+  std::ofstream outstream;
+  if(write_)
+    {
+      outstream.open(filename_,std::ios::out | std::ios::app);
+      writeSolution<Eigen::VectorXd>(time_,x0,outstream,",");
+    }
+  
   while(counter<Nstep)
     {
       // Compute stage-values:
@@ -108,17 +154,21 @@ Eigen::VectorXd EULER_FIRST_ORDER<Eigen::VectorXd>::solve
 	  Eigen::VectorXd Krowj = K.row(j);
 	  x_current=x_current+Krowj*dt*m_bj(j);
 	}
+      if(write_)
+	writeSolution<Eigen::VectorXd>(time_+dt,x_current,outstream,",");
       time_ = time_ + dt;
       counter++;
-    }
+    }//end loop in time
   return x_current;
 }
 
 template<class type>
-CLASSIC_RK4<type>::CLASSIC_RK4():
+CLASSIC_RK4<type>::CLASSIC_RK4(std::string filename,bool write):
   m_aij(4,4),
   m_bj(4),
-  m_ci(4)
+  m_ci(4),
+  filename_(filename),
+  write_(write)
 {
   // Initialize the butcher coefficients:
   
@@ -164,6 +214,13 @@ double CLASSIC_RK4<double>::solve
   Eigen::MatrixXd K(stages,variables);
   double prev_sum = 0.0;
   
+  std::ofstream outstream;
+  if(write_)
+    {
+      outstream.open(filename_,std::ios::out | std::ios::app);
+      writeSolution<double>(time_,x0,outstream,",");
+    }
+  
   while(counter<Nstep)
     {
       // Compute stage-values:
@@ -180,7 +237,8 @@ double CLASSIC_RK4<double>::solve
       // Compute end of the stage values:
       for(unsigned int j=0;j<m_bj.size();j++)
 	x_current=x_current+m_bj(j)*dt*K(j,0);
-      
+      if(write_)
+	writeSolution<double>(time_+dt,x_current,outstream,",");
       time_ = time_ +dt;
       counter++;
     }
@@ -211,6 +269,13 @@ Eigen::VectorXd CLASSIC_RK4<Eigen::VectorXd>::solve
   size_t variables = x0.size(); //double
   
   Eigen::MatrixXd K(stages,variables);
+  
+  std::ofstream outstream;
+  if(write_)
+    {
+      outstream.open(filename_,std::ios::out | std::ios::app);
+      writeSolution<Eigen::VectorXd>(time_,x0,outstream,",");
+    }
 
   while(counter<Nstep)
     {
@@ -233,6 +298,8 @@ Eigen::VectorXd CLASSIC_RK4<Eigen::VectorXd>::solve
 	  Eigen::VectorXd Krowj = K.row(j);
 	  x_current=x_current+m_bj(j)*dt*Krowj;
 	}
+      if(write_)
+	writeSolution<Eigen::VectorXd>(time_+dt,x_current,outstream,",");
       time_ = time_ +dt;
       counter++;
     }
@@ -250,6 +317,16 @@ template class TimeIntegrator<EULER_FIRST_ORDER,Eigen::VectorXd>;
 template class TimeIntegrator<CLASSIC_RK4,double>;
 
 template class TimeIntegrator<CLASSIC_RK4,Eigen::VectorXd>;
+
+//Explicit specialization for constructor:
+
+//template TimeIntegrator<EULER_FIRST_ORDER,double>::TimeIntegrator(std::string filename,bool write);
+
+//template TimeIntegrator<EULER_FIRST_ORDER,Eigen::VectorXd>::TimeIntegrator(std::string filename,bool write);
+
+//template TimeIntegrator<CLASSIC_RK4,double>::TimeIntegrator(std::string filename,bool write);
+
+//template TimeIntegrator<CLASSIC_RK4,Eigen::VectorXd>::TimeIntegrator(std::string filename,bool write);
 
 
 template class EULER_FIRST_ORDER<double>;

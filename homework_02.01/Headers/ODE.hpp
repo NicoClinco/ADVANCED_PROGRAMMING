@@ -15,8 +15,10 @@ class TimeIntegrator:
 {
 public:
   
-  TimeIntegrator():
-    m_time_scheme{TimeStepping<type>()} {};
+  TimeIntegrator(std::string filename,bool write)
+     {
+       m_time_scheme = TimeStepping<type>(filename,write);
+     };
 
   type solve(const double& tInit,const double& tFinal,std::function<type(double,type)> RHS,const type& x0,const unsigned int N)
   {
@@ -33,8 +35,10 @@ template<class type>
 class EULER_FIRST_ORDER
 {
 public:
+
+  EULER_FIRST_ORDER() = default;
   
-  EULER_FIRST_ORDER();
+  EULER_FIRST_ORDER(std::string filename,bool write);
 
   type solve(const double& tInit,const double& tFinal,std::function< type (double,type)> RHS,const type& x0,const unsigned int N);
 
@@ -43,6 +47,8 @@ protected:
   Eigen::MatrixXd m_aij;
   Eigen::VectorXd m_bj;
   Eigen::VectorXd m_ci;
+  std::string filename_;
+  bool write_;
 
 };
 
@@ -50,7 +56,9 @@ template<class type>
 class CLASSIC_RK4
 {
 public:
-  CLASSIC_RK4();
+  CLASSIC_RK4() = default;
+  
+  CLASSIC_RK4(std::string filename,bool write);
 
   type solve(const double& tInit,const double& tFinal,std::function< type (double,type)> RHS,const type& x0,const unsigned int N);
 
@@ -59,8 +67,16 @@ protected:
   Eigen::MatrixXd m_aij;
   Eigen::VectorXd m_bj;
   Eigen::VectorXd m_ci;
+  std::string filename_;
+  bool write_;
 
 };
+
+
+// Template functions to write comma separated values to a file:
+template<class solType>
+void writeSolution(const double& time,const solType& sol,
+	      std::ofstream& outs,std::string separator);
 
 
 #endif

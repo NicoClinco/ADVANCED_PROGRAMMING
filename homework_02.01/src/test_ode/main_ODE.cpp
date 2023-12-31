@@ -11,11 +11,15 @@ using namespace Eigen;
 
 int main(){
 
-  TimeIntegrator<EULER_FIRST_ORDER,double> tIntegratorEU;
-  TimeIntegrator<EULER_FIRST_ORDER,VectorXd> tIntegratorEU_;
+  std::string filenameRK4 = "outputRK4.txt";
+
+  std::string filenameEU = "outputEU.txt";
   
-  TimeIntegrator<CLASSIC_RK4,double> tIntegratorRK4;
-  TimeIntegrator<CLASSIC_RK4,VectorXd> tIntegratorRK4_;
+    // TimeIntegrator<EULER_FIRST_ORDER,double> tIntegratorEU();
+  TimeIntegrator<EULER_FIRST_ORDER,VectorXd> tIntegratorEU_(filenameEU,true);
+  
+  //TimeIntegrator<CLASSIC_RK4,double> tIntegratorRK4;
+  TimeIntegrator<CLASSIC_RK4,VectorXd> tIntegratorRK4_(filenameRK4,true);
   
   double tInit = 0.0;
   double tFin  = 0.1;
@@ -40,19 +44,6 @@ int main(){
 
   std::cout << res_RK_4_v << std::endl;
   //std::cout << res_RK_4 << std::endl;
-
-
-  
-  
-
-  // Ask if the user pass a function of double or a function of vector
-  // Can i create a class that overload both scalar and vector, right?
-
-  //std::ofstream of_("vector.txt");
- 
-   // std::for_each(v.begin(),v.end(),[&of_](double& _){of_<<_<<" ";});
-   
-   //of_.close();
    
   return 0;
 }
