@@ -101,6 +101,7 @@ double EULER_FIRST_ORDER<double>::solve
       time_ = time_ + dt;
       counter++;
     }//end time-stepping
+  outstream.close();
   return x_current;
 }
 
@@ -159,6 +160,7 @@ Eigen::VectorXd EULER_FIRST_ORDER<Eigen::VectorXd>::solve
       time_ = time_ + dt;
       counter++;
     }//end loop in time
+  outstream.close();
   return x_current;
 }
 
@@ -242,7 +244,7 @@ double CLASSIC_RK4<double>::solve
       time_ = time_ +dt;
       counter++;
     }
-  
+  outstream.close();
   return x_current;
 }
 
@@ -303,6 +305,7 @@ Eigen::VectorXd CLASSIC_RK4<Eigen::VectorXd>::solve
       time_ = time_ +dt;
       counter++;
     }
+  outstream.close();
   return x_current;
 }
 
