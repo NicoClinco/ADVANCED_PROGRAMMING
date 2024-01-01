@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC  -Wall -Werror -Wpedantic -g -shared -Wl,-soname,libdata_frame.so -o /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/Libraries/libdata_frame.so CMakeFiles/data_frame.dir/DATA_FRAME.cpp.o 
