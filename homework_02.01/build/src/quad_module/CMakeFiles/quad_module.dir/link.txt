@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -Wall -Werror -Wpedantic -g -shared -Wl,-soname,libquad_module.so -o /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/Libraries/libquad_module.so CMakeFiles/quad_module.dir/Quadrature.cpp.o   -L/home/nico/Desktop/PHD-COURSES/libraries/gsl/lib  -Wl,-rpath,/home/nico/Desktop/PHD-COURSES/libraries/gsl/lib -lgsl -lgslcblas 
