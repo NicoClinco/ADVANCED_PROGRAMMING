@@ -1,20 +1,24 @@
-from . import quadBind as qb
+#from . import quadBind as qb
+import quadBind as qb
 import matplotlib.pyplot as plt
 import time
 
-def execution_time(to_evaluate):
-    """
-    Decorator to test the speed of the quadrature
-    formulas
-    """
-    def wrapper(self,*args, **kwargs):
-        start = time.time();
-        result = to_evaluate(self,*args, **kwargs);
-        end = time.time();
-        print(f"{to_evaluate.__name__} executed in {end - start} seconds.");
-        return result;
-    return wrapper
 
+def execution_time(func):
+    """
+    Decorator which returns
+    the results of a function
+    and the time employed
+    """
+    
+    def wrapper(self,*args,**kwargs):
+        start = time.time();
+        res= func(self,*args,**kwargs);
+        dt = time.time()-start;
+        return res,dt;
+    
+    return wrapper;
+    
 def plotConvergenceHistory(eval):
     """
     Decorator for plotting the errors 
@@ -61,7 +65,7 @@ class pyQuadrature:
         """
         return self.integrator(to_integrate,x_start,x_end,N);
 
-    @execution_time
+
     def integrate(self,to_integrate : callable , x_start : float, x_end : float , N : int):
         return self.__call__(to_integrate,x_start,x_end,N);
 
@@ -113,12 +117,17 @@ class pyQuadrature:
         Return which type of quadrature formula i have
         """
         return self.type;
+    
+        
+        
+        
+        
 
 
 class EvalQuadFormulas:
     """
-    Class for evaluating the goodness of different
-    numerical formulas
+    Class for evaluating the time and the goodness
+    of different quadrature formulas.
     """
     def __init__(self,to_integrate : callable, QuadTypes : list,x_start : float,
                  x_end : float, N : list, analytic_result : float):
@@ -155,5 +164,31 @@ class EvalQuadFormulas:
         fig,axs = plt.subplots(1,1,figsize=(7,7));
         for indx,formula in enumerate(self.formulas):
             formula.evaluate(self.to_integrate,self.x_start,self.x_end,self.N,self.analytic_result,axs,plotError=True);
+        plt.show();
+
+    def plotTimes(self):
+        """
+        Plot the time taken by the various quadrature formulas.
+        """
+        fig,axs = plt.subplots(1,1,figsize=(7,7));
+        times = [];
+        for indx,formula in enumerate(self.formulas):
+            #wrap the function:
+            wrappedformula = execution_time(formula.integrate);
+            times.append([]);
+            for n in self.N:
+                res, time = wrappedformula(self.to_integrate,self.x_start,self.x_end,n);
+                times[indx].append(time);
+
+       
+        axs.set_xlabel("Number of points");
+        axs.set_ylabel("Time [ms]");
+        #Plot the results for every quadrature formula:
+        for nquad in range(len(times)):
+            axs.plot(self.N,times[nquad],label=self.formulas[nquad].__str__());
+        axs.legend(loc='best');
+        
+                
+                
         plt.show();
  

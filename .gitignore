@@ -3,6 +3,7 @@
 *.tar
 *.zip
 *.pptx
+*.so
 Folder-tryingStuffs
 Slides
 __pycache__
