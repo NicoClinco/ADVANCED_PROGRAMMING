@@ -6,9 +6,10 @@ import time
 
 def execution_time(func):
     """
-    Decorator which returns
-    the results of a function
-    and the time employed
+    Decorator for inspecting the
+    execution time of a function
+
+    :param (func) func: Function to be executed
     """
     
     def wrapper(self,*args,**kwargs):
@@ -22,7 +23,9 @@ def execution_time(func):
 def plotConvergenceHistory(eval):
     """
     Decorator for plotting the errors 
-    of convergence
+    of convergence.
+
+    :param (func) eval: method of the class pyQuadrature
     """
     
     def wrapPlot(self,*args,**kwargs):
@@ -164,11 +167,13 @@ class EvalQuadFormulas:
         fig,axs = plt.subplots(1,1,figsize=(7,7));
         for indx,formula in enumerate(self.formulas):
             formula.evaluate(self.to_integrate,self.x_start,self.x_end,self.N,self.analytic_result,axs,plotError=True);
+        fig.tight_layout();
         plt.show();
 
     def plotTimes(self):
         """
-        Plot the time taken by the various quadrature formulas.
+        Plot the execution time for various
+        quadrature formulas
         """
         fig,axs = plt.subplots(1,1,figsize=(7,7));
         times = [];
@@ -183,12 +188,14 @@ class EvalQuadFormulas:
        
         axs.set_xlabel("Number of points");
         axs.set_ylabel("Time [ms]");
+        axs.set_xticks(self.N);
+        axs.ticklabel_format(style='sci', axis='y', scilimits=(0,0)); #scientific format
         #Plot the results for every quadrature formula:
         for nquad in range(len(times)):
-            axs.plot(self.N,times[nquad],label=self.formulas[nquad].__str__());
+            axs.plot(self.N,times[nquad],linewidth=3,label=self.formulas[nquad].__str__());
         axs.legend(loc='best');
-        
-                
+        axs.set_title("Time employed by different quadrature formulas");
+        fig.tight_layout();
                 
         plt.show();
  

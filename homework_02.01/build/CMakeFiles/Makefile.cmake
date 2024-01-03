@@ -11,8 +11,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.28.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.28.1/CMakeSystem.cmake"
   "/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/src/CMakeLists.txt"
-  "/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/src/pyDirQuad/CMakeLists.txt"
-  "/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/src/quad_module/CMakeLists.txt"
+  "/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/src/data_frame_module/CMakeLists.txt"
+  "/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/src/pyDirDF/CMakeLists.txt"
   "/home/nico/anaconda3/envs/POLITO_ENV/share/cmake/pybind11/FindPythonLibsNew.cmake"
   "/home/nico/anaconda3/envs/POLITO_ENV/share/cmake/pybind11/pybind11Common.cmake"
   "/home/nico/anaconda3/envs/POLITO_ENV/share/cmake/pybind11/pybind11Config.cmake"
@@ -57,12 +57,12 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "src/quad_module/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "src/pyDirQuad/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/data_frame_module/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/pyDirDF/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "src/quad_module/CMakeFiles/quad_module.dir/DependInfo.cmake"
-  "src/pyDirQuad/CMakeFiles/quadBind.dir/DependInfo.cmake"
+  "src/data_frame_module/CMakeFiles/data_frame.dir/DependInfo.cmake"
+  "src/pyDirDF/CMakeFiles/dataFrameBind.dir/DependInfo.cmake"
   )

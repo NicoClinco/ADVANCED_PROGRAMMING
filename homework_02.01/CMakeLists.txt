@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(homework2 VERSION 1.0
-		DESCRIPTION "Scientific library"
+	DESCRIPTION "HOMEWORK03"
 		LANGUAGES CXX)
 
 # Set the C++ version:

@@ -117,30 +117,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named quad_module
+# Target rules for targets named data_frame
 
 # Build rule for target.
-quad_module: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 quad_module
-.PHONY : quad_module
+data_frame: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 data_frame
+.PHONY : data_frame
 
 # fast build rule for target.
-quad_module/fast:
-	$(MAKE) $(MAKESILENT) -f src/quad_module/CMakeFiles/quad_module.dir/build.make src/quad_module/CMakeFiles/quad_module.dir/build
-.PHONY : quad_module/fast
+data_frame/fast:
+	$(MAKE) $(MAKESILENT) -f src/data_frame_module/CMakeFiles/data_frame.dir/build.make src/data_frame_module/CMakeFiles/data_frame.dir/build
+.PHONY : data_frame/fast
 
 #=============================================================================
-# Target rules for targets named quadBind
+# Target rules for targets named dataFrameBind
 
 # Build rule for target.
-quadBind: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 quadBind
-.PHONY : quadBind
+dataFrameBind: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dataFrameBind
+.PHONY : dataFrameBind
 
 # fast build rule for target.
-quadBind/fast:
-	$(MAKE) $(MAKESILENT) -f src/pyDirQuad/CMakeFiles/quadBind.dir/build.make src/pyDirQuad/CMakeFiles/quadBind.dir/build
-.PHONY : quadBind/fast
+dataFrameBind/fast:
+	$(MAKE) $(MAKESILENT) -f src/pyDirDF/CMakeFiles/dataFrameBind.dir/build.make src/pyDirDF/CMakeFiles/dataFrameBind.dir/build
+.PHONY : dataFrameBind/fast
 
 # Help Target
 help:
@@ -150,8 +150,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... quadBind"
-	@echo "... quad_module"
+	@echo "... dataFrameBind"
+	@echo "... data_frame"
 .PHONY : help
 
 

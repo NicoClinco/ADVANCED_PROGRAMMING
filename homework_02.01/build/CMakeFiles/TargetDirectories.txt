@@ -2,9 +2,9 @@
 /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/CMakeFiles/rebuild_cache.dir
 /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/CMakeFiles/edit_cache.dir
 /home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/CMakeFiles/rebuild_cache.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/quad_module/CMakeFiles/quad_module.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/quad_module/CMakeFiles/edit_cache.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/quad_module/CMakeFiles/rebuild_cache.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/pyDirQuad/CMakeFiles/quadBind.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/pyDirQuad/CMakeFiles/edit_cache.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/pyDirQuad/CMakeFiles/rebuild_cache.dir
+/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/data_frame_module/CMakeFiles/data_frame.dir
+/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/data_frame_module/CMakeFiles/edit_cache.dir
+/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/data_frame_module/CMakeFiles/rebuild_cache.dir
+/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/pyDirDF/CMakeFiles/dataFrameBind.dir
+/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/pyDirDF/CMakeFiles/edit_cache.dir
+/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_02.01/build/src/pyDirDF/CMakeFiles/rebuild_cache.dir

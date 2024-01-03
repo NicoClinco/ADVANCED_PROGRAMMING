@@ -36,10 +36,10 @@ BUILD_LIB_QUAD:BOOL=OFF
 BUILD_LIB_STATISTICS:BOOL=OFF
 
 //Build Python library for statistics
-BUILD_PYDIR_DF:BOOL=OFF
+BUILD_PYDIR_DF:BOOL=ON
 
 //Build Python library for quadrature
-BUILD_PYDIR_QUAD:BOOL=ON
+BUILD_PYDIR_QUAD:BOOL=OFF
 
 //Build google-test
 BUILD_TESTS:BOOL=OFF
@@ -146,7 +146,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_DESCRIPTION:STATIC=Scientific library
+CMAKE_PROJECT_DESCRIPTION:STATIC=HOMEWORK03
 
 //Value Computed by CMake
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
@@ -270,8 +270,8 @@ pybind11_DIR:PATH=/home/nico/anaconda3/envs/POLITO_ENV/share/cmake/pybind11
 # INTERNAL cache entries
 ########################
 
-//MODIFIED property for variable: BUILD_PYDIR_QUAD
-BUILD_PYDIR_QUAD-MODIFIED:INTERNAL=ON
+//MODIFIED property for variable: BUILD_PYDIR_DF
+BUILD_PYDIR_DF-MODIFIED:INTERNAL=ON
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR

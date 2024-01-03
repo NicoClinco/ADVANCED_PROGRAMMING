@@ -31,8 +31,6 @@ class pyDataFrame(dfb.pyDF):
         for header in self.header_names():
             headers.append(header);
         self.data.columns=headers;
-        #self.data.columns=["date","cloud_cover","sunshine","global_radiation","max_temp","mean_temp",
-        #                   "min_temp","precipitation","pressure","snow_depth"];
         
     def convertToDate(self,column = "date",format_='%Y%m%d'):
         """
@@ -55,6 +53,7 @@ class pyDataFrame(dfb.pyDF):
      
         plt.xlabel("Years");
         plt.ylabel(column + " over the year");
+        plt.tight_layout()
         plt.show();
 
     
@@ -74,4 +73,5 @@ class pyDataFrame(dfb.pyDF):
         plt.xticks(ticks=range(0,12),labels=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]);
         plt.xlabel("months");
         plt.ylabel(column + " for the year "+str(year));
+        plt.tight_layout()
         plt.show();

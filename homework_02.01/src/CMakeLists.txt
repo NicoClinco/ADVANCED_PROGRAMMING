@@ -20,15 +20,6 @@ option(BUILD_PYDIR_QUAD "Build Python library for quadrature" OFF)
 option(BUILD_TESTS "Build google-test" OFF)
 
 
-#MESSAGE(STATUS "THE FOLLOWING OPTIONS ARE AVAILABLE:")
-#MESSAGE(STATUS "Specify -DBUILD_LIB_STATISTICS=ON for statistics module")
-#MESSAGE(STATUS "Specify -DBUILD_LIB_QUAD=ON for quadrature module")
-#MESSAGE(STATUS "Specify -DBUILD_LIB_ODE=ON for ODE module")
-#MESSAGE(STATUS "Specify -DBUILD_EXAMPLE_STATISTICS=ON for generating an executable that test the Statistics module")
-#MESSAGE(STATUS "Specify -DBUILD_EXAMPLE_QUAD=ON for generating an executable that test the Quadrature module")
-#MESSAGE(STATUS "Specify -DBUILD_EXAMPLE_ODE=ON for generating an executable that test the time-integration module")
-
-
 if(BUILD_LIB_STATISTICS)
 	add_subdirectory(data_frame_module)
 endif(BUILD_LIB_STATISTICS)
