@@ -1,5 +1,5 @@
 #include "test_commands_quadrature.hpp"
-//#include "test_commands_statistics.hpp"
+#include "test_commands_statistics.hpp"
 
 
 int main(int argc, char *argv[])

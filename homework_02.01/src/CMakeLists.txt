@@ -59,6 +59,7 @@ endif(BUILD_PYDIR_QUAD)
 
 if(BUILD_TESTS)
       add_subdirectory(quad_module)
+      add_subdirectory(data_frame_module)
       add_subdirectory(tests)
 endif(BUILD_TESTS)
 

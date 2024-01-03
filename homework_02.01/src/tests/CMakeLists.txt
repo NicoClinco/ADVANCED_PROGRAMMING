@@ -13,7 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TOP_TREE}/tests)
 add_executable(test_main test_main.cpp)
 target_include_directories(test_main PUBLIC ${TOP_TREE}/Headers PUBLIC GSL_INCLUDE_DIR)
 target_link_directories(test_main PUBLIC ${TOP_TREE}/Libraries PUBLIC GSL_LIB_DIR)
-target_link_libraries(test_main PUBLIC GTest::gtest_main PUBLIC GTest::gmock_main PUBLIC quad_module PUBLIC gsl PUBLIC gslcblas)
+target_link_libraries(test_main PUBLIC GTest::gtest_main PUBLIC GTest::gmock_main PUBLIC quad_module PUBLIC data_frame PUBLIC gsl PUBLIC gslcblas)
 
 include(GoogleTest)
 gtest_discover_tests(test_main)
