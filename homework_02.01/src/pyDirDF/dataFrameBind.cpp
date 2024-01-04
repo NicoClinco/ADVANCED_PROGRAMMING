@@ -72,6 +72,18 @@ PYBIND11_MODULE(dataFrameBind, m) {
 	     // TO FIX the output:
 	     return "A generic class for parsing CSV FILE";
 	   });
+  // Output methods:
+  pyDF.def("SetOutputFile",&CSV_READER::DATA_FRAME::setOutputfile);
+
+  pyDF.def("write",&CSV_READER::DATA_FRAME::write,py::arg("separator")=" ");
+
+  pyDF.def("writeEntry",&CSV_READER::DATA_FRAME::WriteEntry<double>,"Write a double in the specified file");
+  pyDF.def("writeEntry",&CSV_READER::DATA_FRAME::WriteEntry<int>,"Write an int in the specified file");
+  pyDF.def("writeEntry",&CSV_READER::DATA_FRAME::WriteEntry<std::string>,"Write a string in the specified file");
+  pyDF.def("writeEntry",&CSV_READER::DATA_FRAME::WriteEntry<std::vector<double>>,"Write a VectorDouble in the specified file");
+  pyDF.def("writeEntry",&CSV_READER::DATA_FRAME::WriteEntry<std::vector<std::string>>,"Write a VectorDouble in the specified file");
+  
+  pyDF.def("closeOutput",&CSV_READER::DATA_FRAME::closeOutput,"Close the output file");
   
   // Iterator for rows:
   py::class_<CSV_READER::DATA_FRAME::RowIterator>(pyDF,"RowIterator")
