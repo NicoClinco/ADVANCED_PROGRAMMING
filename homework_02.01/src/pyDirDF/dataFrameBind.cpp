@@ -45,10 +45,10 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("IsCategorical",&CSV_READER::DATA_FRAME::IsNumeric,"True if the column has string values");
   pyDF.def("IsColumn",&CSV_READER::DATA_FRAME::IsColumn,"True if the index of the column is in the correct range");
   pyDF.def("IsRow",&CSV_READER::DATA_FRAME::IsRow,"True if the index of the row is in the correct range");
-  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<int,double>,"Perform the linear regression of two columns");
-  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<double,double>,"Perform the linear regression of two columns");
-  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<double,int>,"Perform the linear regression of two columns");
-  pyDF.def("LinReg",&CSV_READER::DATA_FRAME::LinearRegression<int,int>,"Perform the linear regression of two columns");
+  pyDF.def("LinRegID",&CSV_READER::DATA_FRAME::LinearRegression<int,double>,"Perform the linear regression of two columns");
+  pyDF.def("LinRegDD",&CSV_READER::DATA_FRAME::LinearRegression<double,double>,"Perform the linear regression of two columns");
+  pyDF.def("LinRegDI",&CSV_READER::DATA_FRAME::LinearRegression<double,int>,"Perform the linear regression of two columns");
+  pyDF.def("LinRegII",&CSV_READER::DATA_FRAME::LinearRegression<int,int>,"Perform the linear regression of two columns");
   
 	   
   pyDF.def("__call__",&CSV_READER::DATA_FRAME::operator(),"Return the specific entry in the dataframe");
