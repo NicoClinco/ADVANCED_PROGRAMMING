@@ -2,6 +2,8 @@ import dataFrameBind as dfb
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.impute import SimpleImputer
 import copy
 
 
@@ -76,4 +78,34 @@ class pyDataFrame(dfb.pyDF):
         plt.tight_layout()
         plt.show();
 
+    def LinearRegression(self,Xnames : list, Yname : str):
+        """
+        Method for obtaining the coefficient for doing linear regression
+        (slope and intersect):
+        
+        Y = w1*X1 +... wN*xN + I
+        
+        :param (str) Xname: The name of columns we set as X
+        :param (str) Yname: The name of columns we set as Y
+        :param (
+        """
+        
+        LinearModel = LinearRegression();
+        X = self.data[Xnames]
+        Y = self.data[[Yname]]
+        
+        # Substitute the mean for missing values:
+        imputerX = SimpleImputer(missing_values=np.nan, strategy='mean')
+        imputerX = imputerX.fit(X)
+        X_imputed = imputerX.transform(X)
+
+        imputerY = SimpleImputer(missing_values=np.nan, strategy='mean')
+        imputerY = imputerY.fit(Y)
+        Y_imputed = imputerY.transform(Y)
+        
+        res = LinearModel.fit(X_imputed, Y_imputed)
+        
+        return res.coef_,res.intercept_;
+        
+        
         

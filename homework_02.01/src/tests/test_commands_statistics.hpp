@@ -17,14 +17,7 @@ using namespace CSV_READER;
 */
 
 using VectorDouble = std::vector<double>;
-/*
-TEST(,)
-{
-  	     
-  
-  
-}
-*/
+
 
 /*
   Test the mean, and the standard deviation for all the
@@ -54,12 +47,12 @@ TEST(Statistic_module_Results,Mean)
 
   // Does not work the following for the tolerance:
   //EXPECT_THAT(meanCols,testing::ElementsAreArray(trueMeans));
-   
+   std::cout << "#################################\n";
 }
 
 TEST(Statistic_module_Results,stdDev)
 {
-    std::cout << "---####TESTING THE STANDARD DEVIATION FOR NUMERIC COLUMNS#####---\n";
+  std::cout << "---####TESTING THE STANDARD DEVIATION FOR NUMERIC COLUMNS#####---\n";
   std::string config_file("configCSV.txt");
   std::string filename("London_weather.csv");
   DATA_FRAME df(config_file);
@@ -77,6 +70,7 @@ TEST(Statistic_module_Results,stdDev)
   for(size_t i=0;i<stdDevCols.size();i++)
   EXPECT_THAT(stdDevCols[i],testing::DoubleNear(trueStdDev[i], max_abs_error));
 
+   std::cout << "#################################\n";
    
 }
 

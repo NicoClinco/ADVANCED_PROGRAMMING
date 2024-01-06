@@ -11,7 +11,7 @@ using VectorDouble = std::vector<double>;
 
 TEST(ElementsTest,HasSameElements)
 {
-  
+  std::cout << "###Testing the weights for the quadrature formulas###\n";
   double xMin = 0.0;
   double xMax = 1.0;
   int    N = 50;
@@ -50,7 +50,7 @@ TEST(ElementsTest,HasSameElements)
      ((i%2) == 0 ?  (wSIMPS[i] = 2.0*h/3.0) :  (wSIMPS[i] = 4.0*h/3.0));
     }
   EXPECT_THAT(wSIMPS,ElementsAreArray(wSIMPS_));
-  
+  std::cout << "##############################\n";
 }
 
 
@@ -65,6 +65,7 @@ TEST(ElementsTest,HasSameElements)
  */
 TEST(ResultTest,HasExactSolution)
 {
+  std::cout << "###Testing the goodness of a first order quadrature formula####\n";
   using namespace Integrate_1D;
   NUMERICAL_INTEGRATION<MidPointQuadrature> nIntegrationMID;
   NUMERICAL_INTEGRATION<GaussLegeandreQuadrature> nIntegrationGL;
@@ -95,5 +96,6 @@ TEST(ResultTest,HasExactSolution)
    EXPECT_NEAR(TRPZ_RES0,EXACT_RES0,abs_error);
    EXPECT_NEAR(SIMPS_RES0,EXACT_RES0,abs_error);
    EXPECT_NEAR(GL_RES0,EXACT_RES0,abs_error);
-   
+
+    std::cout << "##############################\n";
 }

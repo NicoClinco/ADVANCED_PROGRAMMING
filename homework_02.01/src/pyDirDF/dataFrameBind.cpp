@@ -4,6 +4,7 @@
 #include <pybind11/operators.h>
 
 #include "DATA_FRAME.hpp"
+#include "CSV_WRITER.hpp"
 
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::string>);
@@ -17,6 +18,8 @@ namespace py = pybind11;
 PYBIND11_MODULE(dataFrameBind, m) {
   m.doc() = "Conversion of the class DataFrame"; // optional module docstring
 
+  m.doc() = "Conversion of the statistic module and the writer for csv files"; // optional module docstring
+  
   py::bind_vector<std::vector<std::string>>(m, "VectorString");
   py::bind_vector<CSV_READER::VecOpvar>(m,"VecOpvar");
   py::bind_vector<std::vector<CSV_READER::VecOpvar>>(m,"vVecOpvar");
@@ -29,6 +32,9 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("IsInt",&CSV_READER::DATA_FRAME::opInt);
   pyDF.def("read",&CSV_READER::DATA_FRAME::read);
 
+  // Magic methods for get the lenght of a column:
+  pyDF.def("__len__",[](CSV_READER::DATA_FRAME& df){return df.data().size();});
+  
   // Magic methods to get the column:
   pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column by index");
   pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column by index");
@@ -36,10 +42,12 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column, depending on the header names");
 
   // Methods for statistical operations:
-  pyDF.def("mean",&CSV_READER::DATA_FRAME::mean,"Mean of a specified column");
-  pyDF.def("stdDev",&CSV_READER::DATA_FRAME::stdDev,"Standard deviation of a specified column");
-  pyDF.def("var",&CSV_READER::DATA_FRAME::var,"Variance of a column");
-
+  pyDF.def("mean",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::mean,py::const_),"Mean of a specified column");
+  pyDF.def("mean",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::mean,py::const_),"Mean of a specified column");
+  pyDF.def("stdDev",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::stdDev,py::const_),"Standard deviation of a specified column");
+  pyDF.def("stdDev",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::stdDev,py::const_),"Standard deviation of a specified column");
+  pyDF.def("var",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::var,py::const_),"Variance of a column");
+  pyDF.def("var",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::var,py::const_),"Variance of a column");
   // Check the goodness of the dataframe:
   pyDF.def("IsNumeric",&CSV_READER::DATA_FRAME::IsNumeric,"True if the column has numerical values");
   pyDF.def("IsCategorical",&CSV_READER::DATA_FRAME::IsNumeric,"True if the column has string values");
@@ -61,6 +69,7 @@ PYBIND11_MODULE(dataFrameBind, m) {
       names[x.second] = x.first;
     return names;  
   },"Get the header names for columns");
+  // Iterator for rows:
   pyDF.def
     (
      "__iter__",
@@ -99,6 +108,9 @@ PYBIND11_MODULE(dataFrameBind, m) {
 	 },
 	 py::keep_alive<0,1>()
 	 )
+   
+    .def("__add__",&CSV_READER::DATA_FRAME::RowIterator::operator+,py::keep_alive<0,1>())
+    .def("__sub__",&CSV_READER::DATA_FRAME::RowIterator::operator-,py::keep_alive<0,1>())
     .def("getEntry",[](CSV_READER::DATA_FRAME::RowIterator& rowIter)
     {
       // Get the entire row:
@@ -127,7 +139,8 @@ PYBIND11_MODULE(dataFrameBind, m) {
     .def("__next__",
 	 [](CSV_READER::DATA_FRAME::colIterator& colIter){
 	   colIter++;
-	 })
+	 }) 
+    // Get a specific entry:
     .def("getEntry",
 	 [](CSV_READER::DATA_FRAME::colIterator& colIter){
 	   return colIter.operator*();
@@ -144,9 +157,45 @@ PYBIND11_MODULE(dataFrameBind, m) {
   pyDF.def("colIterbegin",&CSV_READER::DATA_FRAME::colIterbegin);
   pyDF.def("colIterEnd",&CSV_READER::DATA_FRAME::colIterEnd);
 	 
-       
-       
 
+  // Class for writing CSV FILES:
 
-  
+  py::class_<CSV_WRITER> pyCSVWriter(m,"pyCSVwriter");
+    pyCSVWriter.def(py::init<std::string,const std::string>());
+    pyCSVWriter.def("write",&CSV_WRITER::write);
+    pyCSVWriter.def("close",&CSV_WRITER::close);
+    pyCSVWriter.def("writeToFile",[](CSV_WRITER& writer,const std::string val)
+    {
+      writer.operator<<(val);
+    });
+    pyCSVWriter.def("writeToFile",[](CSV_WRITER& writer,const double val)
+    {
+      writer.operator<<(val);
+      
+    });
+    pyCSVWriter.def("writeToFile",[](CSV_WRITER& writer,const int val)
+    {
+      writer.operator<<(val);
+     
+    });
+    pyCSVWriter.def("writeToFile",[](CSV_WRITER& writer,const std::vector<double> val)
+    {
+      writer.operator<<(val);
+      
+    });
+    pyCSVWriter.def("writeToFile",[](CSV_WRITER& writer,const std::vector<int> val)
+    {
+      writer.operator<<(val);
+ 
+    });
+    pyCSVWriter.def("writeToFile",[](CSV_WRITER& writer,const std::vector<std::string> val)
+    {
+      writer.operator<<(val);
+      
+    });
+    pyCSVWriter.def("endrow",&CSV_WRITER::endrow);
+    pyCSVWriter.def("isActive",&CSV_WRITER::isActive);
+    
+    
+    
 }

@@ -220,11 +220,22 @@ private:
   //mean of a column:
   double mean(size_t col) const;
 
+  // By header name:
+  double mean(std::string colName) const;
+
   //standard deviation of a column
   double stdDev(size_t col) const;
 
+  //By header name:
+  double stdDev(std::string colName) const;
+  
+
   // variance of a column
   double var(size_t col) const;
+
+  // By header name:
+  double var(std::string colName) const;
+  
   // Check if the column is numerical or categorical:
   bool IsNumeric(size_t col) const;
   bool IsCategorical(size_t col) const;

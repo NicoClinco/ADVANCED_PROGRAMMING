@@ -32,6 +32,7 @@ public:
   {
     if(outstream_.is_open()){
       std::cout << "Closing the file: " << outfile_ << std::endl;
+      outstream_<<"\n";
       outstream_.close();}
     isActive_=false;
   }
@@ -41,13 +42,13 @@ public:
     return isActive_;
   }
     // Operator: callable
-    CSV_WRITER& operator << ( CSV_WRITER& (* val)(CSV_WRITER&))
-    {
+  CSV_WRITER& operator << ( CSV_WRITER& (* val)(CSV_WRITER&))
+  {
     if(!isActive())
-    throw("Error the output stream is not active\n");
+      throw("Error the output stream is not active\n");
     
     return val(*this);
-    }
+  }
   
   
   CSV_WRITER& operator << (const char* val)
@@ -115,7 +116,5 @@ private:
   bool isActive_=false;
   
 };
-
-
 
 #endif

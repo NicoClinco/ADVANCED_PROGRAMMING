@@ -163,6 +163,12 @@ double CSV_READER::DATA_FRAME::mean(size_t col) const
   return _mean_;
 }
 
+double CSV_READER::DATA_FRAME::mean(std::string colName) const
+{
+  return this->mean(header_.at(colName));
+}
+
+
 double CSV_READER::DATA_FRAME::stdDev(size_t col) const
 {
   if(!IsNumeric(col))
@@ -211,6 +217,12 @@ double CSV_READER::DATA_FRAME::stdDev(size_t col) const
   return stddev;
 }
 
+double CSV_READER::DATA_FRAME::stdDev(std::string colName) const
+{
+  return this->stdDev(header_.at(colName));
+}
+
+
 double CSV_READER::DATA_FRAME::var(size_t col) const
 {
   // Avoid to write the mean if it is possible to write:
@@ -226,6 +238,11 @@ double CSV_READER::DATA_FRAME::var(size_t col) const
   this->WriteEntry(title,var);
     
   return var;
+}
+
+double CSV_READER::DATA_FRAME::var(std::string colName) const
+{
+  return this->var(header_.at(colName));
 }
 
 size_t CSV_READER::DATA_FRAME::countWord(size_t col,std::string tofind) const
@@ -424,6 +441,10 @@ void CSV_READER::DATA_FRAME::write(std::string separator)
   // if it is null:
   if(!pWriter_){
     pWriter_=std::unique_ptr<CSV_WRITER>(new CSV_WRITER(outputfile_,separator));
+  }
+  else{
+    // Overwrite pWriter_ if pWriter_ is not null:
+    pWriter_.reset(new CSV_WRITER(outputfile_,separator));
   }
   pWriter_->write();
   Iswriting=true;
