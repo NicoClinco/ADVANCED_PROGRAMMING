@@ -26,13 +26,46 @@ class pyDataFrame(dfb.pyDF):
         """
         dfb.pyDF.read(self,filename,has_header);
         #Convert to a pandas dataframe for speed:
-        self.data = pd.DataFrame(self.data());
+        self.data_ = pd.DataFrame(self.data);
         
         #Renaming the columns:
         headers = [];
         for header in self.header_names():
             headers.append(header);
-        self.data.columns=headers;
+        self.data_.columns=headers;
+     
+    @classmethod
+    def constructFromFile(cls,config_file : str, filename : str, has_header : True):
+        """
+        Method that act as alternative constructor
+        
+        :param(str) config_file : The name of the configuration file to read
+        :param (str) filename: The name of the filename to read
+        :param (bool) has_header: Flag for skipping first row
+        """
+        data_frame = cls(config_file);
+        data_frame.read(filename,has_header);
+        return data_frame;
+    
+    # TO ASK:
+    @classmethod
+    def constructFromFile_(cls, filename : str, has_header : True):
+        """
+        Method that act as alternative constructor
+        
+        :param (str) filename: The name of the filename to read
+        :param (bool) has_header: Flag for skipping first row
+        """
+        #Base constructor:
+        data_frame = dfb.pyDF(filename,has_header);
+        #data_frame.data_= pd.read_csv(filename,header='infer');
+        #Set the internal structure: 
+        #data_frame.data = data_frame.data_.values.tolist();
+        
+        # Should i add methods instead?
+        return data_frame;
+        
+        
         
     def convertToDate(self,column = "date",format_='%Y%m%d'):
         """
@@ -41,8 +74,8 @@ class pyDataFrame(dfb.pyDF):
         :param  (str) column : The column which is transformed to a date
         :param  (str) format: Format of the time-series
         """
-        self.data[column] = pd.to_datetime(self.data[column],format=format_);
-        self.data.set_index('date');
+        self.data_[column] = pd.to_datetime(self.data_[column],format=format_);
+        self.data_.set_index('date');
         
     def Year_statistics(self,column="mean_temp"):
         """
@@ -50,7 +83,7 @@ class pyDataFrame(dfb.pyDF):
 
         :param (str) column: The column we want to do statistics
         """
-        self.data.groupby(self.data["date"].dt.year)[column].mean().plot(
+        self.data_.groupby(self.data_["date"].dt.year)[column].mean().plot(
             kind='bar');
      
         plt.xlabel("Years");
@@ -67,10 +100,10 @@ class pyDataFrame(dfb.pyDF):
         :param (str) column: The column we want to do statistics
         :param (str) year:   The year for which we make statistics
         """
-        mask = self.data['date'].dt.year == int(year);
-        year_data = self.data[mask];
+        mask = self.data_['date'].dt.year == int(year);
+        year_data = self.data_[mask];
         
-        self.data.groupby(year_data["date"].dt.month)[column].mean().plot(
+        self.data_.groupby(year_data["date"].dt.month)[column].mean().plot(
             kind='bar');
         plt.xticks(ticks=range(0,12),labels=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]);
         plt.xlabel("months");
@@ -91,8 +124,8 @@ class pyDataFrame(dfb.pyDF):
         """
         
         LinearModel = LinearRegression();
-        X = self.data[Xnames]
-        Y = self.data[[Yname]]
+        X = self.data_[Xnames]
+        Y = self.data_[[Yname]]
         
         # Substitute the mean for missing values:
         imputerX = SimpleImputer(missing_values=np.nan, strategy='mean')

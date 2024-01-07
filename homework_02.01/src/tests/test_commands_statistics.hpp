@@ -1,19 +1,13 @@
 #include "DATA_FRAME.hpp"
 #include "gtest/gtest.h"
 #include <gmock/gmock.h>
+#include <string>
 
 using namespace CSV_READER;
 
 /*
   File used for testing the statistics
   module
-*/
-
-
-/*
-  Test how many elements are contained
-  in a specified column.
-  
 */
 
 using VectorDouble = std::vector<double>;
@@ -72,5 +66,39 @@ TEST(Statistic_module_Results,stdDev)
 
    std::cout << "#################################\n";
    
+}
+
+// Test if the date in the first column is valid "London_weather.csv"
+
+TEST(Statistics_module_TYPE_CHECKING,ColsType)
+{
+  std::cout << "---####TESTING THE DATES #####---\n";
+  std::string config_file("configCSV.txt");
+  std::string filename("London_weather.csv");
+  DATA_FRAME df(config_file);
+  df.read(filename,true);
+  
+
+  std::vector<std::string> dates = df.getCol<std::string>("date");
+
+  // Check if the year, the month and the day is in the right range:
+  
+  for(const auto& date : dates)
+    {
+      std::string year = date.substr(0,4);
+      std::string month = date.substr(4,2);
+      std::string day = date.substr(6,2);
+
+      int year_ = std::stoi(year);
+      int month_ = std::stoi(month);
+      int day_ = std::stoi(day);
+
+      using namespace ::testing;
+      
+      EXPECT_THAT(year_, AllOf(Ge(1979),Le(2020)));
+      EXPECT_THAT(month_, AllOf(Ge(1),Le(12)));
+      EXPECT_THAT(day_, AllOf(Ge(1),Le(31))); 
+    }
+  std::cout << "#################################\n";
 }
 

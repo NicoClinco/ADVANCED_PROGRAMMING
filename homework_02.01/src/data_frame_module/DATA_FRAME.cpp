@@ -3,6 +3,11 @@
 
 #include "DATA_FRAME.hpp"
 
+//Base-constructor: do nothing
+CSV_READER::DATA_FRAME::DATA_FRAME()
+{};
+
+
 CSV_READER::DATA_FRAME::DATA_FRAME(std::string CONFIG_FILE)
 {
  
@@ -36,6 +41,8 @@ void CSV_READER::DATA_FRAME::read(std::string FILEIN,bool HasHeader)
   std::ifstream file_(FILEIN);
   std::string line;
 
+  if(!configFile)
+    throw std::runtime_error("Error-the configuration file is not set!");
  
   VecOpvar currentRow(row_structure.size());
 
@@ -55,7 +62,7 @@ void CSV_READER::DATA_FRAME::read(std::string FILEIN,bool HasHeader)
     }
   }
 
-  
+  // Read the rest of lines:
   while(file_>>line)
   {
 
@@ -87,6 +94,39 @@ void CSV_READER::DATA_FRAME::read(std::string FILEIN,bool HasHeader)
   }
   file_.close();
 }
+
+void CSV_READER::DATA_FRAME::set_config_file(std::string CONFIG_FILE)
+{
+   
+  std::ifstream config_file(CONFIG_FILE);
+  std::string line;
+  //check the correctness:
+  if(!config_file.good())
+    throw("Error: the config-file is corrupted\n");
+
+  if(configFile)
+    {
+      configFile = false;
+      row_structure.clear();
+    }
+  std::vector<std::string> SplitVec;
+
+  std::getline(config_file,line);
+ 
+  boost::split(SplitVec,line,boost::is_any_of("= , \t"),
+                       boost::token_compress_on);
+  bool Check_config = false;
+  for(auto x : SplitVec)
+  {
+    if(x=="header_cols")
+      Check_config=true;
+     if(x!="header_cols")
+       row_structure.push_back(x);
+  }
+ 
+  Check_config ? (configFile=true) : throw std::invalid_argument("ERROR-WRONG ENTRIES IN THE CONFIG-FILE\n");
+}
+
 
 bool CSV_READER::DATA_FRAME::IsNumeric(size_t col) const
 {
@@ -411,8 +451,14 @@ template
 void CSV_READER::DATA_FRAME::makeHistogram<int>(size_t col,std::string title,unsigned int n_interval,bool stdOutput) const;
 
 
-// Return the internal data:
-std::vector<CSV_READER::VecOpvar>& CSV_READER::DATA_FRAME::data()
+// Return the internal data (set)
+std::vector<CSV_READER::VecOpvar>& CSV_READER::DATA_FRAME::set_data()
+{
+  return dataframe;
+}
+
+// Return the internal data (get)
+std::vector<CSV_READER::VecOpvar> CSV_READER::DATA_FRAME::get_data()
 {
   return dataframe;
 }
@@ -430,6 +476,18 @@ std::map<std::string,unsigned int> CSV_READER::DATA_FRAME::HeaderNames() const
   //Return header-names
   return header_;
 }
+
+// Set the header-names:
+void CSV_READER::DATA_FRAME::set_HeaderNames(const std::map<std::string,unsigned int>& headernames)
+{
+  header_= headernames ;
+}
+// Set the row-structure:
+void CSV_READER::DATA_FRAME::set_row_structure(const std::vector<std::string>& rowstructure)
+{
+  row_structure = rowstructure;
+}
+
 
 void CSV_READER::DATA_FRAME::setOutputfile(std::string _outfile_)
 {

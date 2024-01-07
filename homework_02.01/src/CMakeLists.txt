@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
 
 # adding the libraries:
-
+# The user must specify the directories where the following libraries are installed:
 set(GSLPATH "/home/nico/Desktop/PHD-COURSES/libraries/gsl" CACHE STRING "/path/to/gsl")
 set(BOOSTPATH "/home/nico/Desktop/PHD-COURSES/libraries/Boost" CACHE STRING "/path/to/boost")
 set(EIGENPATH "/home/nico/Desktop/PHD-COURSES/libraries/eigen/include/eigen3" CACHE STRING "/path/to/eigen")
+
+
 
 
 option(BUILD_LIB_STATISTICS "Build the statistics module" OFF)

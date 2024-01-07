@@ -32,14 +32,29 @@ class DATA_FRAME
 {
  public:
 
+  // Base-constructor:
+  DATA_FRAME();
+
+  //Copy-constructor:
+  DATA_FRAME(const DATA_FRAME& df):
+    row_structure(df.row_structure),
+    dataframe(df.dataframe),
+    header_(df.header_),
+    configFile(df.configFile),
+    pWriter_(nullptr)
+  {};
+
+  
   //Read the data-structure from config-file where the structure
   //of the row is stored:
-   DATA_FRAME(std::string CONFIG_FILE);
+  DATA_FRAME(std::string CONFIG_FILE);
     
   // Construct from the data-structure given by the user:
   DATA_FRAME(std::vector<std::string> rowstructure):
     row_structure{rowstructure},_rows_{0} {};
 
+  void set_config_file(std::string CONFIG_FILE);
+  
   // Functions needed for missing values:
   OpVariant opDouble(std::string s)
   {
@@ -267,15 +282,22 @@ private:
 
 
   // Accessing operator (writing)
-  std::vector<CSV_READER::VecOpvar>& data();
+  std::vector<CSV_READER::VecOpvar>& set_data();
 
+  // Accessing operator (reading)
+  std::vector<CSV_READER::VecOpvar> get_data();
 
   // Indexing operator (writing)
   CSV_READER::OpVariant& operator() (size_t row,size_t col);
 
   // Header map:
   std::map<std::string,unsigned int> HeaderNames() const;
-  
+
+  //Set the Header map:
+  void set_HeaderNames(const std::map<std::string,unsigned int>& headernames);
+
+  //Set the Row structure:
+  void set_row_structure(const std::vector<std::string>& rowstructure);
 
   //*****OUTPUT FILE MANAGER***********//
   void setOutputfile(std::string _outfile_);
