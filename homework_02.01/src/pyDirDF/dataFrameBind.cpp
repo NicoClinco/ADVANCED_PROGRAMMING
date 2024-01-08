@@ -7,13 +7,13 @@
 #include "CSV_WRITER.hpp"
 
 
-PYBIND11_MAKE_OPAQUE(std::vector<std::string>);
-PYBIND11_MAKE_OPAQUE(CSV_READER::VecOpvar);
-PYBIND11_MAKE_OPAQUE(std::vector<CSV_READER::VecOpvar>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::string>)
+PYBIND11_MAKE_OPAQUE(CSV_READER::VecOpvar)
+PYBIND11_MAKE_OPAQUE(std::vector<CSV_READER::VecOpvar>)
 
 
 namespace py = pybind11;
-/*
+
 // Automatic type-checking:
 template<typename Numeric>
 bool is_number(const std::string& s)
@@ -21,7 +21,7 @@ bool is_number(const std::string& s)
   Numeric n;
   return((std::istringstream(s) >> n >> std::ws).eof());
 }
-*/
+
 
 
 
@@ -30,15 +30,29 @@ PYBIND11_MODULE(dataFrameBind, m) {
   m.doc() = "Conversion of the statistic module and the writer for csv files"; // optional module docstring
   
   py::bind_vector<std::vector<std::string>>(m, "VectorString");
-  py::bind_vector<CSV_READER::VecOpvar>(m,"VecOpvar");
+  //py::bind_vector<CSV_READER::VecOpvar>(m,"VecOpvar");
   py::bind_vector<std::vector<CSV_READER::VecOpvar>>(m,"vVecOpvar");
 
+  // Try to modify the classes here:
+  py::class_<CSV_READER::VecOpvar>(m, "VecOpvarPy")
+    .def(py::init<>())
+    .def("clear", &CSV_READER::VecOpvar::clear)
+    .def("pop_back", &CSV_READER::VecOpvar::pop_back)
+    //.def("append",&CSV_READER::VecOpvar::emplace_back)
+    .def("__len__", [](const CSV_READER::VecOpvar &v) { return v.size(); })
+    .def("__iter__", [](CSV_READER::VecOpvar &v) {
+       return py::make_iterator(v.begin(), v.end());
+    }, py::keep_alive<0, 1>());
+
+
+  
   py::class_<CSV_READER::DATA_FRAME> pyDF(m,"pyDF",py::dynamic_attr());
   pyDF.def(py::init<>()); //Default constructor
   pyDF.def(py::init<const std::string>()); //Construct from config-file
 
-  /*
-  // 07-01-24: Construct by reading the CSV-file as strings
+  
+  //07-01-24: Construct by reading the CSV-file as strings:
+  // TO DO
   pyDF.def(py::init([](const std::string FILEIN,bool HasHeader){
     
     CSV_READER::DATA_FRAME df; //Default constructor
@@ -89,9 +103,9 @@ PYBIND11_MODULE(dataFrameBind, m) {
       }
 	file_.close();
 	df.set_data() = dataframe;
-	return new CSV_READER::DATA_FRAME(df);
+	return new CSV_READER::DATA_FRAME(std::move(df));
       }));
-  */
+  
   pyDF.def("IsDouble",&CSV_READER::DATA_FRAME::opDouble);
   pyDF.def("IsString",&CSV_READER::DATA_FRAME::opString);
   pyDF.def("IsInt",&CSV_READER::DATA_FRAME::opInt);

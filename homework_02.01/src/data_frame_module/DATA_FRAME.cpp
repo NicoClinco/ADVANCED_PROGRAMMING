@@ -5,7 +5,7 @@
 
 //Base-constructor: do nothing
 CSV_READER::DATA_FRAME::DATA_FRAME()
-{};
+{}
 
 
 CSV_READER::DATA_FRAME::DATA_FRAME(std::string CONFIG_FILE)
