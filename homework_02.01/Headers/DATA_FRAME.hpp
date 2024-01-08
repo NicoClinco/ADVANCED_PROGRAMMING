@@ -44,6 +44,17 @@ class DATA_FRAME
     pWriter_(nullptr)
   {};
 
+  //Move-constructor:
+  DATA_FRAME(DATA_FRAME&& df):
+    row_structure(std::move(df.row_structure)),
+    dataframe(std::move(df.dataframe)),
+    header_(std::move(df.header_)),
+    configFile(df.configFile),
+    pWriter_(std::move(df.pWriter_))
+  {
+    std::cout << "Warning-moving the resources to another data-frame\n";
+  };
+    
   
   //Read the data-structure from config-file where the structure
   //of the row is stored:

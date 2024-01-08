@@ -151,7 +151,10 @@ int main(int ac,const char* av[])
        df.closeOutput();
      }
    
- 
+   // Move constructor-testing:
+   DATA_FRAME df_II = std::move(df);
+   std::cout << df_II.get_data().size() << std::endl;
+   
   return 0;
 
   
