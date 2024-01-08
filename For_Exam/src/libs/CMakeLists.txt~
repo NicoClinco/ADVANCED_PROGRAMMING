@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.12)
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOP_TREE}/libs)
+
+include_directories(${TOP_TREE}/include)
+
+set(SOURCE_FILES lib.cpp)
+
+set(HEADER_FILES lib.hpp)
+
+add_library(mylib SHARED ${SOURCE_FILES} ${HEADER_FILES})
+

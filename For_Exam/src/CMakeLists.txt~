@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.12)
+
+#set(EIGENPATH "/home/nico/Desktop/PHD-COURSES/libraries/eigen/include/eigen3" CACHE STRING "/path/to/eigen")
+
+#set(BOOSTPATH "/home/nico/Desktop/PHD-COURSES/libraries/Boost" CACHE STRING "/path/to/boost")
+
+set(TOP_THREE 
+
+add_subdirectory(libs)
+
+add_subdirectory(apps)
