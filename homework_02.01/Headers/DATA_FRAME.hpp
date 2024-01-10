@@ -50,7 +50,9 @@ class DATA_FRAME
     dataframe(std::move(df.dataframe)),
     header_(std::move(df.header_)),
     configFile(df.configFile),
-    pWriter_(std::move(df.pWriter_))
+    pWriter_(std::move(df.pWriter_)),
+    outputfile_(df.outputfile_),
+    Iswriting(df.Iswriting)
   {
     std::cout << "Warning-moving the resources to another data-frame\n";
   };

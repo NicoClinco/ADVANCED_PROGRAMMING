@@ -10,7 +10,6 @@ CSV_READER::DATA_FRAME::DATA_FRAME()
 
 CSV_READER::DATA_FRAME::DATA_FRAME(std::string CONFIG_FILE)
 {
- 
   std::ifstream config_file(CONFIG_FILE);
   std::string line;
   //check the correctness:
