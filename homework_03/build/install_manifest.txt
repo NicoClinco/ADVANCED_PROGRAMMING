@@ -1,2 +1,0 @@
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/libs/libdataframe.so
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/headers/data_frame.hpp

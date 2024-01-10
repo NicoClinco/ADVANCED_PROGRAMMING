@@ -1,0 +1,95 @@
+==7715== Memcheck, a memory error detector
+==7715== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==7715== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==7715== Command: ./main_DATA_FRAME -c configCSV.txt -f London_weather.csv -o Output.txt
+==7715== Parent PID: 6106
+==7715== 
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DF5B6: CSV_READER::DATA_FRAME::mean(unsigned long) const (DATA_FRAME.cpp:161)
+==7715==    by 0x1235AD: main (main_DATA_FRAME.cpp:77)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48DF768: CSV_READER::DATA_FRAME::stdDev(unsigned long) const (DATA_FRAME.cpp:173)
+==7715==    by 0x1235CD: main (main_DATA_FRAME.cpp:78)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DF5B6: CSV_READER::DATA_FRAME::mean(unsigned long) const (DATA_FRAME.cpp:161)
+==7715==    by 0x48DF790: CSV_READER::DATA_FRAME::stdDev(unsigned long) const (DATA_FRAME.cpp:176)
+==7715==    by 0x1235CD: main (main_DATA_FRAME.cpp:78)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DFAC8: CSV_READER::DATA_FRAME::stdDev(unsigned long) const (DATA_FRAME.cpp:210)
+==7715==    by 0x1235CD: main (main_DATA_FRAME.cpp:78)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DF5B6: CSV_READER::DATA_FRAME::mean(unsigned long) const (DATA_FRAME.cpp:161)
+==7715==    by 0x123771: main (main_DATA_FRAME.cpp:89)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== 
+==7715== HEAP SUMMARY:
+==7715==     in use at exit: 0 bytes in 0 blocks
+==7715==   total heap usage: 184,482 allocs, 184,482 frees, 83,780,838 bytes allocated
+==7715== 
+==7715== All heap blocks were freed -- no leaks are possible
+==7715== 
+==7715== ERROR SUMMARY: 5 errors from 5 contexts (suppressed: 0 from 0)
+==7715== 
+==7715== 1 errors in context 1 of 5:
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DF5B6: CSV_READER::DATA_FRAME::mean(unsigned long) const (DATA_FRAME.cpp:161)
+==7715==    by 0x123771: main (main_DATA_FRAME.cpp:89)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== 
+==7715== 1 errors in context 2 of 5:
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DFAC8: CSV_READER::DATA_FRAME::stdDev(unsigned long) const (DATA_FRAME.cpp:210)
+==7715==    by 0x1235CD: main (main_DATA_FRAME.cpp:78)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== 
+==7715== 1 errors in context 3 of 5:
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DF5B6: CSV_READER::DATA_FRAME::mean(unsigned long) const (DATA_FRAME.cpp:161)
+==7715==    by 0x48DF790: CSV_READER::DATA_FRAME::stdDev(unsigned long) const (DATA_FRAME.cpp:176)
+==7715==    by 0x1235CD: main (main_DATA_FRAME.cpp:78)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== 
+==7715== 1 errors in context 4 of 5:
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48DF768: CSV_READER::DATA_FRAME::stdDev(unsigned long) const (DATA_FRAME.cpp:173)
+==7715==    by 0x1235CD: main (main_DATA_FRAME.cpp:78)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== 
+==7715== 1 errors in context 5 of 5:
+==7715== Conditional jump or move depends on uninitialised value(s)
+==7715==    at 0x48E5C1D: void CSV_READER::DATA_FRAME::WriteEntry<double>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, double const&) const (DATA_FRAME.cpp:442)
+==7715==    by 0x48DF5B6: CSV_READER::DATA_FRAME::mean(unsigned long) const (DATA_FRAME.cpp:161)
+==7715==    by 0x1235AD: main (main_DATA_FRAME.cpp:77)
+==7715==  Uninitialised value was created by a stack allocation
+==7715==    at 0x122CC9: main (main_DATA_FRAME.cpp:19)
+==7715== 
+==7715== ERROR SUMMARY: 5 errors from 5 contexts (suppressed: 0 from 0)

@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Werror -Wpedantic CMakeFiles/main.dir/mainDF.cpp.o -o ../../apps/main   -L/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/libs  -Wl,-rpath,/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/build/data_frame:/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/homework_03/libs ../data_frame/libdataframe.so 

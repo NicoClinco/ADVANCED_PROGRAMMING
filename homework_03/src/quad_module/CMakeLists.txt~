@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.12)
+project(quadrature_lib VERSION 1.0.0 DESCRIPTION "Quadrature module" LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wpedantic")
+
+set(GSL_INCLUDE_DIR ${GSLPATH}/include)
+set(GSL_LIB_DIR ${GSLPATH}/lib)
+
+
+message(STATUS "Builing the library for the quadrature module...")
+
+set(SOURCE_FILES Quadrature.cpp)
+set(HEADER_FILES Quadrature.hpp)
+
+add_library(quad_module SHARED ${SOURCE_FILES} ${HEADER_FILES})
+target_include_directories(quad_module PUBLIC ${GSL_INCLUDE_DIR})
+
+target_link_directories(quad_module PUBLIC ${GSL_LIB_DIR})
+target_link_libraries(quad_module gsl gslcblas)
+
+#install(TARGETS quad_module
+#	LIBRARY DESTINATION /home/nico/Desktop/TEMPORARY/dataframe/lib
+#	PUBLIC_HEADER DESTINATION /home/nico/Desktop/TEMPORARY/dataframe/include)
+	
+#install(FILES ${HEADER_FILES} DESTINATION /home/nico/Desktop/TEMPORARY/dataframe/include)
+
+message(STATUS "Quadrature module library builded")
