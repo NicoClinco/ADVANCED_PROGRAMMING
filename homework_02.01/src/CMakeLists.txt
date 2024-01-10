@@ -29,8 +29,6 @@ set(lib_df FALSE)
 set(lib_quad FALSE)
 set(lib_ode FALSE)
 
-include_directories(${INCLUDE_DIR_HPP} ${GSLPATH}/include)
-
 
 if(BUILD_LIB_STATISTICS AND NOT lib_df)
   add_subdirectory(data_frame_module)
