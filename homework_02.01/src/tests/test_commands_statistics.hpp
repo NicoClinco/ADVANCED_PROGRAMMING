@@ -291,7 +291,7 @@ TEST(Statistics_module_BEHAVIOUR,configFile)
   });
   
   std::vector<std::string> tenDates={"19790101","19790102","19790103","19790104","19790105",
-				     "19790106","19790107","19790108","19790109","19790110"}; //to-do!
+				     "19790106","19790107","19790108","19790109","19790110"};
 
   EXPECT_TRUE(std::equal(dateString.begin(),dateString.begin()+10,tenDates.begin()));
   
