@@ -79,16 +79,16 @@ if(build_quadrature):
     ext_modules.append(Extension_quadrature);
 
 if(build_statistics and build_quadrature):
-    name = 'pyGeneral';
+    name_ = 'pyGeneral';
 elif(build_statistics):
-    name = 'pyDataFrame';
+    name_= 'pyDataFrame';
 elif(build_quadrature):
-    name = 'pyQuadrature';
+    name_= 'pyQuadrature';
 else:
-    name = 'default';
+    name_= 'default';
 
 setup(
-name='pyDataFrame',
+name=name_,
 version='1.0',
 author='Nicola Clinco',
 author_email='nicoclinco@gmail.com',

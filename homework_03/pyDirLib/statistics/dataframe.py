@@ -45,28 +45,16 @@ class pyDataFrame(dfb.pyDF):
         """
         data_frame = cls(config_file);
         data_frame.read(filename,has_header);
-        return data_frame;
+        return data_frame;        
     
-    # TO ASK:
-    @classmethod
-    def constructFromFile_(cls, filename : str, has_header : True):
+    def __getitem__(self,column : str):
         """
-        Method that act as alternative constructor
+        Method that give us the column of the data-frame
         
-        :param (str) filename: The name of the filename to read
-        :param (bool) has_header: Flag for skipping first row
+        :param (str) column : The name of the column
         """
-        #Base constructor:
-        data_frame = dfb.pyDF(filename,has_header);
-        #data_frame.data_= pd.read_csv(filename,header='infer');
-        #Set the internal structure: 
-        #data_frame.data = data_frame.data_.values.tolist();
-        
-        # Should i add methods instead?
-        return data_frame;
-        
-        
-        
+        return self.data_[column].to_numpy();
+    
     def convertToDate(self,column = "date",format_='%Y%m%d'):
         """
         Method for converting a column to a time-series.

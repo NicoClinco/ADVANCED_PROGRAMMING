@@ -1,6 +1,7 @@
 #include "Quadrature.hpp"
 #include "gtest/gtest.h"
 #include <gmock/gmock.h>
+#include <cmath>
 
 /*
   Test the quadrature weights for
@@ -83,7 +84,7 @@ TEST(ResultTest,HasExactSolution)
    double EXACT_RES0 = 0.5;
    unsigned int N0 = 20;
    
-   // Testing the code for N = 50: The results need to be exact:
+   // Testing the code for N = 20: The results need to be exact:
    
    double MID_RES0 = nIntegrationMID(ToIntegrate0,xSTART,xEND,N0);
    double TRPZ_RES0 = nIntegrationTRAPZ(ToIntegrate0,xSTART,xEND,N0);
@@ -98,4 +99,36 @@ TEST(ResultTest,HasExactSolution)
    EXPECT_NEAR(GL_RES0,EXACT_RES0,abs_error);
 
     std::cout << "##############################\n";
+}
+
+
+/*
+ Testing the Gauss-Legeandre quadrature formula:
+ The formula must be exact to order 2*n-1
+*/
+TEST(ResultTest,GaussLegeandre)
+{
+  std::cout << "###Testing the goodness of a first order quadrature formula####\n";
+  using namespace Integrate_1D;
+  NUMERICAL_INTEGRATION<GaussLegeandreQuadrature> nIntegrationGL;
+
+  double xSTART = 0.0;
+  double xEND   = 1.0;
+  double EXACT_RES0 = 0.20; //Exact result (1/5)
+  unsigned int N0 = 3;
+  
+  auto ToIntegrate0 = [](double x)
+  {
+    return std::pow(x,4);
+  };
+  
+  
+  double GL_RES0 = nIntegrationGL(ToIntegrate0,xSTART,xEND,N0);
+
+  double abs_error =1e-14;
+  EXPECT_NEAR(GL_RES0,EXACT_RES0,abs_error);
+  
+
+  std::cout << "##############################\n";
+  
 }

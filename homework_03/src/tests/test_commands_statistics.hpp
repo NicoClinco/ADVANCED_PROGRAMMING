@@ -69,25 +69,6 @@ TEST(Statistic_module_Results,stdDev)
    
 }
 
-/*
-// Test the functions for missing values: #opFunctions
-TEST(Statistics_module_BEHAVIOUR,ConversionFunctions)
-{
-  std::cout << "---####TESTING THE Conversion functions Op<> #####---\n";
-  CSV_READER::OpVariant Value;
-
-  std::string StringValue = "Word";
-  std::string IntValue = "10";
-  std::string DoubleValue = "13.5";
-
-  // Base-constructor:
-  CSV_READER::DATA_FRAME df();
-  
-
-  std::cout << "#################################\n";
-}
-*/
-
 
 // Test the type of the columns readed IsNumeric or IsCategorical:
 TEST(Statistics_module_BEHAVIOUR,IsAtype)
@@ -291,7 +272,7 @@ TEST(Statistics_module_BEHAVIOUR,configFile)
   });
   
   std::vector<std::string> tenDates={"19790101","19790102","19790103","19790104","19790105",
-				     "19790106","19790107","19790108","19790109","19790110"}; //to-do!
+				     "19790106","19790107","19790108","19790109","19790110"};
 
   EXPECT_TRUE(std::equal(dateString.begin(),dateString.begin()+10,tenDates.begin()));
   

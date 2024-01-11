@@ -6,105 +6,16 @@
 #include "DATA_FRAME.hpp"
 #include "CSV_WRITER.hpp"
 
-
-PYBIND11_MAKE_OPAQUE(std::vector<std::string>)
-PYBIND11_MAKE_OPAQUE(CSV_READER::VecOpvar)
-PYBIND11_MAKE_OPAQUE(std::vector<CSV_READER::VecOpvar>)
-
-
 namespace py = pybind11;
-
-// Automatic type-checking:
-template<typename Numeric>
-bool is_number(const std::string& s)
-{
-  Numeric n;
-  return((std::istringstream(s) >> n >> std::ws).eof());
-}
-
-
 
 
 PYBIND11_MODULE(dataFrameBind, m) {
 
   m.doc() = "Conversion of the statistic module and the writer for csv files"; // optional module docstring
   
-  py::bind_vector<std::vector<std::string>>(m, "VectorString");
-  //py::bind_vector<CSV_READER::VecOpvar>(m,"VecOpvar");
-  py::bind_vector<std::vector<CSV_READER::VecOpvar>>(m,"vVecOpvar");
-
-  // Try to modify the classes here:
-  py::class_<CSV_READER::VecOpvar>(m, "VecOpvarPy")
-    .def(py::init<>())
-    .def("clear", &CSV_READER::VecOpvar::clear)
-    .def("pop_back", &CSV_READER::VecOpvar::pop_back)
-    //.def("append",&CSV_READER::VecOpvar::emplace_back)
-    .def("__len__", [](const CSV_READER::VecOpvar &v) { return v.size(); })
-    .def("__iter__", [](CSV_READER::VecOpvar &v) {
-       return py::make_iterator(v.begin(), v.end());
-    }, py::keep_alive<0, 1>());
-
-
-  
   py::class_<CSV_READER::DATA_FRAME> pyDF(m,"pyDF",py::dynamic_attr());
   pyDF.def(py::init<>()); //Default constructor
   pyDF.def(py::init<const std::string>()); //Construct from config-file
-
-  
-  //07-01-24: Construct by reading the CSV-file as strings:
-  // TO DO
-  pyDF.def(py::init([](const std::string FILEIN,bool HasHeader){
-    
-    CSV_READER::DATA_FRAME df; //Default constructor
-    std::ifstream file_(FILEIN);
-    std::string line;
-    
-    // Read the first row in case the header is present:
-    std::map<std::string,unsigned int> header_;
-    unsigned int counterH = 0;
-    if(HasHeader){
-      file_>>line;
-      std::stringstream ss(line);
-      std::string _word_;
-      while(std::getline(ss,_word_,',')){
-	header_[_word_] = counterH;
-	counterH++;
-      }
-    }
-    df.set_HeaderNames(header_);
-
-    std::vector<CSV_READER::VecOpvar> dataframe;
-    CSV_READER::VecOpvar currentRow; 
-    // Read the rest of lines:
-    while(file_>>line)
-      {
-
-	std::stringstream ss(line);
-	std::string _word_;
-   
-	while(std::getline(ss,_word_,','))
-	  {
-	    std::cout << _word_<<std::endl;
-	    if(is_number<int>(_word_))
-	      {
-		currentRow.push_back(df.opInt(_word_));
-	      }
-	    else if(is_number<double>(_word_))
-	      {
-		currentRow.push_back(df.opDouble(_word_));
-	      }
-	    else
-	      {
-		currentRow.push_back(df.opString(_word_));
-	      }
-	    
-	  }//end line
-	dataframe.push_back(currentRow);
-      }
-	file_.close();
-	df.set_data() = dataframe;
-	return new CSV_READER::DATA_FRAME(std::move(df));
-      }));
   
   pyDF.def("IsDouble",&CSV_READER::DATA_FRAME::opDouble);
   pyDF.def("IsString",&CSV_READER::DATA_FRAME::opString);
@@ -114,12 +25,6 @@ PYBIND11_MODULE(dataFrameBind, m) {
   // Magic methods for get the lenght of a column:
   pyDF.def("__len__",[](CSV_READER::DATA_FRAME& df){return df.get_data().size();});
   
-  // Magic methods to get the column:
-  pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column by index");
-  pyDF.def("__getitem__",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column by index");
-  pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<double>,py::const_),"Get the column, depending on the header names");
-  pyDF.def("__getitem__",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::getCol<std::string>,py::const_),"Get the column, depending on the header names");
-
   // Methods for statistical operations:
   pyDF.def("mean",py::overload_cast<size_t>(&CSV_READER::DATA_FRAME::mean,py::const_),"Mean of a specified column");
   pyDF.def("mean",py::overload_cast<std::string>(&CSV_READER::DATA_FRAME::mean,py::const_),"Mean of a specified column");
