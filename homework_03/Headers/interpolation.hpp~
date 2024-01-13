@@ -1,0 +1,136 @@
+#ifndef __INTERP_HPP__
+#define __INTERP_HPP__
+
+#include <cmath>
+#include <Eigen/Dense>
+#include <Eigen/Core>
+/*
+  Creating a template class
+  int: Number of nodes found at
+  compilation-time
+ */
+
+class Interpolation
+{
+public:
+  // Note: the values must be ordered when passed to the function:
+  Interpolation(const std::vector<double>& xnodes,const std::vector<double>& ynodes)
+    xnodes_(ynodes)
+    ynodes_(xnodes)
+  {
+    
+    if(nnodes_<=0 || xnodes_.size() != ynodes_.size())
+      throw std::invalid_argument("Error, you must instert a positive number of nodes\n");
+    nnodes_ = xnodes_.size();
+  }
+  // Declare the call operator as virtual here:
+protected:
+  size_t nnodes_;
+  std::vector<double> xnodes_;
+  std::vector<double> ynodes_;
+};
+
+class LinearInterpolation:
+  public Interpolation
+{
+public:
+
+  LinearInterpolation(const std::vector<double>& xnodes,const std::vector<double>& ynodes):
+    Interpolation(xnodes,ynodes)
+  {};
+  
+  //Interpolate the value at a specific point:
+  double interpolate(double value) const {
+        size_t n = xnodes_.size();
+	
+        // Check if x is within the range of the data
+        if (value < xnodes_.front() || value > x_nodes.back()) {
+            throw std::out_of_range("Interpolation point is outside the range of provided data.\n");
+        }
+
+        // Find the index  containing the value to be interpolated:
+        size_t i = 0;
+        while (i<n - 1 && ( value > xnodes_[i + 1])){
+            i++;
+        }
+
+        // Perform linear interpolation within the interval [x_i, x_i+1]
+        double x1 = xnodes_[i];
+        double x2 = xnodes_[i + 1];
+        double y1 = ynodes_[i];
+        double y2 = ynodes_[i + 1];
+
+        // Linear interpolation formula: y = y1 + (x - x1) * (y2 - y1) / (x2 - x1)
+        return y1 + (value - x1) * (y2 - y1) / (x2 - x1);
+    }
+
+  double operator()(double value)
+  {
+    return this->evaluate();
+  }
+  
+}
+
+  class PolynomialInterpolation:
+    public Interpolation
+{
+public:
+
+  PolynomialInterpolation(const std::vector<double>& xnodes,const std::vector<double>& ynodes):
+    Interpolation(xnodes,ynodes)
+  {};
+
+  
+      double interpolate(double value)
+    {
+      Eigen::MatrixXd Vmonde = this->createVanderMondeMatrix();
+      
+      // Creating an Eigen-Vector for the y-data:
+      Eigen::VectorXd y = Eigen::Map<Eigen::VectorXd>(ynodes_.data(),ynodes_.size());
+
+      //Solving the associated system with Eigen:
+      Eigen::VectorXd coeffs= m.colPivHouseholderQr().solve(y); //coefficients.
+
+      //Here, we return the interpolated value:
+
+      //Step 1: Elevate the values to a power:
+      Eigen::VectorXd xPow(xnodes_.size());
+
+      for(size_t i =0;i< xPow.size();++i)
+	{
+	  xPow(i) = pow(xnodes_[i],i);
+	}
+      //Step 2: sum and interpolate:
+      return coeffs.dot(xPow);
+      
+      
+    }
+    double operator()(double value)
+    {
+      return this->interpolate(value);
+    }
+  private:
+  
+  Eigen::MatrixXd createVanderMondeMatrix()
+    {
+      Eigen::MatrixXd m(nnodes_,nnodes_);
+
+      //Fill the Vandermonde matrix:
+      for(size_t r =0;r<m.rows();++r)
+	{
+	  for(size_t c=0;c<m.cols();++c)
+	    {
+	      m(r,c) = pow(xnodes_[r],c);
+	    }
+	}
+      //Return the vandermonde matrix:
+      return m;  
+     }
+ 
+
+  };
+  
+
+  
+
+#endif

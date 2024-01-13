@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.12)
 #For HP-eq
 set(GSLPATH "/home/nico/Desktop/PHD-COURSES/libraries/gsl" CACHE STRING "/path/to/gsl")
 set(BOOSTPATH "/home/nico/Desktop/PHD-COURSES/libraries/Boost" CACHE STRING "/path/to/boost")
-set(EIGENPATH "/home/nico/Desktop/PHD-COURSES/libraries/Eigen/include/eigen3" CACHE STRING "/path/to/eigen")
+set(EIGENPATH "/home/nico/Desktop/PHD-COURSES/libraries/eigen/include/eigen3" CACHE STRING "/path/to/eigen")
 
 #For HP-pro
 #set(GSLPATH "/home/nicopc/Desktop/PHD-COURSES/libraries/gsl" CACHE STRING "/path/to/gsl")
@@ -22,6 +22,8 @@ option(BUILD_EXAMPLE_ODE "Test program for time-integration" OFF)
 
 option(BUILD_PYDIR_DF "Build Python library for statistics" OFF)
 option(BUILD_PYDIR_QUAD "Build Python library for quadrature" OFF)
+option(BUILD_PYDIR_ODE "Build Python library for ode" OFF)
+
 
 option(BUILD_TESTS "Build google-test" OFF)
 
@@ -85,6 +87,15 @@ if(BUILD_PYDIR_QUAD)
   endif(NOT lib_quad)
   add_subdirectory(pyDirQuad)
 endif(BUILD_PYDIR_QUAD)
+
+if(BUILD_PYDIR_ODE)
+ if(NOT lib_ode)
+   add_subdirectory(ode_module)
+   set(lib_ode TRUE)
+ endif(NOT lib_ode)
+ add_subdirectory(pyDirODE)
+endif(BUILD_PYDIR_ODE)
+
 
 if(BUILD_TESTS)
    if(NOT lib_quad)
