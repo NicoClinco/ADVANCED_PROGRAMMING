@@ -1,4 +1,0 @@
-#define Tutorial_VERSION_MAJOR "FIRST_VERSION"
-#define Tutorial_VERSION_MINOR  @Tutorial_VERSION_MINOR@
-
-#define boolean_var true 

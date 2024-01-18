@@ -1,4 +1,0 @@
-/home/nicopc/Desktop/CMake_Tutorial/CMake_LIB/build/CMakeFiles/plotLib.dir
-/home/nicopc/Desktop/CMake_Tutorial/CMake_LIB/build/CMakeFiles/HelloExecutable.dir
-/home/nicopc/Desktop/CMake_Tutorial/CMake_LIB/build/CMakeFiles/edit_cache.dir
-/home/nicopc/Desktop/CMake_Tutorial/CMake_LIB/build/CMakeFiles/rebuild_cache.dir

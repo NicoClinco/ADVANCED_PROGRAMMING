@@ -1,2 +1,0 @@
-/usr/bin/ar qc libplotLib.a  CMakeFiles/plotLib.dir/src/say-hello/myLib.cpp.o
-/usr/bin/ranlib libplotLib.a

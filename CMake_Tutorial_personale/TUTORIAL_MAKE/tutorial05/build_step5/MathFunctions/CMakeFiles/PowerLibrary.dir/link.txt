@@ -1,2 +1,0 @@
-/usr/bin/ar qc libPowerLibrary.a  CMakeFiles/PowerLibrary.dir/MathLibraries/powerclass.cpp.o
-/usr/bin/ranlib libPowerLibrary.a

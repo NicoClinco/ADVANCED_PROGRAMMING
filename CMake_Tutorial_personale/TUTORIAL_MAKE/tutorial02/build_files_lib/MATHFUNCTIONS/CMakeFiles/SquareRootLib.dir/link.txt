@@ -1,2 +1,0 @@
-/usr/bin/ar qc libSquareRootLib.a CMakeFiles/SquareRootLib.dir/BaseMathFunctions/SquareRoot.cpp.o
-/usr/bin/ranlib libSquareRootLib.a

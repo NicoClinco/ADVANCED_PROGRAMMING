@@ -1,4 +1,0 @@
-test25 1 0.00374476
-usageTest 1 0.00426724
-SquareRootCheck 1 0.00323822
----

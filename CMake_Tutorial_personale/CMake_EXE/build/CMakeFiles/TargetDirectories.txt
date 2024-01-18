@@ -1,3 +1,0 @@
-/home/nicopc/Desktop/CMake_Tutorial/build/CMakeFiles/rebuild_cache.dir
-/home/nicopc/Desktop/CMake_Tutorial/build/CMakeFiles/edit_cache.dir
-/home/nicopc/Desktop/CMake_Tutorial/build/CMakeFiles/HelloExecutable.dir

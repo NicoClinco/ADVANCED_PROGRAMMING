@@ -1,2 +1,0 @@
-/home/nicopc/Desktop/CMake_Tutorial/C_Make_functions/build/CMakeFiles/edit_cache.dir
-/home/nicopc/Desktop/CMake_Tutorial/C_Make_functions/build/CMakeFiles/rebuild_cache.dir

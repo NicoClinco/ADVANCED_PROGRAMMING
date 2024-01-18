@@ -1,2 +1,0 @@
-/usr/bin/ar qc libplotLib2.a  CMakeFiles/plotLib2.dir/src/say-kitem/SecLib.cpp.o
-/usr/bin/ranlib libplotLib2.a
