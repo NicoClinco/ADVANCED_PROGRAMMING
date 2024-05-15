@@ -1,3 +1,0 @@
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/Exercises/EX_PYBIND/ex_2/build/CMakeFiles/newton_py.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/Exercises/EX_PYBIND/ex_2/build/CMakeFiles/edit_cache.dir
-/home/nico/Desktop/PHD-COURSES/ADVANCED_PROGRAMMING/Exercises/EX_PYBIND/ex_2/build/CMakeFiles/rebuild_cache.dir

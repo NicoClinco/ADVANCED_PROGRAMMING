@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ex1.dir/ex1.cpp.o -o ex1   -L/home/nico/Desktop/PHD-COURSES/gls/lib  -Wl,-rpath,/home/nico/Desktop/PHD-COURSES/gls/lib -lgsl -lgslcblas 

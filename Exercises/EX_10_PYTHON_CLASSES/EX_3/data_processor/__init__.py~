@@ -1,9 +1,0 @@
-
-#__init__.py works as entry point for operations
-
-__all__=['data_analysis','operations'];
-
-
-from . import data_analysis;
-
-from . import operations;
